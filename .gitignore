@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.next-build-check/
+out/
+.env*
+!.env.example
+tsconfig.tsbuildinfo
+.claude/
