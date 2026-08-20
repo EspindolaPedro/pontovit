@@ -1,0 +1,12 @@
+node_modules
+.next
+.next-build-check
+.git
+.gitignore
+.env*
+!.env.example
+npm-debug.log*
+pnpm-debug.log*
+docs
+spec
+conteudo-extraido-pontovit
