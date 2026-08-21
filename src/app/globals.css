@@ -105,10 +105,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .benefit-icon img { width: 24px; height: 24px; object-fit: contain; }
 .figma-benefit-card h3 { margin: 25px 0 0; max-width: 294px; font-size: 26px; font-weight: 600; line-height: 1.12; }
 .figma-benefit-card p { max-width: 332px; margin: 22px 0 0; font-size: 22px; font-weight: 300; line-height: 1.35; }
-.figma-logos { display: grid; min-height: 162px; grid-template-columns: minmax(210px, 265px) 130px 102px 265px minmax(250px, 384px); align-items: center; justify-content: space-between; gap: 28px; margin-top: 90px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; text-align: left; }
+.figma-logos { display: grid; min-height: 162px; grid-template-columns: minmax(210px, 265px) minmax(0, 1fr); align-items: center; gap: 42px; margin-top: 90px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; text-align: left; }
 .figma-logos p { max-width: 265px; margin: 0; color: #101010; font-size: 16px; font-weight: 600; line-height: 1.45; }
-.figma-logo-track { display: contents; }
-.figma-logos img { width: 100%; height: auto; max-height: 91px; object-fit: contain; }
+.figma-logo-track { position: relative; min-width: 0; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.figma-logo-track-inner { display: flex; width: max-content; align-items: center; gap: clamp(42px, 5vw, 88px); animation: figma-logo-scroll 28s linear infinite; }
+.figma-logos img { display: block; width: 150px; height: 91px; flex: 0 0 150px; object-fit: contain; }
+@keyframes figma-logo-scroll { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 22px)); } }
+.figma-logo-track:hover .figma-logo-track-inner { animation-play-state: paused; }
 .figma-product { position: relative; min-height: 715px; overflow: hidden; padding: 115px max(40px, calc((100% - 1769px) / 2)); background: #fafafa; }
 .figma-product-copy { position: relative; z-index: 1; max-width: 690px; }
 .figma-product-copy p { max-width: 570px; margin: 35px 0 0; font-size: 24px; font-weight: 300; line-height: 1.35; }
@@ -445,10 +448,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .figma-benefit-card p { max-width: 330px; font-size: 18px; line-height: 1.35; }
   .figma-logos { margin: 30px 24px 0; padding: 21px 8px 30px; gap: 22px 12px; }
   .figma-logos p { max-width: 310px; margin: 0; text-align: left; font-size: 16px; line-height: 1.45; }
-  .figma-logo-track { display: flex; gap: 12px; width: calc(100% + 16px); margin: 22px -8px 0; padding: 0 8px 8px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; scroll-padding-inline: 8px; scrollbar-width: none; cursor: grab; overscroll-behavior-x: contain; touch-action: pan-y; user-select: none; }
+  .figma-logo-track { display: block; width: calc(100% + 16px); margin: 22px -8px 0; padding: 0 8px 8px; overflow: hidden; }
   .figma-logo-track::-webkit-scrollbar { display: none; }
-  .figma-logo-track.is-dragging { cursor: grabbing; scroll-behavior: auto; scroll-snap-type: none; }
-  .figma-logo-track img { flex: 0 0 calc(50% - 6px); width: auto; max-width: none; max-height: 74px; scroll-snap-align: start; }
+  .figma-logo-track-inner { gap: 28px; animation-duration: 24s; }
+  .figma-logo-track img { width: 112px; height: 74px; flex-basis: 112px; }
 
   .figma-product { min-height: 0; padding: 61px 32px 0; background: #f5f5f5; }
   .product-title-desktop { display: none; }
@@ -1479,6 +1482,12 @@ body {
 .figma-partners-block.is-accent .figma-partners-label span { color: #df7300; }
 .figma-partners-label p { margin: 0; color: #737b80; font-size: 13px; line-height: 1.45; }
 
+.figma-partner-carousel { position: relative; width: 100%; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.figma-partner-carousel-track { display: flex; width: max-content; align-items: center; gap: clamp(38px, 5vw, 82px); animation: figma-partner-scroll 26s linear infinite; }
+.figma-partner-carousel img { display: block; width: 170px; height: 102px; flex: 0 0 170px; object-fit: contain; }
+.figma-partner-carousel:hover .figma-partner-carousel-track { animation-play-state: paused; }
+@keyframes figma-partner-scroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
 .figma-marquee { position: relative; width: 100%; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
 .figma-marquee-track { display: flex; width: max-content; gap: 16px; animation: figma-marquee-scroll 36s linear infinite; }
 .figma-marquee-right .figma-marquee-track { animation-name: figma-marquee-scroll-reverse; }
@@ -1506,6 +1515,8 @@ body {
   .figma-partners-label { padding: 0 24px; }
   .figma-partners-label span { font-size: 16px; }
   .figma-partners-label p { width: 100%; font-size: 12px; }
+  .figma-partner-carousel-track { gap: 28px; animation-duration: 22s; }
+  .figma-partner-carousel img { width: 112px; height: 74px; flex-basis: 112px; }
   .figma-marquee { padding-inline: 12px; }
   .figma-marquee-tile { width: clamp(92px, 29vw, 116px); height: 100px; padding: 13px; }
   .figma-marquee-track { gap: 12px; }
@@ -1612,9 +1623,50 @@ body {
 .pv-footer .pv-footer-cta-button { min-height: 40px; padding: 0 16px; font-size: 12px; }
 
 @media (max-width: 720px) {
+  .pv-footer::before { clip-path: ellipse(120% 135% at 50% 100%); }
   .pv-footer-inner { padding-top: 88px; }
   .pv-footer-cta { width: calc(100% - 28px); padding: 22px 20px; }
   .pv-footer-cta h2 { font-size: 27px; }
   .pv-footer-cta-button,
   .pv-footer .pv-footer-cta-button { width: auto; min-height: 44px; }
+}
+
+/* Partners follows the compact Clients rhythm: copy on the left, logos on the right. */
+.figma-partners { padding: 32px 0 52px; }
+.figma-partners-heading { margin-bottom: 28px; }
+.figma-partners-heading h2 { font-size: clamp(30px, 3vw, 40px); }
+.figma-partners-block.is-accent {
+  display: grid;
+  width: min(calc(100% - 80px), 1760px);
+  grid-template-columns: minmax(210px, 265px) minmax(0, 1fr);
+  align-items: center;
+  gap: 42px;
+  margin-inline: auto;
+  padding: 24px 0 30px;
+}
+.figma-partners-block.is-accent .figma-partners-label {
+  display: block;
+  max-width: 265px;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+.figma-partners-block.is-accent .figma-partners-label span { display: block; }
+.figma-partners-block.is-accent .figma-partners-label span { color: #cf6800; font-size: 18px; font-weight: 800; }
+.figma-partners-block.is-accent .figma-partners-label p { max-width: 250px; margin-top: 9px; color: #4d5961; font-size: 14px; font-weight: 500; line-height: 1.45; }
+
+@media (max-width: 720px) {
+  .figma-partners { padding: 30px 0 46px; }
+  .figma-partners-heading { margin-bottom: 20px; }
+  .figma-partners-heading h2 { font-size: clamp(28px, 7.5vw, 34px); }
+  .figma-partners-block.is-accent {
+    display: block;
+    width: auto;
+    margin-inline: 24px;
+    padding: 20px 0 26px;
+  }
+  .figma-partners-block.is-accent .figma-partners-label { max-width: 310px; }
+  .figma-partners-block.is-accent .figma-partners-label span { font-size: 17px; }
+  .figma-partners-block.is-accent .figma-partners-label p { max-width: 300px; font-size: 13px; line-height: 1.45; }
+  .figma-partners-block.is-accent .figma-partner-carousel { margin-top: 18px; }
 }

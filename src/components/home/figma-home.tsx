@@ -56,6 +56,17 @@ function LogoMarquee({ logos, folder, direction = "left" }: { logos: readonly (r
   );
 }
 
+function PartnerCarousel() {
+  const loopedLogos = [...partnerLogos, ...partnerLogos];
+  return (
+    <div className="figma-partner-carousel" aria-label="Parceiros da PontoVit">
+      <div className="figma-partner-carousel-track">
+        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={`/assets/parceiros/${file}`} alt={index < partnerLogos.length ? name : ""} aria-hidden={index >= partnerLogos.length ? true : undefined} />)}
+      </div>
+    </div>
+  );
+}
+
 function ArrowButton({ children = "Solicitar demonstração", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
   return (
     <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="figma-button">
@@ -346,6 +357,37 @@ function BlogPreviewCarousel() {
 }
 
 function LogoCarousel() {
+  const logos = clientLogos;
+  const loopedLogos = [...logos, ...logos];
+
+  return (
+    <div className="figma-logo-track" aria-label="Empresas que confiam na PontoVit">
+      <div className="figma-logo-track-inner">
+        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={`/assets/clientes/${image}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
+      </div>
+    </div>
+  );
+}
+
+function LegacyRawLogoCarousel() {
+  const logos = [
+    ["raw-1.png", "Supermercado Paraná"],
+    ["raw-4.png", "Vitória Humana"],
+    ["raw-5.png", "Amas"],
+    ["raw-10.png", "Metadados"],
+  ] as const;
+  const loopedLogos = [...logos, ...logos];
+
+  return (
+    <div className="figma-logo-track" aria-label="Empresas que confiam na PontoVit">
+      <div className="figma-logo-track-inner">
+        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={`${asset}${image}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
+      </div>
+    </div>
+  );
+}
+
+function LegacyLogoCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ pointerId: number; startX: number; startScrollLeft: number; moved: boolean } | null>(null);
   const logos = [
@@ -548,17 +590,10 @@ export function FigmaHome() {
         </div>
       </section>
 
-      <section className="figma-partners" aria-labelledby="partners-title">
-        <div className="figma-partners-heading">
-          <h2 id="partners-title">Quem caminha ao lado da PontoVit.</h2>
-        </div>
-        <div className="figma-partners-block">
-          <div className="figma-partners-label"><span>Clientes</span><p>Empresas que colocaram suas escalas em ordem com a PontoVit.</p></div>
-          <LogoMarquee logos={clientLogos} folder="clientes" direction="left" />
-        </div>
+      <section className="figma-partners">
         <div className="figma-partners-block is-accent">
           <div className="figma-partners-label"><span>Parceiros</span><p>Organizações que caminham ao lado da PontoVit todos os dias.</p></div>
-          <LogoMarquee logos={partnerLogos} folder="parceiros" direction="right" />
+          <PartnerCarousel />
         </div>
       </section>
 
