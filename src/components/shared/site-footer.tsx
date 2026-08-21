@@ -3,7 +3,7 @@ import type { ComponentType } from "react";
 import { siteConfig } from "@/config/site";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { Logo } from "@/components/shared/logo";
-import { ArrowUpRightIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from "@/components/shared/icons";
+import { ArrowUpRightIcon, FacebookIcon, InstagramIcon, LinkedinIcon, MailIcon, MapPinIcon, PhoneIcon } from "@/components/shared/icons";
 
 const footerGroups = [
   {
@@ -42,15 +42,18 @@ const socialLinks: ReadonlyArray<readonly [string, SocialIcon, string]> = [
 export function SiteFooter() {
   return (
     <footer className="pv-footer">
+      <span className="pv-footer-orb pv-footer-orb-1" aria-hidden="true" />
+      <span className="pv-footer-orb pv-footer-orb-2" aria-hidden="true" />
       <div className="pv-footer-inner">
         <div className="pv-footer-cta">
+          <span className="pv-footer-cta-orb" aria-hidden="true" />
           <div>
             <p className="pv-footer-eyebrow">PontoVit</p>
             <h2>Mais controle para quem planeja.</h2>
             <p>Mais simplicidade para quem opera.</p>
           </div>
           <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="pv-footer-cta-button">
-            Solicitar demo <ArrowUpRightIcon size={18} />
+            Solicitar demonstração <ArrowUpRightIcon size={20} />
           </Link>
         </div>
 
@@ -58,14 +61,19 @@ export function SiteFooter() {
           <div className="pv-footer-brand">
             <Logo />
             <p>Gestão de escalas, jornadas e equipes em um único sistema.</p>
+            <div className="pv-footer-contact">
+              <a href={`mailto:${siteConfig.email}`}><MailIcon size={16} /> {siteConfig.email}</a>
+              <a href="tel:+556730257957"><PhoneIcon size={16} /> +55 (67) 3025-7957</a>
+              <span><MapPinIcon size={16} /> Campo Grande · Porto Alegre</span>
+            </div>
             <div className="pv-footer-socials" aria-label="Redes sociais">
               {socialLinks.map(([label, Icon, href]) => href ? (
                 <a key={label} href={href} target="_blank" rel="noreferrer" className="pv-social-link" aria-label={label}>
-                  <Icon size={18} />
+                  <Icon size={20} />
                 </a>
               ) : (
                 <span key={label} className="pv-social-link is-placeholder" title={`${label}: link será configurado`} aria-label={`${label}: link será configurado`}>
-                  <Icon size={18} />
+                  <Icon size={20} />
                 </span>
               ))}
             </div>
@@ -83,6 +91,7 @@ export function SiteFooter() {
 
         <div className="pv-footer-bottom">
           <span>© {new Date().getFullYear()} PontoVit. Todos os direitos reservados.</span>
+          <a href="https://www.instagram.com/eupedroespindola" target="_blank" rel="noreferrer" className="pv-footer-credit">Desenvolvido por @eupedroespindola</a>
         </div>
       </div>
     </footer>

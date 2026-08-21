@@ -91,7 +91,7 @@ export function SiteHeader() {
         </nav>
       </div>
 
-      <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="site-header-cta">Solicitar demo</Link>
+      <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="site-header-cta">Solicitar demonstração</Link>
 
       <button type="button" className="site-header-toggle" aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={mobileOpen} onClick={() => setMobileOpen((value) => !value)}>
         <span /><span /><span />
@@ -109,7 +109,7 @@ export function SiteHeader() {
         </details>
         <Link href="/blog/" onClick={() => setMobileOpen(false)}>Blog</Link>
         <Link href="/contato-antigo/" onClick={() => setMobileOpen(false)}>Contato</Link>
-        <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" onClick={() => setMobileOpen(false)}>Solicitar demo <ArrowIcon /></Link>
+        <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" onClick={() => setMobileOpen(false)}>Solicitar demonstração <ArrowIcon /></Link>
       </div>
     </header>
   );

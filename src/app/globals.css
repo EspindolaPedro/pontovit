@@ -106,7 +106,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .figma-benefit-card h3 { margin: 25px 0 0; max-width: 294px; font-size: 26px; font-weight: 600; line-height: 1.12; }
 .figma-benefit-card p { max-width: 332px; margin: 22px 0 0; font-size: 22px; font-weight: 300; line-height: 1.35; }
 .figma-logos { display: grid; min-height: 162px; grid-template-columns: minmax(210px, 265px) 130px 102px 265px minmax(250px, 384px); align-items: center; justify-content: space-between; gap: 28px; margin-top: 90px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; text-align: left; }
-.figma-logos p { max-width: 265px; margin: 0; font-size: 16px; font-weight: 300; line-height: 1.45; }
+.figma-logos p { max-width: 265px; margin: 0; color: #101010; font-size: 16px; font-weight: 600; line-height: 1.45; }
 .figma-logo-track { display: contents; }
 .figma-logos img { width: 100%; height: auto; max-height: 91px; object-fit: contain; }
 .figma-product { position: relative; min-height: 715px; overflow: hidden; padding: 115px max(40px, calc((100% - 1769px) / 2)); background: #fafafa; }
@@ -161,14 +161,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
   align-items: start;
   min-height: 798px;
   padding: 246px max(40px, calc((100% - 1760px) / 2)) 130px;
-  background: #f3f3f3 url("/assets/figma/testimonials-bg.png") center / 100% 100% no-repeat;
+  background: #f3f3f3;
 }
 .figma-testimonial-intro { padding-top: 8px; }
 .figma-testimonial-intro .figma-eyebrow { margin: 0; color: #777; font-size: 12px; font-weight: 500; letter-spacing: .23em; text-transform: uppercase; }
 .figma-testimonial-intro h2 { margin: 17px 0 0; color: #414141; font-family: var(--font-manrope), Arial, sans-serif; font-size: clamp(26px, 1.7vw, 34px); font-weight: 800; line-height: 1.14; letter-spacing: -.035em; }
 .figma-stars { margin-top: 22px; color: #ed8107; font-size: 21px; letter-spacing: 3px; line-height: 1; }
 .figma-testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(22px, 2.35vw, 45px); }
-.figma-testimonial-card { position: relative; display: flex; min-height: 327px; flex-direction: column; padding: 67px 24px 22px; border: 1px solid #dedede; border-radius: 7px; background: #fff; box-shadow: 0 11px 22px rgba(0, 0, 0, .04); }
+.figma-testimonial-card { position: relative; display: flex; min-height: 327px; flex-direction: column; padding: 67px 24px 22px; border: 1px solid #dedede; border-radius: 8px; background: #fffaf4; box-shadow: 0 11px 22px rgba(0, 0, 0, .04); transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease; }
+.figma-testimonial-card:hover { transform: translateY(-4px); border-color: rgba(242, 138, 11, .35); box-shadow: 0 18px 34px rgba(0, 0, 0, .08); }
 .testimonial-accent { position: absolute; top: -6px; left: 12px; width: 66px; height: 12px; border-radius: 99px; background: #f28a0b; box-shadow: 0 4px 9px rgba(242, 138, 11, .25); }
 .figma-testimonial-card blockquote { margin: 0; color: #484848; font-size: 16px; font-weight: 400; line-height: 1.26; }
 .figma-testimonial-card footer { display: flex; margin-top: auto; flex-direction: column; color: #333; font-size: 15px; line-height: 1.25; }
@@ -185,7 +186,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .figma-testimonial-card { min-height: 27.25vw; padding: 5.6vw 1.25vw 1.5vw; }
   .figma-testimonial-card blockquote { font-size: 1.25vw; }
   .figma-testimonial-card footer { font-size: 1.15vw; }
-  .figma-testimonial-card footer span { font-size: .9vw; }
+  .testimonial-footer-copy > span { font-size: .9vw; }
 }
 
 @media (max-width: 720px) {
@@ -253,7 +254,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
   .figma-hero { height: 690px; }
   .figma-hero-copy { top: 184px; width: calc(100% - 40px); }
-  .figma-hero-copy h1 { font-size: clamp(30px, 8.8vw, 36px); }
+  .figma-hero-copy h1 { font-size: clamp(24px, 7vw, 29px); }
   .figma-hero-copy p { max-width: 330px; font-size: 16px; }
 
   .figma-problem {
@@ -391,19 +392,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
     background-color: #f3f3f3;
     background-image: none;
   }
-  .figma-testimonials::before, .figma-testimonials::after {
-    position: absolute;
-    right: -15%;
-    left: -15%;
-    display: block;
-    height: 90px;
-    background: #fff;
-    content: "";
-    pointer-events: none;
-  }
-  .figma-testimonials::before { top: -48px; border-radius: 50%; }
-  .figma-testimonials::after { bottom: -48px; border-radius: 50%; }
-  .figma-testimonials > * { position: relative; z-index: 1; }
 }
 
 @media (max-width: 420px) {
@@ -508,9 +496,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
     min-height: 0;
     padding: 83px 28px 92px;
     background-color: #f3f3f3;
-    background-image: url("/assets/figma/mobile/testimonials-bg-mobile.png");
-    background-position: center;
-    background-size: 100% 100%;
   }
   .figma-testimonials::before, .figma-testimonials::after { display: none; }
   .figma-testimonial-intro { padding-top: 0; }
@@ -522,7 +507,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .figma-testimonial-card { flex: 0 0 calc(100vw - 56px); min-height: 365px; padding: 67px 22px 24px; scroll-snap-align: start; }
   .figma-testimonial-card blockquote { font-size: 18px; line-height: 1.3; }
   .figma-testimonial-card footer { font-size: 16px; }
-  .figma-testimonial-card footer span { font-size: 13px; }
+  .testimonial-footer-copy > span { font-size: 13px; }
 }
 
 /* Final palette overrides: later responsive rules must not turn this section white. */
@@ -539,8 +524,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .pv-footer {
-  background: transparent !important;
+  /* Neutral graphite keeps the orange CTA as the visual accent. */
+  background: #171a1f !important;
+  border-radius: 50% 50% 0 0 / 112px 112px 0 0;
 }
+
+.pv-footer-cta { max-width: 1320px; margin-inline: auto; padding: clamp(30px, 4vw, 52px) clamp(28px, 5vw, 58px); }
+.pv-footer .pv-footer-cta-button { background: #0d1014; }
+.pv-footer .pv-footer-cta-button:hover { background: #080a0d; }
 
 /* Shared page canvas used by transparent Home sections and the footer. */
 body {
@@ -581,6 +572,9 @@ body {
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
+
+  .pv-footer { border-radius: 50% 50% 0 0 / 64px 64px 0 0; }
+  .pv-footer-cta { padding: 28px 24px; }
 }
 
 /* Internal pages: Home-width composition, restrained type scale and product-only visuals. */
@@ -1459,4 +1453,168 @@ body {
     background: var(--pv-line);
   }
   .figma-blog-preview-dots button.is-active { width: 22px; border-radius: 99px; background: var(--pv-orange); }
+}
+
+/* Clientes & Parceiros — confiança como uma única faixa contínua. */
+.figma-partners {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(86px, 8vw, 124px) 0 clamp(96px, 9vw, 138px);
+  background: #fafafa;
+}
+.figma-partners-heading { max-width: 620px; margin: 0 auto clamp(48px, 5vw, 66px); padding: 0 24px; text-align: center; }
+.figma-partners-heading .figma-eyebrow { display: inline-flex; align-items: center; gap: 11px; margin: 0; color: #e77c08; font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+.figma-partners-heading .figma-eyebrow::before,
+.figma-partners-heading .figma-eyebrow::after { width: 24px; height: 1px; background: rgba(231, 124, 8, .42); content: ""; }
+.figma-partners-heading h2 { max-width: 570px; margin: 0 auto; color: #1b2228; font-family: var(--font-manrope), Arial, sans-serif; font-size: clamp(32px, 3.4vw, 48px); font-weight: 700; letter-spacing: -.055em; line-height: 1.08; text-wrap: balance; }
+
+.figma-partners-block { position: relative; padding: 30px 0 40px; }
+.figma-partners-block + .figma-partners-block { padding-top: 36px; }
+.figma-partners-block + .figma-partners-block::before { position: absolute; top: 0; right: max(24px, calc((100% - 1270px) / 2)); left: max(24px, calc((100% - 1270px) / 2)); height: 1px; background: linear-gradient(90deg, transparent, rgba(222, 157, 99, .32), transparent); content: ""; }
+.figma-partners-block.is-accent { background: transparent; }
+
+.figma-partners-label { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 14px; max-width: 1600px; margin: 0 auto 22px; padding: 0 max(24px, calc((100% - 1600px) / 2)); text-align: center; }
+.figma-partners-label span { color: #df7300; font-family: var(--font-manrope), Arial, sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -.015em; }
+.figma-partners-block.is-accent .figma-partners-label span { color: #df7300; }
+.figma-partners-label p { margin: 0; color: #737b80; font-size: 13px; line-height: 1.45; }
+
+.figma-marquee { position: relative; width: 100%; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.figma-marquee-track { display: flex; width: max-content; gap: 16px; animation: figma-marquee-scroll 36s linear infinite; }
+.figma-marquee-right .figma-marquee-track { animation-name: figma-marquee-scroll-reverse; }
+.figma-marquee:hover .figma-marquee-track { animation-play-state: paused; }
+.figma-marquee-tile { display: grid; overflow: hidden; place-items: center; width: 142px; height: 122px; flex-shrink: 0; padding: 17px; border: 1px solid rgba(218, 221, 221, .9); border-radius: 16px; background: rgba(255, 255, 255, .86); box-shadow: 0 10px 26px rgba(40, 30, 20, .045); transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease; }
+.figma-marquee-tile:hover { transform: translateY(-4px); border-color: rgba(231, 124, 8, .38); box-shadow: 0 16px 32px rgba(40, 30, 20, .1); }
+.figma-marquee-tile img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+
+@keyframes figma-marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes figma-marquee-scroll-reverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .figma-marquee-track { animation: none; }
+}
+
+@media (max-width: 720px) {
+  .figma-partners { padding: 72px 0 88px; }
+  .figma-partners-heading { margin-bottom: 42px; padding: 0 24px; }
+  .figma-partners-heading .figma-eyebrow { font-size: 10px; letter-spacing: .14em; }
+  .figma-partners-heading .figma-eyebrow::before,
+  .figma-partners-heading .figma-eyebrow::after { width: 16px; }
+  .figma-partners-heading h2 { font-size: clamp(29px, 8vw, 36px); line-height: 1.08; }
+  .figma-partners-block { padding: 24px 0 32px; }
+  .figma-partners-block + .figma-partners-block { padding-top: 30px; }
+  .figma-partners-label { padding: 0 24px; }
+  .figma-partners-label span { font-size: 16px; }
+  .figma-partners-label p { width: 100%; font-size: 12px; }
+  .figma-marquee { padding-inline: 12px; }
+  .figma-marquee-tile { width: clamp(92px, 29vw, 116px); height: 100px; padding: 13px; }
+  .figma-marquee-track { gap: 12px; }
+}
+
+/* Restore the original testimonial atmosphere after the later palette overrides. */
+.figma-testimonials {
+  background: url("/assets/figma/testimonials-bg.png") center / 100% 100% no-repeat;
+}
+
+.figma-blog-preview { background: #fafafa; }
+
+@media (max-width: 720px) {
+  .figma-testimonials {
+    background-color: transparent;
+    background-image: url("/assets/figma/mobile/testimonials-bg-mobile.png");
+    background-size: 100% 100%;
+  }
+}
+
+/* Footer refinement: lighter surface, compact CTA and a softer curved entry. */
+.pv-footer {
+  background: #eef1f2 !important;
+  border-radius: 50% 50% 0 0 / 150px 150px 0 0;
+  color: #1b2228;
+}
+.pv-footer-cta {
+  max-width: 1180px;
+  padding: 30px 44px;
+  border-radius: 24px !important;
+  background: linear-gradient(135deg, #ed8107, #e46b08);
+  box-shadow: 0 18px 38px rgba(237, 129, 7, .22);
+}
+.pv-footer-cta h2 { font-size: clamp(28px, 3.2vw, 44px); }
+.pv-footer-cta p:not(.pv-footer-eyebrow) { font-size: 16px; }
+.pv-footer-cta-button,
+.pv-footer .pv-footer-cta-button { min-height: 46px; gap: 9px; padding: 0 18px; background: #1b2228; font-size: 13px; }
+.pv-footer .pv-footer-cta-button:hover { background: #10151a; }
+.pv-footer-brand > a { filter: none; }
+.pv-footer-brand > p { color: #5f6a72; font-size: 15px; line-height: 1.55; }
+.pv-footer-contact a, .pv-footer-contact span { color: #5f6a72; font-size: 14px; }
+.pv-footer-group h3 { color: #1b2228; }
+.pv-footer-group a { color: #5f6a72; font-size: 15px; }
+.pv-footer-top { border-bottom-color: rgba(27, 34, 40, .12); }
+.pv-social-link { border-color: rgba(27, 34, 40, .18); color: #1b2228; }
+.pv-social-link.is-placeholder { color: rgba(27, 34, 40, .38); }
+.pv-social-link.is-placeholder:hover { border-color: rgba(27, 34, 40, .18); }
+.pv-footer-bottom { color: #7c878e; }
+.pv-footer-credit { color: #68747c; }
+.pv-footer-orb-1 { border-color: rgba(237, 129, 7, .13); }
+.pv-footer-orb-2 { opacity: .35; }
+
+.figma-testimonial-card {
+  border-color: #edcf9c;
+  background: #fff0d8;
+}
+.figma-testimonial-card:hover { border-color: rgba(225, 119, 0, .5); }
+.pv-footer { background: #fff0b8 !important; color: #fff; }
+.pv-footer-brand > a { filter: brightness(0) invert(1); }
+.pv-footer-brand > p,
+.pv-footer-contact a,
+.pv-footer-contact span,
+.pv-footer-group h3,
+.pv-footer-group a,
+.pv-footer-bottom,
+.pv-footer-credit { color: #fff; }
+.pv-social-link { color: #fff; border-color: rgba(255, 255, 255, .55); }
+.pv-social-link.is-placeholder { color: rgba(255, 255, 255, .65); }
+
+.pv-footer { color: #171a1f; border-radius: 50% 50% 0 0 / 180px 180px 0 0; }
+.pv-footer-inner { padding-top: 84px; }
+.pv-footer-brand > a { filter: none; }
+.pv-footer-brand > p,
+.pv-footer-contact a,
+.pv-footer-contact span,
+.pv-footer-group h3,
+.pv-footer-group a,
+.pv-footer-bottom,
+.pv-footer-credit { color: #171a1f; }
+.pv-social-link { color: #171a1f; border-color: rgba(23, 26, 31, .28); }
+.pv-social-link.is-placeholder { color: rgba(23, 26, 31, .55); }
+
+/* Use a single smooth arch instead of rounded side corners on the footer. */
+.pv-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: transparent !important;
+  border-radius: 0;
+}
+.pv-footer::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: #fff0b8;
+  clip-path: ellipse(120% 100% at 50% 100%);
+  content: "";
+}
+.pv-footer-inner { padding-top: 120px; }
+.pv-footer-cta { max-width: 1040px; padding: 24px 34px; }
+.pv-footer-cta h2 { font-size: clamp(25px, 2.8vw, 38px); }
+.pv-footer-cta p:not(.pv-footer-eyebrow) { margin-top: 8px; font-size: 14px; }
+.pv-footer-cta-button,
+.pv-footer .pv-footer-cta-button { min-height: 40px; padding: 0 16px; font-size: 12px; }
+
+@media (max-width: 720px) {
+  .pv-footer-inner { padding-top: 88px; }
+  .pv-footer-cta { width: calc(100% - 28px); padding: 22px 20px; }
+  .pv-footer-cta h2 { font-size: 27px; }
+  .pv-footer-cta-button,
+  .pv-footer .pv-footer-cta-button { width: auto; min-height: 44px; }
 }

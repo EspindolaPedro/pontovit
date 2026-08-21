@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/container";
 import { PageHero } from "@/components/shared/page-hero";
 import { ButtonLink } from "@/components/shared/button-link";
@@ -17,13 +16,85 @@ export function ContactPage() {
 
   return (
     <main className="pv-page">
-      <PageHero eyebrow="Contato" title="Converse com quem entende da sua operação." description="Tire dúvidas, conte como sua empresa organiza as jornadas hoje e veja como a PontoVit pode ajudar." visual="contact" />
+      <PageHero
+        eyebrow="Contato"
+        title="Converse com quem entende da sua operação."
+        description="Tire dúvidas, conte como sua empresa organiza as jornadas hoje e veja como a PontoVit pode ajudar."
+        visual="contact"
+        image="/assets/people/retail-supervisor.png"
+        imageAlt="Especialista PontoVit"
+      />
 
-      <section id="conteudo" className="pv-page-section pv-contact-section"><Container><div className="pv-contact-heading"><div><p className="eyebrow">Fale com um especialista</p><h2>O próximo passo é uma conversa.</h2></div><p>Nosso atendimento comercial acontece pelo WhatsApp. Envie uma mensagem e explique o que sua operação precisa.</p></div><div className="pv-photo-panel mt-14" style={{ height: 420 }}><Image src="/assets/people/retail-supervisor.png" alt="Especialista PontoVit pronto para atender" width={1400} height={840} /><span className="pv-photo-panel-tag">Atendimento humano · PontoVit</span></div><div className="pv-contact-options"><a href={contactUrl} target="_blank" rel="noreferrer" className="pv-contact-option pv-contact-option-primary"><span className="pv-contact-option-number">01</span><div><h3>Quero conhecer a plataforma</h3><p>Entenda como a PontoVit organiza escalas e jornadas.</p></div><ArrowUpRightIcon size={22} /></a><a href={`mailto:contato@pontovit.com.br`} className="pv-contact-option"><span className="pv-contact-option-number">02</span><div><h3>Tenho uma dúvida</h3><p>Fale com nosso time sobre a realidade da sua operação.</p></div><ArrowUpRightIcon size={22} /></a><div className="pv-contact-option pv-contact-option-info"><span className="pv-contact-option-number">03</span><div><h3>Atendimento PontoVit</h3><p>contato@pontovit.com.br<br />Campo Grande · Porto Alegre</p></div></div></div></Container></section>
+      <section id="conteudo" className="pv-page-section pv-contact-section">
+        <Container>
+          <div className="pv-contact-heading">
+            <div>
+              <p className="eyebrow">Fale com um especialista</p>
+              <h2>O próximo passo é uma conversa.</h2>
+            </div>
+            <p>Nosso atendimento comercial acontece pelo WhatsApp. Envie uma mensagem e explique o que sua operação precisa.</p>
+          </div>
 
-      <section className="pv-page-section pv-faq-section"><Container><div className="pv-faq-heading"><p className="eyebrow">Perguntas frequentes</p><h2>Antes da demonstração,<br /><strong>algumas respostas.</strong></h2><p>Se ainda ficou alguma dúvida, fale diretamente com nosso time.</p></div><div className="pv-faq-list">{questions.map(([question, answer], index) => <details key={question} className="pv-faq-item"><summary><span>0{index + 1}</span>{question}<b>+</b></summary><p>{answer}</p></details>)}</div><div className="pv-contact-promises"><span><CheckIcon size={16} /> Sem compromisso</span><span><CheckIcon size={16} /> Conversa personalizada</span><span><CheckIcon size={16} /> Atendimento humano</span></div></Container></section>
+          <div className="pv-contact-options">
+            <a href={contactUrl} target="_blank" rel="noreferrer" className="pv-contact-option pv-contact-option-primary">
+              <span className="pv-contact-option-number">01</span>
+              <div>
+                <h3>Quero conhecer a plataforma</h3>
+                <p>Entenda como a PontoVit organiza escalas e jornadas.</p>
+              </div>
+              <ArrowUpRightIcon size={22} />
+            </a>
+            <a href="mailto:contato@pontovit.com.br" className="pv-contact-option">
+              <span className="pv-contact-option-number">02</span>
+              <div>
+                <h3>Tenho uma dúvida</h3>
+                <p>Fale com nosso time sobre a realidade da sua operação.</p>
+              </div>
+              <ArrowUpRightIcon size={22} />
+            </a>
+            <div className="pv-contact-option pv-contact-option-info">
+              <span className="pv-contact-option-number">03</span>
+              <div>
+                <h3>Atendimento PontoVit</h3>
+                <p>contato@pontovit.com.br<br />Campo Grande · Porto Alegre</p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
 
-      <section className="pv-page-section pv-contact-cta"><Container><div><p className="eyebrow">Pronto para organizar melhor?</p><h2>Vamos entender sua operação.</h2></div><ButtonLink href={contactUrl} target="_blank" rel="noreferrer">Solicitar demonstração</ButtonLink></Container></section>
+      <section className="pv-page-section pv-faq-section">
+        <Container>
+          <div className="pv-faq-heading">
+            <p className="eyebrow">Perguntas frequentes</p>
+            <h2>Antes da demonstração,<br /><strong>algumas respostas.</strong></h2>
+            <p>Se ainda ficou alguma dúvida, fale diretamente com nosso time.</p>
+          </div>
+          <div className="pv-faq-list">
+            {questions.map(([question, answer], index) => (
+              <details key={question} className="pv-faq-item">
+                <summary><span>0{index + 1}</span>{question}<b>+</b></summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+          <div className="pv-contact-promises">
+            <span><CheckIcon size={16} /> Sem compromisso</span>
+            <span><CheckIcon size={16} /> Conversa personalizada</span>
+            <span><CheckIcon size={16} /> Atendimento humano</span>
+          </div>
+        </Container>
+      </section>
+
+      <section className="pv-page-section pv-contact-cta">
+        <Container>
+          <div>
+            <p className="eyebrow">Pronto para organizar melhor?</p>
+            <h2>Vamos entender sua operação.</h2>
+          </div>
+          <ButtonLink href={contactUrl} target="_blank" rel="noreferrer">Solicitar demonstração</ButtonLink>
+        </Container>
+      </section>
     </main>
   );
 }

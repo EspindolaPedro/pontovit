@@ -9,7 +9,54 @@ import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const asset = "/assets/figma/";
 
-function ArrowButton({ children = "Solicitar Demo", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
+const clientLogos = [
+  ["superdo.jpeg", "Superdó"],
+  ["master-supermercados.jpeg", "Master Supermercados"],
+  ["posto-vargem-linda.jpeg", "Posto Vargem Linda"],
+  ["cardapio-web.jpeg", "Cardápio Web"],
+  ["patbo.jpeg", "PatBo"],
+  ["supermercado-gaucho.jpeg", "Supermercado Gaúcho"],
+  ["basica-condominios.jpeg", "Básica Administração de Condomínios"],
+  ["laticinios-uniao-do-brasil.jpeg", "Laticínios União do Brasil"],
+  ["dom-pedro.jpeg", "Dom Pedro"],
+  ["veratti-supermercados.jpeg", "Veratti Supermercados"],
+  ["santhiago.jpeg", "Supermercado Santhiago"],
+  ["cliente-01.jpeg", "Cliente PontoVit"],
+  ["pag-poko.jpeg", "Supermercados Pag Poko"],
+  ["vetcenter.jpeg", "VetCenter Clínica & Pet Store"],
+] as const;
+
+const partnerLogos = [
+  ["abrasel.jpeg", "Abrasel"],
+  ["amas.jpeg", "AMAS"],
+  ["metadados.jpeg", "Metadados"],
+  ["vitoria-humana.jpeg", "Vitória Humana"],
+  ["stelanto.jpeg", "Stelanto"],
+] as const;
+
+function LogoMarquee({ logos, folder, direction = "left" }: { logos: readonly (readonly [string, string])[]; folder: string; direction?: "left" | "right" }) {
+  // Repeat the set enough times that the seam where it loops sits well past what's visible
+  // in one viewport — with a short list (e.g. 5 partners), just doubling it makes the repeat
+  // obvious immediately. Always keep the repeat count even so translateX(-50%) lands on a
+  // clean set boundary for a seamless loop.
+  const minTiles = 20;
+  const rawRepeat = Math.max(2, Math.ceil(minTiles / logos.length));
+  const repeatCount = rawRepeat % 2 === 0 ? rawRepeat : rawRepeat + 1;
+  const looped = Array.from({ length: repeatCount }, () => logos).flat();
+  return (
+    <div className={`figma-marquee figma-marquee-${direction}`}>
+      <div className="figma-marquee-track">
+        {looped.map(([file, name], index) => (
+          <div className="figma-marquee-tile" key={`${file}-${index}`}>
+            <img src={`/assets/${folder}/${file}`} alt={name} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ArrowButton({ children = "Solicitar demonstração", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
   return (
     <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="figma-button">
       <span className="figma-button-label figma-button-label-desktop">{children}</span>
@@ -31,9 +78,9 @@ const benefits = [
 ] as const;
 
 const resources = [
-  ["Gestão de escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "raw-14.png", "mobile/resources-schedules.png"],
-  ["Controle de ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "raw-12.png", "mobile/resources-point.png"],
-  ["Gestão de equipes", "Organize colaboradores por unidade, setor, função ou necessidade operacional.", "raw-13.png", "mobile/resources-teams.png"],
+  ["Gestão de escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "resources-gestao-de-escalas.png", "resources-gestao-de-escalas.png"],
+  ["Controle de ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "resources-controle-ponto.png", "resources-controle-ponto.png"],
+  ["Gestão da Força de Trabalho (WFM)", "Organize colaboradores por unidade, setor, função ou necessidade operacional.", "resources-gestao-wfm.png", "resources-gestao-wfm.png"],
 ];
 
 function BenefitsCarousel() {
@@ -209,7 +256,10 @@ function TestimonialsCarousel() {
         <article className="figma-testimonial-card" key={testimonial.name}>
           <span className="testimonial-accent" aria-hidden="true" />
           <blockquote>“{testimonial.quote}”</blockquote>
-          <footer><strong>{testimonial.name}</strong><span>{testimonial.company}</span></footer>
+          <footer>
+            <strong>{testimonial.name}</strong>
+            <span>{testimonial.company}</span>
+          </footer>
         </article>
       ))}
     </div>
@@ -450,7 +500,7 @@ export function FigmaHome() {
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
         <div className="figma-orbit" aria-hidden="true"><img src={`${asset}hero-icons.svg`} alt="" /></div>
         <div className="figma-hero-copy">
-          <h1>Toda a <em>gestão de escalas e pontos</em> da sua equipe em um único sistema</h1>
+          <h1>Toda a <em>gestão de escalas e registro de ponto</em> da sua equipe em um único sistema</h1>
           <p>Planeje jornadas, organize equipes e reduza o trabalho manual com uma plataforma pensada para tornar sua operação mais previsível e eficiente.</p>
           <ArrowButton />
         </div>
@@ -475,7 +525,7 @@ export function FigmaHome() {
       </section>
 
       <section className="figma-product">
-        <div className="figma-product-copy"><SectionTitle title={<><span className="product-title-desktop">Uma escala que considera<br /><strong>muito mais do que horários.</strong></span><span className="product-title-mobile">Uma escala que<br /><strong>considera mais do<br />que horários.</strong></span></>} /><p>A PontoVit ajuda sua empresa a planejar jornadas considerando as necessidades da operação, disponibilidade das equipes e regras definidas para cada escala.</p><ArrowButton mobileChildren="Solicitar Demo">Conhecer a plataforma</ArrowButton></div>
+        <div className="figma-product-copy"><SectionTitle title={<><span className="product-title-desktop">Uma escala que considera<br /><strong>muito mais do que horários.</strong></span><span className="product-title-mobile">Uma escala que<br /><strong>considera mais do<br />que horários.</strong></span></>} /><p>A PontoVit ajuda sua empresa a planejar jornadas considerando as necessidades da operação, disponibilidade das equipes e regras definidas para cada escala.</p><ArrowButton mobileChildren="Solicitar demonstração">Conhecer a plataforma</ArrowButton></div>
         <picture className="product-device">
           <source media="(max-width: 720px)" srcSet={`${asset}mobile/product-monitor.png`} />
           <img src={`${asset}raw-16.png`} alt="Sistema PontoVit em um notebook" />
@@ -495,6 +545,20 @@ export function FigmaHome() {
           <h2 id="scale-title">Da jornada mais<br />simples à operação<br />mais complexa.</h2>
           <p><strong>5x2. 6x1. 12x36.</strong> Turnos alternados. Folgas. Equipes diferentes em unidades diferentes.</p>
           <ArrowButton />
+        </div>
+      </section>
+
+      <section className="figma-partners" aria-labelledby="partners-title">
+        <div className="figma-partners-heading">
+          <h2 id="partners-title">Quem caminha ao lado da PontoVit.</h2>
+        </div>
+        <div className="figma-partners-block">
+          <div className="figma-partners-label"><span>Clientes</span><p>Empresas que colocaram suas escalas em ordem com a PontoVit.</p></div>
+          <LogoMarquee logos={clientLogos} folder="clientes" direction="left" />
+        </div>
+        <div className="figma-partners-block is-accent">
+          <div className="figma-partners-label"><span>Parceiros</span><p>Organizações que caminham ao lado da PontoVit todos os dias.</p></div>
+          <LogoMarquee logos={partnerLogos} folder="parceiros" direction="right" />
         </div>
       </section>
 
