@@ -61,6 +61,15 @@ const partnerLogos = [
   ["Logo Vitória Humana 2026.jpeg", "Vitória Humana"],
 ] as const;
 
+const partnerFallbacks: Record<string, string> = {
+  Abrasel: "Logo Abrasel.png",
+  AMAS: "Logo AMAS.png",
+  "AMAS MS": "Logo AMAS.png",
+  Metadados: "Logo Metadados.png",
+  Stelanto: "Logo Stelanto.png",
+  "Vitória Humana": "Logo Vitória Humana 2026.jpeg",
+};
+
 function LogoMarquee({ logos, folder, direction = "left" }: { logos: readonly (readonly [string, string])[]; folder: string; direction?: "left" | "right" }) {
   // Repeat the set enough times that the seam where it loops sits well past what's visible
   // in one viewport — with a short list (e.g. 5 partners), just doubling it makes the repeat
@@ -88,7 +97,15 @@ function PartnerCarousel({ logos = partnerLogos }: { logos?: readonly (readonly 
   return (
     <div className="figma-partner-carousel" aria-label="Parceiros da PontoVit">
       <div className="figma-partner-carousel-track">
-        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={file.startsWith("/") ? file : `/assets/parceiros-novos/${encodeURIComponent(file)}`} alt={index < logos.length ? name : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
+        {loopedLogos.map(([file, name], index) => {
+          const source = file.startsWith("/") ? file : `/assets/parceiros-novos/${encodeURIComponent(file)}`;
+          const fallback = partnerFallbacks[name] ? `/assets/parceiros-novos/${encodeURIComponent(partnerFallbacks[name])}` : null;
+          return <img key={`${file}-${index}`} src={source} alt={index < logos.length ? name : ""} aria-hidden={index >= logos.length ? true : undefined} onError={(event) => {
+            if (!fallback || event.currentTarget.dataset.fallbackApplied || source === fallback) return;
+            event.currentTarget.dataset.fallbackApplied = "true";
+            event.currentTarget.src = fallback;
+          }} />;
+        })}
       </div>
     </div>
   );

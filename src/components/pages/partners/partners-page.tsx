@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { SyntheticEvent } from "react";
 import { Container } from "@/components/shared/container";
 import type { getPublicBrandLogos } from "@/server/modules/brand/brand.repository";
 
@@ -37,6 +38,13 @@ const partners = [
   },
 ] as const;
 
+function applyStaticFallback(event: SyntheticEvent<HTMLImageElement>, fallback: string) {
+  const image = event.currentTarget;
+  if (image.dataset.fallbackApplied) return;
+  image.dataset.fallbackApplied = "true";
+  image.src = fallback;
+}
+
 export function PartnersPage({ partnerLogos = [] }: { partnerLogos?: PublicLogo[] }) {
   const logoFor = (name: string, fallback: string) => {
     const item = partnerLogos.find((logo) => logo.name.toLowerCase() === name.toLowerCase());
@@ -56,7 +64,7 @@ export function PartnersPage({ partnerLogos = [] }: { partnerLogos?: PublicLogo[
 
           <article className="pv-stelanto-feature">
             <div className="pv-stelanto-logo">
-              <Image src={logoFor("Stelanto", "/assets/parceiros-novos/Logo Stelanto.png")} alt="Logo Stelanto" width={520} height={100} />
+              <Image src={logoFor("Stelanto", "/assets/parceiros-novos/Logo Stelanto.png")} alt="Logo Stelanto" width={520} height={100} onError={(event) => applyStaticFallback(event, "/assets/parceiros-novos/Logo Stelanto.png")} />
             </div>
             <div className="pv-stelanto-copy">
               <p className="eyebrow">PontoVit + Stelanto</p>
@@ -80,7 +88,7 @@ export function PartnersPage({ partnerLogos = [] }: { partnerLogos?: PublicLogo[
               <article key={partner.name} className={`pv-partner-card${index % 2 === 1 ? " is-warm" : ""}`}>
                 <div className="pv-partner-card-top">
                   <span>0{index + 1}</span>
-                  <div className="pv-partner-logo"><Image src={logoFor(partner.name, partner.logo)} alt={`Logo ${partner.name}`} width={220} height={100} /></div>
+                  <div className="pv-partner-logo"><Image src={logoFor(partner.name, partner.logo)} alt={`Logo ${partner.name}`} width={220} height={100} onError={(event) => applyStaticFallback(event, partner.logo)} /></div>
                 </div>
                 <p className="pv-partner-kicker">{partner.kicker}</p>
                 <h3>{partner.name}</h3>
