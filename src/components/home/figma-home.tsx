@@ -577,7 +577,7 @@ export function FigmaHome() {
       <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit">
         <div className="figma-video-frame">
           <iframe
-            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=0&modestbranding=1&fs=0"
+            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1"
             title="Conheça a PontoVit"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
