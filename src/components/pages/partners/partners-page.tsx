@@ -61,7 +61,7 @@ export function PartnersPage({ partnerLogos = [] }: { partnerLogos?: PublicLogo[
             <div className="pv-stelanto-copy">
               <p className="eyebrow">PontoVit + Stelanto</p>
               <h2>Duas especialistas. Uma <strong>plataforma integrada.</strong></h2>
-              <p>A PontoVit organiza suas escalas. A Stelanto entrega o ponto eletrônico. Conectadas, eliminam retrabalho e dão visibilidade total da operação.</p>
+              <p>{partners[0].description}</p>
               <div className="pv-stelanto-pillars">
                 <div>
                   <strong>Gestão de escalas</strong>

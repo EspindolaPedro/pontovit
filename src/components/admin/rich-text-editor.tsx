@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 
@@ -40,17 +40,29 @@ export function RichTextEditor({ value, onChange }: Props) {
   }, [editor, value]);
 
   if (!editor) return <div className="pv-rich-editor-loading">Carregando editor...</div>;
+
+  const run = (command: () => boolean) => { command(); editor.commands.focus(); };
   return (
     <div className="pv-rich-editor">
-      <div className="pv-rich-editor-toolbar" role="toolbar" aria-label="Formatação">
-        <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive("bold") ? "is-active" : ""}>B</button>
-        <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive("italic") ? "is-active" : ""}>I</button>
-        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>H2</button>
-        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>H3</button>
-        <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}>Lista</button>
-        <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()}>Citação</button>
+      <div className="pv-rich-editor-toolbar" role="toolbar" aria-label="Formatação do conteúdo">
+        <div className="pv-rich-editor-group">
+          <button type="button" aria-label="Negrito" aria-pressed={editor.isActive("bold")} onClick={() => run(() => editor.chain().toggleBold().run())} className={editor.isActive("bold") ? "is-active" : ""}>B</button>
+          <button type="button" aria-label="Itálico" aria-pressed={editor.isActive("italic")} onClick={() => run(() => editor.chain().toggleItalic().run())} className={editor.isActive("italic") ? "is-active" : ""}>I</button>
+          <button type="button" aria-label="Título 2" aria-pressed={editor.isActive("heading", { level: 2 })} onClick={() => run(() => editor.chain().toggleHeading({ level: 2 }).run())} className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}>H2</button>
+          <button type="button" aria-label="Título 3" aria-pressed={editor.isActive("heading", { level: 3 })} onClick={() => run(() => editor.chain().toggleHeading({ level: 3 }).run())} className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}>H3</button>
+        </div>
+        <div className="pv-rich-editor-group">
+          <button type="button" aria-label="Lista com marcadores" aria-pressed={editor.isActive("bulletList")} onClick={() => run(() => editor.chain().toggleBulletList().run())} className={editor.isActive("bulletList") ? "is-active" : ""}>• Lista</button>
+          <button type="button" aria-label="Lista numerada" aria-pressed={editor.isActive("orderedList")} onClick={() => run(() => editor.chain().toggleOrderedList().run())} className={editor.isActive("orderedList") ? "is-active" : ""}>1. Lista</button>
+          <button type="button" aria-label="Citação" aria-pressed={editor.isActive("blockquote")} onClick={() => run(() => editor.chain().toggleBlockquote().run())} className={editor.isActive("blockquote") ? "is-active" : ""}>Citação</button>
+        </div>
+        <div className="pv-rich-editor-group pv-rich-editor-history">
+          <button type="button" aria-label="Desfazer" disabled={!editor.can().undo()} onClick={() => run(() => editor.chain().undo().run())}>↶</button>
+          <button type="button" aria-label="Refazer" disabled={!editor.can().redo()} onClick={() => run(() => editor.chain().redo().run())}>↷</button>
+        </div>
       </div>
       <EditorContent editor={editor} />
+      <div className="pv-rich-editor-footer"><span>Use títulos, listas e citações para deixar a leitura mais escaneável.</span></div>
     </div>
   );
 }

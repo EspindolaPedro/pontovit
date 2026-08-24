@@ -651,7 +651,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
           </button>
           <iframe
             ref={videoRef}
-            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
+            src="https://www.youtube.com/embed/NHp77G9FiZQ?si=n6WaBjx5YT2DDxaA&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
             title="Conheça a PontoVit"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
