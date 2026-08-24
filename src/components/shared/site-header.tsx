@@ -72,6 +72,7 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const productActive = pathname.startsWith("/escalas-de-trabalho");
   const aboutActive = pathname.startsWith("/quem-somos");
+  const partnersActive = pathname.startsWith("/parceiros");
   const blogActive = pathname.startsWith("/blog");
   const contactActive = pathname.startsWith("/contato");
 
@@ -86,6 +87,7 @@ export function SiteHeader() {
           <Link href="/" className={`site-header-link${pathname === "/" ? " is-active" : ""}`}>Home</Link>
           <Dropdown label="Escalas de Trabalho" href="/escalas-de-trabalho/" items={productItems} active={productActive} />
           <Dropdown label="Quem Somos" href="/quem-somos/" items={aboutItems} active={aboutActive} />
+          <Link href="/parceiros/" className={`site-header-link${partnersActive ? " is-active" : ""}`}>Parceiros</Link>
           <Link href="/blog/" className={`site-header-link${blogActive ? " is-active" : ""}`}>Blog</Link>
           <Link href="/contato-antigo/" className={`site-header-link${contactActive ? " is-active" : ""}`}>Contato</Link>
         </nav>
@@ -107,6 +109,7 @@ export function SiteHeader() {
           <summary><Link href="/quem-somos/" onClick={() => setMobileOpen(false)}>Quem Somos</Link><Chevron /></summary>
           <div>{aboutItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>{item.label}</Link>)}</div>
         </details>
+        <Link href="/parceiros/" onClick={() => setMobileOpen(false)}>Parceiros</Link>
         <Link href="/blog/" onClick={() => setMobileOpen(false)}>Blog</Link>
         <Link href="/contato-antigo/" onClick={() => setMobileOpen(false)}>Contato</Link>
         <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" onClick={() => setMobileOpen(false)}>Solicitar demonstração <ArrowIcon /></Link>

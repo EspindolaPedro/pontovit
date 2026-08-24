@@ -9,7 +9,7 @@ import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const asset = "/assets/figma/";
 
-const clientLogos = [
+const legacyClientLogos = [
   ["superdo.jpeg", "Superdó"],
   ["master-supermercados.jpeg", "Master Supermercados"],
   ["posto-vargem-linda.jpeg", "Posto Vargem Linda"],
@@ -26,12 +26,38 @@ const clientLogos = [
   ["vetcenter.jpeg", "VetCenter Clínica & Pet Store"],
 ] as const;
 
-const partnerLogos = [
+const legacyPartnerLogos = [
   ["abrasel.jpeg", "Abrasel"],
   ["amas.jpeg", "AMAS"],
   ["metadados.jpeg", "Metadados"],
   ["vitoria-humana.jpeg", "Vitória Humana"],
   ["stelanto.jpeg", "Stelanto"],
+] as const;
+
+const clientLogos = [
+  ["Logo Básica.jpg.jpeg", "Básica Administração de Condomínios"],
+  ["Logo CardápioWeb.png", "Cardápio Web"],
+  ["Logo Dom Pedro.png", "Dom Pedro"],
+  ["Logo Nicolini.jpeg", "Nicolini"],
+  ["Logo Nohda.jpg.jpeg", "Nohda"],
+  ["Logo Pag Poko.jpg.jpeg", "Supermercados Pag Poko"],
+  ["Logo Santhiago.jpg.jpeg", "Supermercado Santhiago"],
+  ["Logo Super Gaúcho.png", "Supermercado Gaúcho"],
+  ["Logo superdo.png", "Superdó"],
+  ["logo uniao nova.jpg.jpeg", "Laticínios União do Brasil"],
+  ["Logo Vargem Linda.jpg.jpeg", "Posto Vargem Linda"],
+  ["Logo Veratti.png", "Veratti Supermercados"],
+  ["Logo Vet Center.jpg.jpeg", "VetCenter Clínica & Pet Store"],
+  ["Logomarca Master Sonda.png", "Master Sonda"],
+  ["One Car Wash.png", "One Car Wash"],
+] as const;
+
+const partnerLogos = [
+  ["Logo Abrasel.png", "Abrasel"],
+  ["Logo AMAS.png", "AMAS"],
+  ["Logo Metadados.png", "Metadados"],
+  ["Logo Stelanto.png", "Stelanto"],
+  ["Logo Vitória Humana 2026.jpeg", "Vitória Humana"],
 ] as const;
 
 function LogoMarquee({ logos, folder, direction = "left" }: { logos: readonly (readonly [string, string])[]; folder: string; direction?: "left" | "right" }) {
@@ -61,7 +87,7 @@ function PartnerCarousel() {
   return (
     <div className="figma-partner-carousel" aria-label="Parceiros da PontoVit">
       <div className="figma-partner-carousel-track">
-        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={`/assets/parceiros/${file}`} alt={index < partnerLogos.length ? name : ""} aria-hidden={index >= partnerLogos.length ? true : undefined} />)}
+        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={`/assets/parceiros-novos/${encodeURIComponent(file)}`} alt={index < partnerLogos.length ? name : ""} aria-hidden={index >= partnerLogos.length ? true : undefined} />)}
       </div>
     </div>
   );
@@ -89,8 +115,8 @@ const benefits = [
 ] as const;
 
 const resources = [
-  ["Gestão de escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "resources-gestao-de-escalas.png", "resources-gestao-de-escalas.png"],
-  ["Controle de ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "resources-controle-ponto.png", "resources-controle-ponto.png"],
+  ["Gestão de Escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "resources-gestao-de-escalas.png", "resources-gestao-de-escalas.png"],
+  ["Controle de Ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "resources-controle-ponto.png", "resources-controle-ponto.png"],
   ["Gestão da Força de Trabalho (WFM)", "Organize colaboradores por unidade, setor, função ou necessidade operacional.", "resources-gestao-wfm.png", "resources-gestao-wfm.png"],
 ];
 
@@ -363,7 +389,7 @@ function LogoCarousel() {
   return (
     <div className="figma-logo-track" aria-label="Empresas que confiam na PontoVit">
       <div className="figma-logo-track-inner">
-        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={`/assets/clientes/${image}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
+        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={`/assets/clientes-novos/${encodeURIComponent(image)}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
       </div>
     </div>
   );
@@ -542,11 +568,24 @@ export function FigmaHome() {
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
         <div className="figma-orbit" aria-hidden="true"><img src={`${asset}hero-icons.svg`} alt="" /></div>
         <div className="figma-hero-copy">
-          <h1>Toda a <em>gestão de escalas e registro de ponto</em> da sua equipe em um único sistema</h1>
-          <p>Planeje jornadas, organize equipes e reduza o trabalho manual com uma plataforma pensada para tornar sua operação mais previsível e eficiente.</p>
-          <ArrowButton />
+          <h1>Gestão de <em>escalas inteligente</em>, com registro de <em>ponto integrado</em></h1>
+          <p>Com o PontoVit, você simplifica a gestão de escalas e, quando precisar, pode integrar o registro de ponto Stelanto para uma gestão ainda mais completa da jornada de trabalho.</p>
+          <ArrowButton>Falar no Whatsapp</ArrowButton>
         </div>
       </section>
+
+      <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit">
+        <div className="figma-video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0"
+            title="Conheça a PontoVit"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      </div>
 
       <section className="figma-problem">
         <div className="figma-problem-copy problem-left"><h2>Gerenciar jornadas não deveria dar tanto trabalho.</h2><p>Planilhas, ajustes manuais, trocas de turno, folgas, horas extras e regras trabalhistas tornam a rotina cada vez mais complexa conforme sua operação cresce.</p><span className="problem-arrow">→</span></div>
@@ -560,10 +599,6 @@ export function FigmaHome() {
       <section className="figma-benefits">
         <SectionTitle title={<>Menos tempo montando escalas.<br /><strong>Mais tempo gerenciando sua operação.</strong></>} />
         <BenefitsCarousel />
-        <div className="figma-logos">
-          <p>Empresas que confiam na PontoVit para manter a operação em movimento.</p>
-          <LogoCarousel />
-        </div>
       </section>
 
       <section className="figma-product">
@@ -594,6 +629,16 @@ export function FigmaHome() {
         <div className="figma-partners-block is-accent">
           <div className="figma-partners-label"><span>Parceiros</span><p>Organizações que caminham ao lado da PontoVit todos os dias.</p></div>
           <PartnerCarousel />
+        </div>
+      </section>
+
+      <section className="figma-client-strip" aria-label="Clientes da PontoVit">
+        <div className="figma-logos">
+          <div className="figma-client-strip-label">
+            <span>Clientes</span>
+            <p>Empresas que confiam na PontoVit para manter a operação em movimento.</p>
+          </div>
+          <LogoCarousel />
         </div>
       </section>
 

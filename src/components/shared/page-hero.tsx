@@ -12,12 +12,13 @@ type PageHeroProps = {
   visual?: PageHeroVisual;
   image?: string;
   imageAlt?: string;
+  aside?: ReactNode;
   video?: string;
   stat?: string;
   statLabel?: string;
 };
 
-export function PageHero({ eyebrow, title, description, visual = "content", image, imageAlt, video, stat = "03", statLabel = "leituras para quem planeja operações" }: PageHeroProps) {
+export function PageHero({ eyebrow, title, description, visual = "content", image, imageAlt, aside, video, stat = "03", statLabel = "leituras para quem planeja operações" }: PageHeroProps) {
   return (
     <section className="pv-page-hero pv-editorial-hero hero-stage">
       <Container>
@@ -29,7 +30,7 @@ export function PageHero({ eyebrow, title, description, visual = "content", imag
             <a href="#conteudo" className="pv-explore-link"><span><ArrowDownIcon size={16} /></span> Explorar esta página</a>
           </div>
           <div className={`pv-editorial-hero-art pv-hero-visual-${visual}${image ? " has-image" : ""}`}>
-            {image ? (
+            {aside ?? (image ? (
               <Image src={image} alt={imageAlt ?? "PontoVit"} width={640} height={420} className="pv-editorial-hero-image" />
             ) : video ? (
               <div className="pv-hero-video-stage">
@@ -55,7 +56,7 @@ export function PageHero({ eyebrow, title, description, visual = "content", imag
                 <strong>Ideias que<br />organizam a rotina.</strong>
                 <div><b>{stat}</b><small>{statLabel}</small></div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </Container>
