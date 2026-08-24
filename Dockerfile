@@ -22,4 +22,4 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm db:deploy && node .next/standalone/server.js"]
+CMD ["sh", "-c", "pnpm db:deploy && pnpm db:restore-media && node .next/standalone/server.js"]

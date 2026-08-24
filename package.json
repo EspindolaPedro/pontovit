@@ -12,6 +12,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
+    "db:restore-media": "tsx prisma/restore-media.ts",
     "db:import-blog": "tsx prisma/import-blog.ts",
     "db:import-brand": "tsx prisma/import-brand.ts"
   },

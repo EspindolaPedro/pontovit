@@ -17,13 +17,16 @@ function mediaRoot() {
   return path.resolve(process.env.MEDIA_STORAGE_PATH ?? "./storage/media");
 }
 
-function publicBrandFallback(storageKey: string) {
-  const match = storageKey.match(/^brand-(client|partner)-(.+)$/);
-  if (!match) return null;
+function publicMediaFallback(storageKey: string) {
+  const brand = storageKey.match(/^brand-(client|partner)-(.+)$/);
+  if (brand) {
+    const folder = brand[1] === "partner" ? "parceiros-novos" : "clientes";
+    return path.resolve(process.cwd(), "public", "assets", folder, path.basename(brand[2]));
+  }
 
-  const [, group, filename] = match;
-  const folder = group === "partner" ? "parceiros-novos" : "clientes";
-  return path.resolve(process.cwd(), "public", "assets", folder, path.basename(filename));
+  const legacy = storageKey.match(/^legacy-(.+)$/);
+  if (legacy) return path.resolve(process.cwd(), "public", "assets", "blog", path.basename(legacy[1]));
+  return null;
 }
 
 export async function saveMedia(file: File, altText: string, userId: string) {
@@ -67,7 +70,7 @@ export async function getMediaFile(id: string) {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
 
-    const fallbackPath = publicBrandFallback(media.storageKey);
+    const fallbackPath = publicMediaFallback(media.storageKey);
     if (fallbackPath) {
       try {
         return { media, contents: await readFile(fallbackPath) };
