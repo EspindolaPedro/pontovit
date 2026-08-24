@@ -2662,8 +2662,8 @@ body {
 
 @media (max-width: 720px) {
   .figma-video-embed {
-    margin-top: 0;
-    padding: 0 20px 62px;
+    margin-top: -50px;
+    padding: 0 20px 112px;
   }
 
   .figma-video-frame {
