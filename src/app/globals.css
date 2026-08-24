@@ -2400,6 +2400,12 @@ body {
   line-height: .98;
 }
 
+.pv-partners-page .pv-partners-heading h2 strong,
+.pv-partners-page .pv-stelanto-copy h2 strong {
+  color: var(--pv-yellow-strong);
+  font-weight: inherit;
+}
+
 .pv-partners-page .pv-partners-heading > p {
   max-width: 360px;
   margin: 0;
@@ -2598,24 +2604,33 @@ body {
 
   .pv-partners-page .pv-editorial-hero-grid { display: block; }
   .pv-partners-page .pv-editorial-hero-copy h1 { font-size: clamp(38px, 10.5vw, 50px); }
-  .pv-partners-page .pv-partners-intro { padding: 112px 0 70px; }
+  .pv-partners-page .pv-partners-intro { padding: 78px 0 48px; background: #fafafa; }
   .pv-partners-page .pv-partners-heading { display: block; }
-  .pv-partners-page .pv-partners-heading h2 { font-size: 36px; }
-  .pv-partners-page .pv-partners-heading > p { margin-top: 22px; }
-  .pv-partners-page .pv-stelanto-feature { display: block; width: auto; margin: 42px 0 0; padding: 0 0 18px; }
-  .pv-partners-page .pv-stelanto-logo { grid-column: auto; grid-row: auto; min-height: 120px; padding: 18px; }
-  .pv-partners-page .pv-stelanto-copy { grid-column: auto; grid-row: auto; width: auto; justify-self: auto; margin-top: 28px; padding-top: 0; }
-  .pv-partners-page .pv-stelanto-copy h2 { font-size: 32px; }
-  .pv-partners-page .pv-stelanto-copy > p:not(.eyebrow) { margin-top: 20px; line-height: 1.65; }
-  .pv-partners-page .pv-stelanto-pillars { display: block; margin-top: 32px; }
-  .pv-partners-page .pv-stelanto-pillars > div + div { margin-top: 20px; }
-  .pv-partners-page .pv-partners-grid { display: block; margin-top: 42px; }
+  .pv-partners-page .pv-partners-heading h2 { max-width: 360px; font-size: clamp(31px, 8.5vw, 38px); font-weight: 500; line-height: 1.02; }
+  .pv-partners-page .pv-partners-heading > p { max-width: 340px; margin-top: 18px; font-size: 14px; line-height: 1.55; }
+  .pv-partners-page .pv-stelanto-feature { display: block; width: auto; margin: 36px 0 0; padding: 0 0 10px; }
+  .pv-partners-page .pv-stelanto-logo { grid-column: auto; grid-row: auto; min-height: 132px; padding: 20px; border: 1px solid #eee9e3; border-radius: 18px; background: #fff; box-shadow: 0 12px 28px rgba(32, 26, 20, .05); }
+  .pv-partners-page .pv-stelanto-logo img { width: min(100%, 320px); }
+  .pv-partners-page .pv-stelanto-copy { grid-column: auto; grid-row: auto; width: auto; justify-self: auto; margin-top: 24px; padding-top: 0; }
+  .pv-partners-page .pv-stelanto-copy h2 { max-width: 360px; margin-top: 12px; font-size: clamp(29px, 8vw, 35px); font-weight: 500; line-height: 1.04; }
+  .pv-partners-page .pv-stelanto-copy > p:not(.eyebrow) { margin-top: 18px; font-size: 14px; line-height: 1.6; }
+  .pv-partners-page .pv-stelanto-pillars { display: block; margin-top: 28px; }
+  .pv-partners-page .pv-stelanto-pillars > div { padding-top: 15px; }
+  .pv-partners-page .pv-stelanto-pillars > div + div { margin-top: 18px; }
+  .pv-partners-page .pv-stelanto-pillars strong { font-size: 14px; }
+  .pv-partners-page .pv-stelanto-pillars ul { gap: 8px; margin-top: 12px; font-size: 13px; line-height: 1.45; }
+  .pv-partners-page .pv-partners-grid { display: block; margin-top: 34px; padding-top: 8px; }
   .pv-partners-page .pv-partner-card,
   .pv-partners-page .pv-partner-card:nth-child(4),
-  .pv-partners-page .pv-partner-card:nth-child(5) { min-height: 0; margin-top: 16px; }
+  .pv-partners-page .pv-partner-card:nth-child(5) { min-height: 0; margin-top: 14px; padding: 18px; border: 1px solid #e8e4df; border-radius: 18px; background: #fff; box-shadow: 0 12px 28px rgba(32, 26, 20, .055); }
   .pv-partners-page .pv-partner-card:first-child { margin-top: 0; }
-  .pv-partners-page .pv-partner-logo { width: 160px; }
-  .pv-partners-page .pv-partner-logo img { width: 140px; }
+  .pv-partners-page .pv-partner-card-top { position: relative; min-height: 78px; align-items: center; justify-content: center; gap: 12px; }
+  .pv-partners-page .pv-partner-card-top > span { position: absolute; top: 0; left: 0; font-size: 11px; }
+  .pv-partners-page .pv-partner-logo { width: min(100%, 176px); height: 78px; border-radius: 10px; }
+  .pv-partners-page .pv-partner-logo img { width: 130px; height: 64px; }
+  .pv-partners-page .pv-partner-kicker { margin-top: 22px; font-size: 10px; }
+  .pv-partners-page .pv-partner-card h3 { margin-top: 8px; font-size: 25px; line-height: 1.05; }
+  .pv-partners-page .pv-partner-description { margin-top: 12px; font-size: 14px; line-height: 1.55; }
 }
 
 /* Partners hero stays text-led; no decorative right-hand card. */

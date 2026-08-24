@@ -42,7 +42,7 @@ export function PartnersPage() {
           <div className="pv-partners-heading">
             <div>
               <p className="eyebrow">Quem está com a gente</p>
-              <h2>Parcerias que fortalecem a operação.</h2>
+              <h2>Parcerias que <strong>fortalecem</strong> a operação.</h2>
             </div>
             <p>Empresas e entidades que compartilham o compromisso de simplificar a rotina e desenvolver negócios mais preparados.</p>
           </div>
@@ -53,7 +53,7 @@ export function PartnersPage() {
             </div>
             <div className="pv-stelanto-copy">
               <p className="eyebrow">PontoVit + Stelanto</p>
-              <h2>Duas especialistas. Uma plataforma integrada.</h2>
+              <h2>Duas especialistas. Uma <strong>plataforma integrada.</strong></h2>
               <p>A PontoVit organiza suas escalas. A Stelanto entrega o ponto eletrônico. Conectadas, eliminam retrabalho e dão visibilidade total da operação.</p>
               <div className="pv-stelanto-pillars">
                 <div>
