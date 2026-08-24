@@ -662,8 +662,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
 
       <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit">
         <div className="figma-video-frame">
-          <button type="button" className={`figma-video-sound${videoMuted ? "" : " is-audio-on"}`} onClick={toggleVideoSound} aria-pressed={!videoMuted} aria-label={videoMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}>
-            {videoMuted && <span className="figma-video-mute-x" aria-hidden="true">×</span>}
+          <button type="button" className="figma-video-sound" onClick={toggleVideoSound} aria-pressed={!videoMuted} aria-label={videoMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.2 3a4.2 4.2 0 0 0-2.2-3.7v7.4a4.2 4.2 0 0 0 2.2-3.7Zm0-8.2v2.1a8 8 0 0 1 0 12.2v2.1a10 10 0 0 0 0-16.4Z" /></svg>
             <span>{videoMuted ? "Ativar som" : "Desativar som"}</span>
           </button>
