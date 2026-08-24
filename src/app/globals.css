@@ -2730,9 +2730,9 @@ body {
 
 .pv-partners-page .pv-stelanto-feature {
   display: grid;
-  grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(260px, .75fr) minmax(0, 1.25fr);
   align-items: start;
-  gap: clamp(48px, 7vw, 110px);
+  gap: clamp(36px, 5vw, 72px);
   width: 100%;
   margin: 44px 0 0;
   padding: 12px 0 28px;
@@ -2759,7 +2759,7 @@ body {
 }
 
 .pv-partners-page .pv-stelanto-copy h2 {
-  max-width: 560px;
+  max-width: 720px;
   margin: 18px 0 0;
   color: var(--pv-ink);
   font-family: var(--pv-font-display);
@@ -2772,8 +2772,8 @@ body {
 .pv-partners-page .pv-stelanto-copy {
   grid-column: 2;
   grid-row: 1;
-  width: min(100%, 560px);
-  justify-self: end;
+  width: min(100%, 720px);
+  justify-self: stretch;
   padding-top: clamp(8px, 1.5vw, 24px);
 }
 
@@ -3007,6 +3007,8 @@ body {
 }
 
 .figma-video-sound:hover { background: rgba(16, 16, 16, .98); transform: translateY(-2px); }
+.figma-video-sound.is-audio-on { opacity: 0; pointer-events: none; transform: translateY(4px); }
+.figma-video-mute-x { margin-right: -2px; color: #ffb02e; font-size: 18px; font-weight: 800; line-height: 1; }
 .figma-video-sound svg { width: 17px; height: 17px; fill: currentColor; }
 
 .figma-problem {
