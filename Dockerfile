@@ -15,7 +15,10 @@ COPY . .
 
 RUN pnpm exec prisma generate
 RUN pnpm run build
-RUN cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+RUN mkdir -p .next/standalone/public .next/standalone/.next/static \
+    && cp -r public/. .next/standalone/public/ \
+    && cp -r .next/static/. .next/standalone/.next/static/ \
+    && test -f .next/standalone/public/assets/product/pontovit-logo.png
 
 ENV NODE_ENV=production
 ENV PORT=3000
