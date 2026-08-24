@@ -9,6 +9,7 @@ const prisma = new PrismaClient({
 async function main() {
   const email = (process.env.CMS_ADMIN_EMAIL ?? "admin@pontovit.local").trim().toLowerCase();
   const password = process.env.CMS_ADMIN_PASSWORD ?? "change-me-local-only";
+  const passwordHash = await bcrypt.hash(password, 12);
 
   if (password === "change-me-local-only" || password === "troque-esta-senha-local") {
     console.warn("CMS_ADMIN_PASSWORD não foi trocada; use uma senha própria antes de qualquer ambiente compartilhado.");
@@ -16,11 +17,11 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email },
-    update: { isActive: true, role: UserRole.OWNER },
+    update: { passwordHash, isActive: true, role: UserRole.OWNER },
     create: {
       name: "Administrador PontoVit",
       email,
-      passwordHash: await bcrypt.hash(password, 12),
+      passwordHash,
       role: UserRole.OWNER,
     },
   });
