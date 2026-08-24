@@ -17,6 +17,15 @@ function mediaRoot() {
   return path.resolve(process.env.MEDIA_STORAGE_PATH ?? "./storage/media");
 }
 
+function publicBrandFallback(storageKey: string) {
+  const match = storageKey.match(/^brand-(client|partner)-(.+)$/);
+  if (!match) return null;
+
+  const [, group, filename] = match;
+  const folder = group === "partner" ? "parceiros-novos" : "clientes";
+  return path.resolve(process.cwd(), "public", "assets", folder, path.basename(filename));
+}
+
 export async function saveMedia(file: File, altText: string, userId: string) {
   const extension = allowedTypes.get(file.type);
   if (!extension) throw new AppError("Formato de imagem não permitido. Use JPG, PNG ou WebP.", 422, "UNSUPPORTED_MEDIA_TYPE");
@@ -53,7 +62,22 @@ export async function getMediaFile(id: string) {
   const root = mediaRoot();
   const filePath = path.resolve(root, media.storageKey);
   if (!filePath.startsWith(`${root}${path.sep}`)) throw new AppError("Arquivo inválido.", 400, "INVALID_MEDIA_PATH");
-  return { media, contents: await readFile(filePath) };
+  try {
+    return { media, contents: await readFile(filePath) };
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+
+    const fallbackPath = publicBrandFallback(media.storageKey);
+    if (fallbackPath) {
+      try {
+        return { media, contents: await readFile(fallbackPath) };
+      } catch (fallbackError) {
+        if ((fallbackError as NodeJS.ErrnoException).code !== "ENOENT") throw fallbackError;
+      }
+    }
+
+    throw new AppError("Arquivo de mídia não encontrado.", 404, "MEDIA_FILE_NOT_FOUND");
+  }
 }
 
 export async function updateMedia(id: string, input: unknown) {
