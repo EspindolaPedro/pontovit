@@ -22,4 +22,4 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm db:deploy && pnpm db:restore-media && node .next/standalone/server.js"]
+CMD ["sh", "-c", "pnpm db:deploy && (pnpm db:restore-media || echo 'Aviso: nao foi possivel restaurar as midias publicas') && node .next/standalone/server.js"]
