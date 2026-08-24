@@ -1,0 +1,258 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  EDITOR
+  AUTHOR
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum LogoGroup {
+  CLIENT
+  PARTNER
+}
+
+enum CodeInjectionLocation {
+  HEADER
+  FOOTER
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  passwordHash  String
+  role          UserRole     @default(AUTHOR)
+  isActive      Boolean      @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  posts         Post[]       @relation("PostAuthor")
+  updatedPosts  Post[]       @relation("PostUpdater")
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  createdMedia  Media[]      @relation("MediaCreator")
+  createdLogos  BrandLogo[]  @relation("LogoCreator")
+  updatedLogos  BrandLogo[]  @relation("LogoUpdater")
+  apiKeys       ApiKey[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model LoginAttempt {
+  id          String   @id @default(cuid())
+  fingerprint String
+  email       String
+  failedCount Int      @default(0)
+  windowStart DateTime @default(now())
+  blockedUntil DateTime?
+  updatedAt   DateTime @updatedAt
+
+  @@unique([fingerprint, email])
+  @@index([blockedUntil])
+}
+
+model RateLimitBucket {
+  id           String   @id @default(cuid())
+  key          String   @unique
+  count        Int      @default(0)
+  windowStart  DateTime @default(now())
+  blockedUntil DateTime?
+  updatedAt    DateTime @updatedAt
+
+  @@index([blockedUntil])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model Category {
+  id          String         @id @default(cuid())
+  name        String
+  slug        String         @unique
+  description String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  posts       PostCategory[]
+}
+
+model Post {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  title           String
+  excerpt         String?
+  content         Json
+  coverMediaId    String?
+  seoTitle        String?
+  seoDescription  String?
+  seoCanonical    String?
+  seoNoIndex      Boolean        @default(false)
+  status          PostStatus     @default(DRAFT)
+  publishedAt     DateTime?
+  authorId        String
+  updatedById     String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  deletedAt       DateTime?
+  author          User           @relation("PostAuthor", fields: [authorId], references: [id])
+  updatedBy       User?          @relation("PostUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  coverMedia      Media?         @relation(fields: [coverMediaId], references: [id], onDelete: SetNull)
+  categories      PostCategory[]
+
+  @@index([status, publishedAt])
+  @@index([deletedAt])
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@index([categoryId])
+}
+
+model Media {
+  id          String      @id @default(cuid())
+  filename    String
+  storageKey  String      @unique
+  mimeType    String
+  byteSize    Int
+  width       Int?
+  height      Int?
+  altText     String
+  focalPointX Float?
+  focalPointY Float?
+  createdById String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  creator     User        @relation("MediaCreator", fields: [createdById], references: [id])
+  posts       Post[]
+  brandLogos  BrandLogo[]
+}
+
+model SiteSettings {
+  id                   String   @id @default("main")
+  companyName          String
+  description          String?
+  logoMediaId          String?
+  email                String?
+  phone                String?
+  whatsapp             String?
+  whatsappMessage      String?
+  address              String?
+  defaultSeoTitle      String?
+  defaultSeoDescription String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model SocialLink {
+  id         String   @id @default(cuid())
+  platform   String
+  label      String
+  url        String
+  sortOrder  Int      @default(0)
+  isVisible  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model CtaSettings {
+  id          String   @id @default("main")
+  headerLabel String?
+  heroLabel   String?
+  footerLabel String?
+  target      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BrandLogo {
+  id          String    @id @default(cuid())
+  group       LogoGroup
+  name        String
+  altText     String
+  mediaId     String
+  sortOrder   Int       @default(0)
+  isVisible   Boolean   @default(true)
+  createdById String
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  media       Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  createdBy   User      @relation("LogoCreator", fields: [createdById], references: [id])
+  updatedBy   User?     @relation("LogoUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([group, sortOrder])
+}
+
+model CodeInjection {
+  id          String              @id @default(cuid())
+  name        String
+  location    CodeInjectionLocation
+  html        String              @default("")
+  css         String              @default("")
+  javascript  String              @default("")
+  isEnabled   Boolean             @default(false)
+  createdById String
+  updatedById String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([location, isEnabled])
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String
+  keyPrefix   String
+  keyHash     String    @unique
+  scopes      String[]
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  createdBy   User      @relation(fields: [createdById], references: [id])
+
+  @@index([revokedAt, expiresAt])
+}

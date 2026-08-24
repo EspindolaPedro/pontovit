@@ -8,7 +8,7 @@ import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { CompanyIcon, UsersIcon } from "@/components/shared/feature-icons";
 import { aboutAudience, aboutPurpose, aboutTimeline } from "@/data/home";
 
-export function AboutPage() {
+export function AboutPage({ ctaTarget }: { ctaTarget?: string | null }) {
   return (
     <main className="pv-page pv-about-page">
       <PageHero eyebrow="Quem somos" title={<>A pioneira em gestão de <strong>Escalas de Trabalho</strong> no Brasil.</>} description="Nossa missão é resolver um problema que afeta muitas pessoas em seu cotidiano: a distribuição de horários, turnos e jornadas de trabalho." visual="story" video="https://www.youtube.com/embed/WJl87KyZeGc?autoplay=1&mute=1&loop=1&playlist=WJl87KyZeGc" />
@@ -46,7 +46,7 @@ export function AboutPage() {
               <h2>{aboutPurpose.title}</h2>
               <p>{aboutPurpose.text}</p>
               <p>Estamos aqui para tornar essa tarefa mais fácil e, o que é ainda mais importante, para proporcionar harmonia onde antes reinavam conflitos e muito estresse.</p>
-              <ButtonLink href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="mt-8">Conhecer a PontoVit</ButtonLink>
+              <ButtonLink href={ctaTarget || getWhatsAppUrl()} target="_blank" rel="noreferrer" className="mt-8">Conhecer a PontoVit</ButtonLink>
             </Reveal>
           </div>
         </Container>

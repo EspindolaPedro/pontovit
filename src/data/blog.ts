@@ -14,6 +14,10 @@ export type BlogPost = {
   excerpt: string;
   image: string | null;
   blocks: BlogBlock[];
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  seoCanonical?: string | null;
+  seoNoIndex?: boolean;
 };
 
 export const blogPosts = rawPosts as BlogPost[];

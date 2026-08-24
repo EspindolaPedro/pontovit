@@ -1,0 +1,17 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { AdminModal } from "@/components/admin/admin-modal";
+
+type Media = { id: string; filename: string };
+type Logo = { id: string; name: string; group: string; altText: string; media: { id: string } };
+
+export default function BrandPage() {
+  const [logos, setLogos] = useState<Logo[]>([]); const [media, setMedia] = useState<Media[]>([]); const [form, setForm] = useState({ group: "PARTNER", name: "", altText: "", mediaId: "" }); const [open, setOpen] = useState(false); const [error, setError] = useState("");
+  function load() { Promise.all([fetch("/api/admin/brand-logos").then((r) => r.json()), fetch("/api/admin/media").then((r) => r.json())]).then(([a, b]) => { setLogos(a.data ?? []); setMedia(b.data ?? []); }); }
+  useEffect(load, []);
+  async function create(event: React.FormEvent) { event.preventDefault(); setError(""); const response = await fetch("/api/admin/brand-logos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, sortOrder: logos.length, isVisible: true }) }); const result = await response.json(); if (!response.ok) setError(result.message); else { setForm({ group: "PARTNER", name: "", altText: "", mediaId: "" }); setOpen(false); load(); } }
+  async function remove(id: string) { await fetch(`/api/admin/brand-logos/${id}`, { method: "DELETE" }); load(); }
+  return <main className="pv-admin-subpage"><header className="pv-admin-subpage-header"><div><Link className="pv-admin-back" href="/admin">← Voltar para visão geral</Link><p className="pv-admin-eyebrow">Marca</p><h1>Clientes e parceiros</h1><span>Controle as logos exibidas nas seções públicas sem editar código.</span></div><button className="pv-admin-primary-action" onClick={() => { setError(""); setOpen(true); }}>Adicionar logo <b>↗</b></button></header>{error ? <p className="pv-admin-error">{error}</p> : null}<div className="pv-admin-brand-list">{logos.map((logo) => <div key={logo.id}><img src={`/api/media/${logo.media.id}`} alt={logo.altText} /><span><strong>{logo.name}</strong><small>{logo.group === "CLIENT" ? "Cliente" : "Parceiro"}</small></span><button onClick={() => remove(logo.id)}>Remover</button></div>)}</div><AdminModal open={open} title="Adicionar logo" description="Associe uma imagem a uma das áreas públicas da marca." onClose={() => setOpen(false)}><form className="pv-admin-brand-form" onSubmit={create}><label className="pv-admin-modal-field">Área<select value={form.group} onChange={(e) => setForm({ ...form, group: e.target.value })}><option value="PARTNER">Parceiro</option><option value="CLIENT">Cliente</option></select></label><label className="pv-admin-modal-field">Nome da marca<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nome da marca" required /></label><label className="pv-admin-modal-field">Texto alternativo<input value={form.altText} onChange={(e) => setForm({ ...form, altText: e.target.value })} placeholder="Logo da empresa" required /></label><label className="pv-admin-modal-field">Arquivo<select value={form.mediaId} onChange={(e) => setForm({ ...form, mediaId: e.target.value })} required><option value="">Selecione uma imagem</option>{media.map((item) => <option key={item.id} value={item.id}>{item.filename}</option>)}</select></label><button className="pv-admin-primary-action">Salvar logo <b>↗</b></button></form></AdminModal></main>;
+}

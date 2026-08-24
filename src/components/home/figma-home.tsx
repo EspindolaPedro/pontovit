@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { testimonials } from "@/data/home";
 import { blogPosts, formatPostDate } from "@/data/blog";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const asset = "/assets/figma/";
+const CtaContext = createContext({ label: "Falar no Whatsapp", target: getWhatsAppUrl() });
 
 const legacyClientLogos = [
   ["superdo.jpeg", "Superdó"],
@@ -82,20 +83,20 @@ function LogoMarquee({ logos, folder, direction = "left" }: { logos: readonly (r
   );
 }
 
-function PartnerCarousel() {
-  const loopedLogos = [...partnerLogos, ...partnerLogos];
+function PartnerCarousel({ logos = partnerLogos }: { logos?: readonly (readonly [string, string])[] }) {
+  const loopedLogos = [...logos, ...logos];
   return (
     <div className="figma-partner-carousel" aria-label="Parceiros da PontoVit">
       <div className="figma-partner-carousel-track">
-        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={`/assets/parceiros-novos/${encodeURIComponent(file)}`} alt={index < partnerLogos.length ? name : ""} aria-hidden={index >= partnerLogos.length ? true : undefined} />)}
+        {loopedLogos.map(([file, name], index) => <img key={`${file}-${index}`} src={file.startsWith("/") ? file : `/assets/parceiros-novos/${encodeURIComponent(file)}`} alt={index < logos.length ? name : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
       </div>
     </div>
   );
 }
 
-function ArrowButton({ children = "Solicitar demonstração", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
+function ArrowButton({ children = "Falar no Whatsapp", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
   return (
-    <Link href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="figma-button">
+    <Link href={useContext(CtaContext).target} target="_blank" rel="noreferrer" className="figma-button">
       <span className="figma-button-label figma-button-label-desktop">{children}</span>
       {mobileChildren && <span className="figma-button-label figma-button-label-mobile">{mobileChildren}</span>}
       <span className="figma-button-arrow">↗</span>
@@ -105,6 +106,24 @@ function ArrowButton({ children = "Solicitar demonstração", mobileChildren }: 
 
 function SectionTitle({ eyebrow, title, light = false }: { eyebrow?: string; title: React.ReactNode; light?: boolean }) {
   return <div className={`figma-section-title${light ? " is-light" : ""}`}>{eyebrow && <p className="figma-eyebrow">{eyebrow}</p>}<h2>{title}</h2></div>;
+}
+
+function MobileCarouselDots({ count, activeIndex, onSelect, label }: { count: number; activeIndex: number; onSelect: (index: number) => void; label: string }) {
+  return (
+    <div className="figma-mobile-carousel-dots" role="tablist" aria-label={label}>
+      {Array.from({ length: count }, (_, index) => (
+        <button
+          key={index}
+          type="button"
+          role="tab"
+          aria-label={label + ": slide " + (index + 1)}
+          aria-selected={activeIndex === index}
+          className={"figma-mobile-carousel-dot" + (activeIndex === index ? " is-active" : "")}
+          onClick={() => onSelect(index)}
+        />
+      ))}
+    </div>
+  );
 }
 
 const benefits = [
@@ -151,7 +170,6 @@ function BenefitsCarousel() {
     const track = trackRef.current;
     const card = track?.children[index] as HTMLElement | undefined;
     if (!track || !card) return;
-    setActiveIndex(index);
     const scrollPaddingLeft = Number.parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0;
     track.scrollTo({ left: Math.max(0, card.offsetLeft - scrollPaddingLeft), behavior: "smooth" });
   };
@@ -220,7 +238,8 @@ function BenefitsCarousel() {
   };
 
   return (
-    <div ref={trackRef} className="figma-benefit-grid" aria-label="Benefícios da PontoVit" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}>
+    <>
+      <div ref={trackRef} className="figma-benefit-grid" aria-label="Benefícios da PontoVit" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}>
       {benefits.map(([title, text, icon], index) => (
         <article key={title} className={`figma-benefit-card card-${index + 1}`}>
           <button type="button" className={`benefit-pill${activeIndex === index ? " is-default-active" : ""}`} aria-label={`Ativar benefício: ${title}`} onClick={() => handlePillClick(index)}>
@@ -231,13 +250,46 @@ function BenefitsCarousel() {
           <p>{text}</p>
         </article>
       ))}
-    </div>
+      </div>
+      <MobileCarouselDots count={benefits.length} activeIndex={activeIndex} onSelect={goToSlide} label="Automatização" />
+    </>
   );
 }
 
 function TestimonialsCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ pointerId: number; startX: number; startScrollLeft: number; moved: boolean } | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const updateActiveCard = () => {
+      const cards = Array.from(track.children) as HTMLElement[];
+      if (!cards.length) return;
+      const trackCenter = track.scrollLeft + track.clientWidth / 2;
+      const nextIndex = cards.reduce((closestIndex, card, index) => {
+        const closestCard = cards[closestIndex];
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const closestCenter = closestCard.offsetLeft + closestCard.offsetWidth / 2;
+        return Math.abs(cardCenter - trackCenter) < Math.abs(closestCenter - trackCenter) ? index : closestIndex;
+      }, 0);
+      setActiveIndex(nextIndex);
+    };
+
+    track.addEventListener("scroll", updateActiveCard, { passive: true });
+    return () => track.removeEventListener("scroll", updateActiveCard);
+  }, []);
+
+  const goToSlide = (index: number) => {
+    const track = trackRef.current;
+    const card = track?.children[index] as HTMLElement | undefined;
+    if (!track || !card) return;
+    setActiveIndex(index);
+    const scrollPaddingLeft = Number.parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0;
+    track.scrollTo({ left: Math.max(0, card.offsetLeft - scrollPaddingLeft), behavior: "smooth" });
+  };
 
   const snapToNearestCard = () => {
     const track = trackRef.current;
@@ -251,6 +303,7 @@ function TestimonialsCarousel() {
       const closestCenter = closestCard.offsetLeft + closestCard.offsetWidth / 2;
       return Math.abs(cardCenter - trackCenter) < Math.abs(closestCenter - trackCenter) ? cardIndexPosition : closestIndex;
     }, 0);
+    setActiveIndex(index);
     const scrollPaddingLeft = Number.parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0;
     track.scrollTo({ left: Math.max(0, cards[index].offsetLeft - scrollPaddingLeft), behavior: "smooth" });
   };
@@ -288,7 +341,8 @@ function TestimonialsCarousel() {
   };
 
   return (
-    <div ref={trackRef} className="figma-testimonial-grid" aria-label="Depoimentos de clientes" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}>
+    <>
+      <div ref={trackRef} className="figma-testimonial-grid" aria-label="Depoimentos de clientes" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}>
       {testimonials.map((testimonial) => (
         <article className="figma-testimonial-card" key={testimonial.name}>
           <span className="testimonial-accent" aria-hidden="true" />
@@ -299,7 +353,9 @@ function TestimonialsCarousel() {
           </footer>
         </article>
       ))}
-    </div>
+      </div>
+      <MobileCarouselDots count={testimonials.length} activeIndex={activeIndex} onSelect={goToSlide} label="Depoimentos" />
+    </>
   );
 }
 
@@ -382,14 +438,13 @@ function BlogPreviewCarousel() {
   );
 }
 
-function LogoCarousel() {
-  const logos = clientLogos;
+function LogoCarousel({ logos = clientLogos }: { logos?: readonly (readonly [string, string])[] }) {
   const loopedLogos = [...logos, ...logos];
 
   return (
     <div className="figma-logo-track" aria-label="Empresas que confiam na PontoVit">
       <div className="figma-logo-track-inner">
-        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={`/assets/clientes-novos/${encodeURIComponent(image)}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
+        {loopedLogos.map(([image, label], index) => <img key={`${image}-${index}`} src={image.startsWith("/") ? image : `/assets/clientes-novos/${encodeURIComponent(image)}`} alt={index < logos.length ? label : ""} aria-hidden={index >= logos.length ? true : undefined} />)}
       </div>
     </div>
   );
@@ -560,7 +615,9 @@ function BlogPreviewCarouselV2() {
   );
 }
 
-export function FigmaHome() {
+export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], ctaTarget }: { clientLogosFromCms?: readonly (readonly [string, string])[]; partnerLogosFromCms?: readonly (readonly [string, string])[]; ctaTarget?: string | null }) {
+  const cmsClients = clientLogosFromCms.length ? clientLogosFromCms : clientLogos;
+  const cmsPartners = partnerLogosFromCms.length ? partnerLogosFromCms : partnerLogos;
   const videoRef = useRef<HTMLIFrameElement>(null);
   const [videoMuted, setVideoMuted] = useState(true);
 
@@ -574,7 +631,7 @@ export function FigmaHome() {
   }
 
   return (
-    <main className="figma-home">
+    <CtaContext.Provider value={{ label: "Falar no Whatsapp", target: ctaTarget || getWhatsAppUrl() }}><main className="figma-home">
       <section className="figma-hero">
         <img className="figma-rosette rosette-left" src={`${asset}rosette-left.svg`} alt="" aria-hidden="true" />
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
@@ -594,7 +651,7 @@ export function FigmaHome() {
           </button>
           <iframe
             ref={videoRef}
-            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1"
+            src="https://www.youtube.com/embed/8iMVAB4iJc4?si=BZAZ2gJw50Y-ek1O&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
             title="Conheça a PontoVit"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -619,7 +676,7 @@ export function FigmaHome() {
       </section>
 
       <section className="figma-product">
-        <div className="figma-product-copy"><SectionTitle title={<><span className="product-title-desktop">Uma escala que considera<br /><strong>muito mais do que horários.</strong></span><span className="product-title-mobile">Uma escala que<br /><strong>considera mais do<br />que horários.</strong></span></>} /><p>A PontoVit ajuda sua empresa a planejar jornadas considerando as necessidades da operação, disponibilidade das equipes e regras definidas para cada escala.</p><ArrowButton mobileChildren="Solicitar demonstração">Conhecer a plataforma</ArrowButton></div>
+        <div className="figma-product-copy"><SectionTitle title={<><span className="product-title-desktop">Uma escala que considera<br /><strong>muito mais do que horários.</strong></span><span className="product-title-mobile">Uma escala que<br /><strong>considera mais do<br />que horários.</strong></span></>} /><p>A PontoVit ajuda sua empresa a planejar jornadas considerando as necessidades da operação, disponibilidade das equipes e regras definidas para cada escala.</p><ArrowButton mobileChildren="Falar no Whatsapp">Conhecer a plataforma</ArrowButton></div>
         <picture className="product-device">
           <source media="(max-width: 720px)" srcSet={`${asset}mobile/product-monitor.png`} />
           <img src={`${asset}raw-16.png`} alt="Sistema PontoVit em um notebook" />
@@ -627,7 +684,6 @@ export function FigmaHome() {
       </section>
 
       <section className="figma-resources"><SectionTitle title={<>Gerêncie sua equipe<br /><strong>sem complicar a rotina.</strong></>} /><div className="figma-resource-grid">{resources.map(([title, text, image, mobileImage]) => <article key={title}><div className="resource-image"><picture><source media="(max-width: 720px)" srcSet={`${asset}${mobileImage}`} /><img src={`${asset}${image}`} alt="" /></picture></div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
-
       <section className="figma-scale" aria-labelledby="scale-title">
         <div className="figma-scale-art">
           <picture>
@@ -645,7 +701,7 @@ export function FigmaHome() {
       <section className="figma-partners">
         <div className="figma-partners-block is-accent">
           <div className="figma-partners-label"><span>Parceiros</span><p>Organizações que caminham ao lado da PontoVit todos os dias.</p></div>
-          <PartnerCarousel />
+          <PartnerCarousel logos={cmsPartners} />
         </div>
       </section>
 
@@ -655,7 +711,7 @@ export function FigmaHome() {
             <span>Clientes</span>
             <p>Empresas que confiam na PontoVit para manter a operação em movimento.</p>
           </div>
-          <LogoCarousel />
+          <LogoCarousel logos={cmsClients} />
         </div>
       </section>
 
@@ -680,6 +736,6 @@ export function FigmaHome() {
         <BlogPreviewCarouselV2 />
       </section>
 
-    </main>
+    </main></CtaContext.Provider>
   );
 }

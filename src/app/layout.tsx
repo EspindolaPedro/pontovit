@@ -1,32 +1,37 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import Script from "next/script";
-import { SiteHeader } from "@/components/shared/site-header";
-import { SiteFooter } from "@/components/shared/site-footer";
+import { SiteChrome } from "@/components/shared/site-chrome";
+import { AdminFrame } from "@/components/admin/admin-frame";
 import { siteConfig } from "@/config/site";
 import { seoKeywords } from "@/lib/seo";
+import { getCurrentUser } from "@/server/auth/session";
+import { getPublicSettings } from "@/server/modules/settings/settings.service";
+import { getPublicCodeInjections } from "@/server/modules/settings/code.service";
+import { CodeInjectionLocation } from "@prisma/client";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: { default: "PontoVit | Gestão de Escalas de Trabalho", template: "%s | PontoVit" },
-  description: siteConfig.description,
-  keywords: seoKeywords,
-  authors: [{ name: "PontoVit" }],
-  creator: "PontoVit",
-  publisher: "PontoVit",
-  alternates: { canonical: "/" },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-  openGraph: { type: "website", locale: "pt_BR", url: "/", siteName: "PontoVit", title: "PontoVit | Gestão de Escalas de Trabalho", description: siteConfig.description },
-  twitter: { card: "summary_large_image", title: "PontoVit | Gestão de Escalas de Trabalho", description: siteConfig.description },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getPublicSettings();
+  const title = settings.site?.defaultSeoTitle || "PontoVit | Gestão de Escalas de Trabalho";
+  const description = settings.site?.defaultSeoDescription || settings.site?.description || siteConfig.description;
+  return {
+    metadataBase: new URL(siteConfig.url), title: { default: title, template: "%s | PontoVit" }, description, keywords: seoKeywords,
+    authors: [{ name: settings.site?.companyName || "PontoVit" }], creator: "PontoVit", publisher: "PontoVit", alternates: { canonical: "/" },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+    openGraph: { type: "website", locale: "pt_BR", url: "/", siteName: "PontoVit", title, description }, twitter: { card: "summary_large_image", title, description },
+  };
+}
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const organizationJsonLd = { "@context": "https://schema.org", "@type": "Organization", name: siteConfig.name, url: siteConfig.url, logo: `${siteConfig.url}/assets/product/pontovit-logo.png`, email: siteConfig.email, description: siteConfig.description };
-  const websiteJsonLd = { "@context": "https://schema.org", "@type": "WebSite", name: siteConfig.name, url: siteConfig.url, inLanguage: "pt-BR", publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url } };
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const runtimeSettings = await getPublicSettings();
+  const currentUser = await getCurrentUser();
+  const [headerCode, footerCode] = await Promise.all([getPublicCodeInjections(CodeInjectionLocation.HEADER), getPublicCodeInjections(CodeInjectionLocation.FOOTER)]);
+  const organizationJsonLd = { "@context": "https://schema.org", "@type": "Organization", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url, logo: `${siteConfig.url}/assets/product/pontovit-logo.png`, email: runtimeSettings.site?.email || siteConfig.email, description: runtimeSettings.site?.description || siteConfig.description };
+  const websiteJsonLd = { "@context": "https://schema.org", "@type": "WebSite", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url, inLanguage: "pt-BR", publisher: { "@type": "Organization", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url } };
   return <html lang="pt-BR"><body className={`${inter.variable} ${manrope.variable} font-sans`}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} /><Script id="chatwoot-widget" strategy="afterInteractive">{`(function(d,t) {
     var BASE_URL="https://chatwoot.vitoriahumana.com.br";
     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -34,10 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     g.async = true;
     s.parentNode.insertBefore(g,s);
     g.onload=function(){
-      window.chatwootSDK.run({
-        websiteToken: 'KMFc1nEDrcH8igRBGgihM3n',
-        baseUrl: BASE_URL
-      })
+      window.chatwootSDK.run({ websiteToken: 'KMFc1nEDrcH8igRBGgihM3n', baseUrl: BASE_URL })
     }
-  })(document,"script");`}</Script><SiteHeader />{children}<SiteFooter /></body></html>;
+  })(document,"script");`}</Script><SiteChrome settings={runtimeSettings} headerCode={headerCode} footerCode={footerCode}><AdminFrame user={currentUser ? { name: currentUser.name, email: currentUser.email } : null}>{children}</AdminFrame></SiteChrome></body></html>;
 }

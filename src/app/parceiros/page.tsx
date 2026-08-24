@@ -1,5 +1,9 @@
 import { PartnersPage } from "@/components/pages/partners/partners-page";
 import { pageMetadata } from "@/lib/seo";
+import { getPublicBrandLogos } from "@/server/modules/brand/brand.repository";
+import { LogoGroup } from "@prisma/client";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = pageMetadata(
   "Parceiros",
@@ -7,6 +11,6 @@ export const metadata = pageMetadata(
   "/parceiros/",
 );
 
-export default function PartnersRoute() {
-  return <PartnersPage />;
+export default async function PartnersRoute() {
+  return <PartnersPage partnerLogos={await getPublicBrandLogos(LogoGroup.PARTNER)} />;
 }

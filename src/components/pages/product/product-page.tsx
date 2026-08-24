@@ -15,8 +15,8 @@ const stages = [
   ["Impressão", "Gere e compartilhe a escala final com as equipes de forma simples."],
 ] as const;
 
-export function ProductPage() {
-  const whatsapp = getWhatsAppUrl();
+export function ProductPage({ ctaTarget }: { ctaTarget?: string | null }) {
+  const whatsapp = ctaTarget || getWhatsAppUrl();
 
   return (
     <main className="pv-page pv-product-page">
@@ -33,7 +33,7 @@ export function ProductPage() {
               <h2>{escalasIntro.oPontoVit[0]}</h2>
               <p>{escalasIntro.oPontoVit[1]}</p>
               <p>{escalasIntro.oPontoVit[2]}</p>
-              <ButtonLink href={whatsapp} target="_blank" rel="noreferrer" className="mt-8">Solicitar uma demonstração</ButtonLink>
+              <ButtonLink href={whatsapp} target="_blank" rel="noreferrer" className="mt-8">Falar no Whatsapp</ButtonLink>
             </div>
           </Reveal>
         </Container>

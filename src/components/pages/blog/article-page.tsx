@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftIcon, ArrowUpRightIcon } from "@/components/shared/icons";
 import { Container } from "@/components/shared/container";
-import { formatPostDate, getPostBySlug, getRelatedPosts, type BlogBlock } from "@/data/blog";
+import { formatPostDate, getPostBySlug, getRelatedPosts, type BlogBlock, type BlogPost } from "@/data/blog";
 import { absoluteUrl } from "@/lib/seo";
 
-type ArticlePageProps = { slug: string };
+type ArticlePageProps = { slug: string; post?: BlogPost | null; relatedPosts?: BlogPost[] };
 
 function Block({ block }: { block: BlogBlock }) {
   switch (block.type) {
@@ -22,22 +22,22 @@ function Block({ block }: { block: BlogBlock }) {
   }
 }
 
-export function ArticlePage({ slug }: ArticlePageProps) {
-  const post = getPostBySlug(slug);
+export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePageProps) {
+  const post = dynamicPost ?? getPostBySlug(slug);
   if (!post) return null;
-  const related = getRelatedPosts(post.slug, 2);
+  const related = relatedPosts ?? getRelatedPosts(post.slug, 2);
   const [lead, ...rest] = post.blocks;
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: post.title,
-    description: post.excerpt,
+    headline: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt,
     image: post.image ? [absoluteUrl(post.image)] : undefined,
     datePublished: post.date,
     dateModified: post.date,
     articleSection: post.category,
     inLanguage: "pt-BR",
-    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/blog/${post.slug}/`) },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(post.seoCanonical || `/blog/${post.slug}/`) },
     author: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/") },
     publisher: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/"), logo: { "@type": "ImageObject", url: absoluteUrl("/assets/product/pontovit-logo.png") } },
   };

@@ -1,29 +1,41 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 export function ContactForm() {
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError("");
+    setIsSending(true);
     const form = new FormData(event.currentTarget);
-    const message = [
-      "*Novo contato pelo site PontoVit*",
-      "",
-      "*Dados do contato*",
-      `*Nome:* ${form.get("name")}`,
-      `*Empresa:* ${form.get("company") || "Não informado"}`,
-      `*E-mail:* ${form.get("email")}`,
-      `*Telefone:* ${form.get("phone") || "Não informado"}`,
-      "",
-      `*Interesse:* ${form.get("interest")}`,
-      `*Mensagem:* ${form.get("message") || "Não informado"}`,
-    ].join("\n");
 
-    window.open(getWhatsAppUrl(message), "_blank", "noopener,noreferrer");
-    setSent(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.get("name"),
+          company: form.get("company"),
+          email: form.get("email"),
+          phone: form.get("phone"),
+          subject: form.get("interest"),
+          message: form.get("message"),
+          website: form.get("website"),
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Não foi possível preparar a mensagem.");
+      setSent(true);
+      window.location.assign(result.redirectUrl);
+    } catch (submissionError) {
+      setError(submissionError instanceof Error ? submissionError.message : "Tente novamente em instantes.");
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (
@@ -63,12 +75,20 @@ export function ContactForm() {
           <span>Mensagem <small>(opcional)</small></span>
           <textarea name="message" rows={4} placeholder="Conte brevemente sobre a sua operação..." />
         </label>
+        <label className="pv-honeypot" aria-hidden="true">
+          <span>Website</span>
+          <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+        </label>
       </div>
 
       <div className="pv-contact-form-footer">
-        <button type="submit">{sent ? "Mensagem preparada ✓" : "Falar com um especialista"}<b aria-hidden="true">↗</b></button>
+        <button type="submit" disabled={isSending}>
+          {isSending ? "Preparando..." : sent ? "Mensagem preparada ✓" : "Falar com um especialista"}
+          <b aria-hidden="true">↗</b>
+        </button>
         <small>Sem compromisso. Atendimento humano e personalizado.</small>
       </div>
+      {error ? <p className="pv-contact-form-error" role="alert">{error}</p> : null}
     </form>
   );
 }
