@@ -44,7 +44,6 @@ async function main() {
       headerLabel: "Falar no Whatsapp",
       heroLabel: "Falar no Whatsapp",
       footerLabel: "Falar no Whatsapp",
-      target: "https://wa.me/5567999999999",
     },
   });
 

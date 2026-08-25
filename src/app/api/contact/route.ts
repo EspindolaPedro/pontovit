@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     ].join("\n");
 
     const settings = await getPublicSettings();
-    const baseTarget = settings.cta?.target || (settings.site?.whatsapp ? `https://wa.me/${settings.site.whatsapp.replace(/\D/g, "")}` : getWhatsAppUrl().split("?")[0]);
+    const baseTarget = settings.cta?.target || getWhatsAppUrl().split("?")[0];
     const redirectUrl = `${baseTarget}${baseTarget.includes("?") ? "&" : "?"}text=${encodeURIComponent(message)}`;
     return NextResponse.json({ ok: true, redirectUrl });
   } catch (error) {

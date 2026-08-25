@@ -18,6 +18,14 @@ const optionalText = (maxLength: number) => z.preprocess(
 
 export const EmailSchema = z.preprocess((value) => sanitizeEmail(value), z.string().email().max(254));
 export const UrlSchema = z.preprocess((value) => sanitizeUrl(value), z.string().url().max(2048));
+const optionalEmail = () => z.preprocess(
+  (value) => value == null || value === "" ? undefined : sanitizeEmail(value),
+  z.string().email().max(254).optional(),
+);
+const optionalUrl = () => z.preprocess(
+  (value) => value == null || value === "" ? undefined : sanitizeUrl(value),
+  z.string().url().max(2048).optional(),
+);
 
 export const PostUpsertSchema = z.object({
   title: text(180, 3),
@@ -67,7 +75,7 @@ export const SiteSettingsSchema = z.object({
   companyName: text(120, 2),
   description: optionalText(500),
   logoMediaId: z.string().cuid().optional().nullable(),
-  email: EmailSchema.optional(),
+  email: optionalEmail(),
   phone: optionalText(50),
   whatsapp: optionalText(30),
   whatsappMessage: optionalText(500),
@@ -88,7 +96,7 @@ export const CtaSettingsSchema = z.object({
   headerLabel: optionalText(80),
   heroLabel: optionalText(80),
   footerLabel: optionalText(80),
-  target: UrlSchema.optional(),
+  target: optionalUrl(),
 });
 
 export const MediaUpdateSchema = z.object({
