@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { AdminIcon } from "./admin-icons";
 
 export function AdminModal({ open, title, description, onClose, children, size = "default" }: { open: boolean; title: string; description?: string; onClose: () => void; children: React.ReactNode; size?: "default" | "wide" }) {
   useEffect(() => {
@@ -13,5 +14,5 @@ export function AdminModal({ open, title, description, onClose, children, size =
   }, [open, onClose]);
 
   if (!open) return null;
-  return <div className="pv-admin-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><section className={`pv-admin-modal${size === "wide" ? " is-wide" : ""}`} role="dialog" aria-modal="true" aria-labelledby="admin-modal-title"><header><div><p className="pv-admin-eyebrow">Ação rápida</p><h2 id="admin-modal-title">{title}</h2>{description ? <p>{description}</p> : null}</div><button type="button" className="pv-admin-modal-close" onClick={onClose} aria-label="Fechar modal">×</button></header>{children}</section></div>;
+  return <div className="pv-admin-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><section className={`pv-admin-modal${size === "wide" ? " is-wide" : ""}`} role="dialog" aria-modal="true" aria-labelledby="admin-modal-title"><header><div><p className="pv-admin-eyebrow">Ação rápida</p><h2 id="admin-modal-title">{title}</h2>{description ? <p>{description}</p> : null}</div><button type="button" className="pv-admin-modal-close" onClick={onClose} aria-label="Fechar modal"><AdminIcon name="close" /></button></header>{children}</section></div>;
 }

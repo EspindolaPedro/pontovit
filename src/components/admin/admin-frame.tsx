@@ -47,7 +47,6 @@ export function AdminFrame({ user, children }: { user: AdminUser | null; childre
             <Link key={href} className={isActivePath(pathname, href) ? "is-active" : ""} href={href}>
               <AdminIcon name={iconForAdminPath(href)} className="pv-admin-nav-icon" />
               <span>{label}</span>
-              <i aria-hidden="true">↗</i>
             </Link>
           ))}
         </nav>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AdminModal } from "@/components/admin/admin-modal";
+import { AdminIcon } from "@/components/admin/admin-icons";
 
 type Media = {
   id: string;
@@ -198,7 +199,7 @@ export default function MediaPage() {
           <h1>Mídia</h1>
           <span>Organize as logos por contexto e mantenha as imagens editoriais separadas da marca.</span>
         </div>
-        <button className="pv-admin-primary-action" onClick={() => { setError(""); setUploadOpen(true); }}>Enviar imagem <b>↗</b></button>
+        <button className="pv-admin-primary-action" onClick={() => { setError(""); setUploadOpen(true); }}><AdminIcon name="plus" />Enviar imagem</button>
       </header>
       {error ? <p className="pv-admin-error">{error}</p> : null}
       <div className="pv-admin-media-groups">
@@ -210,7 +211,7 @@ export default function MediaPage() {
         <form className="pv-admin-upload-form" onSubmit={upload}>
           <label className="pv-admin-modal-field">Arquivo<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setFile(event.target.files?.[0] ?? null)} required /></label>
           <label className="pv-admin-modal-field">Texto alternativo<input value={altText} onChange={(event) => setAltText(event.target.value)} placeholder="Descreva a imagem" required /></label>
-          <button className="pv-admin-primary-action">Enviar imagem <b>↗</b></button>
+          <button className="pv-admin-primary-action"><AdminIcon name="plus" />Enviar imagem</button>
         </form>
       </AdminModal>
     </main>

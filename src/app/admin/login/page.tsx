@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
           <label>E-mail<input name="email" type="email" autoComplete="email" required /></label>
           <label>Senha<input name="password" type="password" autoComplete="current-password" required /></label>
           {error ? <p className="pv-admin-error" role="alert">{error}</p> : null}
-          <button type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar no CMS"}<span>↗</span></button>
+          <button type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar no CMS"}</button>
         </form>
       </div>
     </main>

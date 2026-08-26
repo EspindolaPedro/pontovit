@@ -2470,7 +2470,7 @@ body {
 .pv-admin-table th, .pv-admin-table td { padding: 16px 18px; border-bottom: 1px solid #eef0ed; color: #737a77; font-size: 12px; text-align: left; white-space: nowrap; }
 .pv-admin-table th { color: #929995; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .pv-admin-table tbody tr:last-child td { border-bottom: 0; }
-.pv-admin-table td:first-child { width: 44%; }
+.pv-admin-table--posts td:first-child { width: 44%; }
 .pv-admin-table td a { color: var(--pv-ink); text-decoration: none; }
 .pv-admin-table td strong, .pv-admin-table td small { display: block; }
 .pv-admin-table td strong { font-size: 13px; font-weight: 650; }
@@ -4346,3 +4346,25 @@ body {
   .pv-not-found-progress span { animation: none; }
   .pv-not-found-progress span { transform: scaleX(1); }
 }
+
+/* CMS refinement pass — icon buttons, unified full-width tables, premium modal */
+.pv-admin-primary-action, .pv-admin-secondary-action { gap: 9px; }
+.pv-admin-primary-action svg, .pv-admin-secondary-action svg { width: 15px; height: 15px; flex-shrink: 0; }
+.pv-admin-form button { justify-content: center; gap: 9px; }
+
+.pv-admin-toolbar .pv-admin-secondary-action { margin-top: 0; white-space: nowrap; }
+
+.pv-admin-module-arrow { position: absolute; z-index: 1; right: 24px; bottom: 22px; width: 18px; height: 18px; color: var(--pv-orange-deep); transition: transform .2s ease; }
+.pv-admin-module:hover .pv-admin-module-arrow { transform: translate(3px, -3px); }
+
+.pv-admin-modal { border-radius: 20px; box-shadow: 0 30px 90px rgba(18, 24, 21, .22); }
+.pv-admin-modal-close svg { width: 15px; height: 15px; }
+.pv-admin-modal-field-wide { grid-column: 1 / -1; }
+
+.pv-admin-table-thumb { display: block; width: 60px; height: 38px; object-fit: contain; padding: 5px; border: 1px solid #eef0ed; border-radius: 9px; background: #fafbf9; }
+.pv-admin-table-actions { display: flex; align-items: center; gap: 16px; white-space: nowrap; }
+.pv-admin-link-action { border: 0; background: none; color: var(--pv-orange-deep); cursor: pointer; font: inherit; font-size: 11px; font-weight: 700; }
+.pv-admin-link-action:hover { text-decoration: underline; }
+
+.pv-admin-table-wrap { width: 100%; }
+.pv-admin-table { width: 100%; }

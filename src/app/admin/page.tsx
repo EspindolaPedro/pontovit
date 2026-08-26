@@ -30,7 +30,7 @@ export default async function AdminPage() {
             <span className="pv-admin-module-icon"><AdminIcon name={moduleIcons[href]} /></span>
             <h3>{title}</h3>
             <p>{description}</p>
-            <b aria-hidden="true">↗</b>
+            <AdminIcon name="arrow" className="pv-admin-module-arrow" />
           </a>
         ))}
       </div>

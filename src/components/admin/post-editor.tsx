@@ -155,7 +155,7 @@ export function PostEditor({ id }: { id?: string }) {
     <form id="post-editor" className="pv-post-form" onSubmit={submit}>
       <div className="pv-post-form-actions">
         <div><span className="pv-admin-eyebrow">Conteúdo editorial</span><strong>{id ? "Editando este post" : "Pronto para publicar"}</strong></div>
-        <button className="pv-admin-primary-action" disabled={saving}>{saving ? "Salvando..." : "Salvar post"} <b>↗</b></button>
+        <button className="pv-admin-primary-action" disabled={saving}>{saving ? "Salvando..." : "Salvar post"}</button>
       </div>
 
       {message ? <p className="pv-admin-success">{message}</p> : null}
@@ -201,7 +201,7 @@ export function PostEditor({ id }: { id?: string }) {
         </div>
       </section>
 
-      <div className="pv-post-bottom-actions"><span>Revise o conteúdo antes de publicar.</span><button className="pv-admin-primary-action" disabled={saving}>{saving ? "Salvando..." : "Salvar post"} <b>↗</b></button></div>
+      <div className="pv-post-bottom-actions"><span>Revise o conteúdo antes de publicar.</span><button className="pv-admin-primary-action" disabled={saving}>{saving ? "Salvando..." : "Salvar post"}</button></div>
     </form>
   );
 }
