@@ -7,6 +7,25 @@ import { Reveal } from "@/components/shared/reveal";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { ArrowUpRightIcon } from "@/components/shared/icons";
 import { escalasBenefits, escalasIntro, scaleTypes } from "@/data/home";
+import { absoluteUrl } from "@/lib/seo";
+
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "PontoVit",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: "Sistema empresarial para montar, organizar e acompanhar escalas de trabalho, jornadas, turnos e folgas com conformidade com a CLT.",
+  url: absoluteUrl("/escalas-de-trabalho"),
+};
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Escalas de Trabalho", item: absoluteUrl("/escalas-de-trabalho") },
+  ],
+};
 
 const stages = [
   ["Montagem", "Construa a jornada com as regras e necessidades da operação."],
@@ -20,6 +39,8 @@ export function ProductPage({ ctaTarget }: { ctaTarget?: string | null }) {
 
   return (
     <main className="pv-page pv-product-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <PageHero eyebrow={escalasIntro.eyebrow} title={<>Com o PontoVit você monta todas as <strong>Escalas de Trabalho</strong> de acordo com as regras da consolidação das leis trabalhistas com rapidez e facilidade.</>} visual="product" image="/assets/product/product-devices.png" imageAlt="PontoVit em diferentes dispositivos" />
 
       <section id="conteudo" className="pv-page-section pv-product-intro">

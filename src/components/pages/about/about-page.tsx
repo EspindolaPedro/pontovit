@@ -7,10 +7,21 @@ import { ScrollTimeline } from "@/components/shared/scroll-timeline";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { CompanyIcon, UsersIcon } from "@/components/shared/feature-icons";
 import { aboutAudience, aboutPurpose, aboutTimeline } from "@/data/home";
+import { absoluteUrl } from "@/lib/seo";
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Quem Somos", item: absoluteUrl("/quem-somos") },
+  ],
+};
 
 export function AboutPage({ ctaTarget }: { ctaTarget?: string | null }) {
   return (
     <main className="pv-page pv-about-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <PageHero eyebrow="Quem somos" title={<>A pioneira em gestão de <strong>Escalas de Trabalho</strong> no Brasil.</>} description="Nossa missão é resolver um problema que afeta muitas pessoas em seu cotidiano: a distribuição de horários, turnos e jornadas de trabalho." visual="story" video="https://www.youtube.com/embed/WJl87KyZeGc?autoplay=1&mute=1&loop=1&playlist=WJl87KyZeGc" />
 
       <section id="conteudo" className="pv-page-section pv-story-section">

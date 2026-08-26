@@ -682,7 +682,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         <div className="figma-problem-copy problem-left"><h2>Gerenciar jornadas não deveria dar tanto trabalho.</h2><p>Planilhas, ajustes manuais, trocas de turno, folgas, horas extras e regras trabalhistas tornam a rotina cada vez mais complexa conforme sua operação cresce.</p><span className="problem-arrow">→</span></div>
         <picture className="problem-device">
           <source media="(max-width: 720px)" srcSet={`${asset}mobile/problem-monitor.png`} />
-          <img src={`${asset}problem-raw-2.png`} alt="Mockup do sistema PontoVit" />
+          <Image src={`${asset}problem-raw-2.png`} alt="Mockup do sistema PontoVit" width={384} height={256} />
         </picture>
         <div className="figma-problem-copy problem-right"><h2>A PontoVit coloca tudo isso em ordem.</h2><p>Centralize a gestão da sua equipe e tenha mais clareza para planejar, ajustar e acompanhar cada jornada.</p></div>
       </section>
@@ -696,7 +696,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         <div className="figma-product-copy"><SectionTitle title={<><span className="product-title-desktop">Uma escala que considera<br /><strong>muito mais do que horários.</strong></span><span className="product-title-mobile">Uma escala que<br /><strong>considera mais do<br />que horários.</strong></span></>} /><p>A PontoVit ajuda sua empresa a planejar jornadas considerando as necessidades da operação, disponibilidade das equipes e regras definidas para cada escala.</p><ArrowButton mobileChildren="Falar no Whatsapp">Conhecer a plataforma</ArrowButton></div>
         <picture className="product-device">
           <source media="(max-width: 720px)" srcSet={`${asset}mobile/product-monitor.png`} />
-          <img src={`${asset}raw-16.png`} alt="Sistema PontoVit em um notebook" />
+          <Image src={`${asset}raw-16.png`} alt="Sistema PontoVit em um notebook" width={1536} height={1024} />
         </picture>
       </section>
 
@@ -705,7 +705,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         <div className="figma-scale-art">
           <picture>
             <source media="(max-width: 720px)" srcSet={`${asset}mobile/scale-laptop.png`} />
-            <img src={`${asset}raw-2.png`} alt="Notebook com a grade de escalas PontoVit" />
+            <Image src={`${asset}raw-2.png`} alt="Notebook com a grade de escalas PontoVit" width={1536} height={1024} />
           </picture>
         </div>
         <div className="figma-scale-copy">

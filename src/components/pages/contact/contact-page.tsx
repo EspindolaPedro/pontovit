@@ -9,9 +9,20 @@ const questions = [
   ["Por que ter escalas organizadas é importante?", "Uma escala bem estruturada reduz conflitos, melhora a comunicação e ajuda a acompanhar as regras aplicáveis à jornada."],
 ] as const;
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: questions.map(([question, answer]) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
+};
+
 export function ContactPage() {
   return (
     <main className="pv-page pv-contact-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <PageHero
         eyebrow="Contato"
         title="Converse com quem entende da sua operação."

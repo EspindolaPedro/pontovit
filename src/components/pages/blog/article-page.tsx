@@ -41,10 +41,20 @@ export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePa
     author: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/") },
     publisher: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/"), logo: { "@type": "ImageObject", url: absoluteUrl("/assets/product/pontovit-logo.png") } },
   };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: "Blog", item: absoluteUrl("/blog") },
+      { "@type": "ListItem", position: 3, name: post.title, item: absoluteUrl(`/blog/${post.slug}`) },
+    ],
+  };
 
   return (
     <main className="pv-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <section className="pv-article-hero">
         <Container>
           <Link href="/blog" className="pv-back-link"><ArrowLeftIcon size={16} /> Voltar para conteúdos</Link>
