@@ -33,8 +33,8 @@ export async function POST(request: Request) {
     ].join("\n");
 
     const settings = await getPublicSettings();
-    const baseTarget = settings.cta?.target || getWhatsAppUrl().split("?")[0];
-    const redirectUrl = `${baseTarget}${baseTarget.includes("?") ? "&" : "?"}text=${encodeURIComponent(message)}`;
+    const baseTarget = (settings.cta?.target || getWhatsAppUrl()).split("?")[0];
+    const redirectUrl = `${baseTarget}?text=${encodeURIComponent(message)}`;
     return NextResponse.json({ ok: true, redirectUrl });
   } catch (error) {
     return errorResponse(error);

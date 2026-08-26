@@ -25,7 +25,9 @@ export async function deleteSocialLink(id: string) { await prisma.socialLink.del
 export async function getPublicSettings() {
   try {
     const [site, cta, socials] = await Promise.all([getSiteSettings(), getCtaSettings(), getSocialLinks()]);
-    const configuredTarget = site?.whatsapp ? `https://wa.me/${site.whatsapp.replace(/\D/g, "")}` : cta?.target || null;
+    const configuredTarget = site?.whatsapp
+      ? `https://wa.me/${site.whatsapp.replace(/\D/g, "")}${site.whatsappMessage ? `?text=${encodeURIComponent(site.whatsappMessage)}` : ""}`
+      : cta?.target || null;
     return { site, cta: cta ? { ...cta, target: configuredTarget } : { target: configuredTarget, headerLabel: null, heroLabel: null, footerLabel: null }, socials };
   } catch {
     return { site: null, cta: null, socials: [] };
