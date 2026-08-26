@@ -94,6 +94,12 @@ const nextConfig: NextConfig = {
       )),
       // Categoria antiga do blog (WordPress), sem equivalente direto hoje.
       { source: "/category/:path*", destination: "/blog", permanent: true },
+      // Arquivos de autor e paginação antiga do blog (WordPress) — o blog
+      // atual pagina por clique, sem URL própria por página.
+      { source: "/author/:path*", destination: "/blog", permanent: true },
+      { source: "/blog/page/:path*", destination: "/blog", permanent: true },
+      // Outra página de contato antiga (diferente de /contato-antigo).
+      { source: "/contato-pontovit", destination: "/contato-antigo", permanent: true },
     ];
   },
 };
