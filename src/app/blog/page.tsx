@@ -8,6 +8,6 @@ export const dynamic = "force-dynamic";
 export const metadata = pageMetadata(
   "Blog de Gestão de Escalas e Jornadas",
   "Conteúdos sobre gestão de escalas de trabalho, jornadas, turnos, folgas, controle de ponto, legislação trabalhista e gestão empresarial.",
-  "/blog/",
+  "/blog",
 );
 export default async function BlogRoute() { const [posts, settings] = await Promise.all([listPublishedPosts(), getPublicSettings()]); return <BlogPage posts={posts} ctaTarget={settings.cta?.target} />; }

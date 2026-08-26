@@ -443,7 +443,7 @@ function BlogPreviewCarousel() {
   return (
     <div ref={trackRef} className="figma-blog-preview-grid" aria-label="Posts recentes do blog" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd} onClick={handleClick}>
       {blogPosts.slice(0, 3).map((post) => (
-        <Link key={post.slug} href={`/blog/${post.slug}/`} className="figma-blog-preview-card">
+        <Link key={post.slug} href={`/blog/${post.slug}`} className="figma-blog-preview-card">
           {post.image && <div className="figma-blog-preview-image"><Image src={post.image} alt="" width={640} height={360} /></div>}
           <div className="figma-blog-preview-meta"><span>{post.category}</span><time dateTime={post.date}>{formatPostDate(post.date)}</time></div>
           <h3>{post.title}</h3>
@@ -614,7 +614,7 @@ function BlogPreviewCarouselV2() {
         onClick={handleClick}
       >
         {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}/`} className="figma-blog-preview-card">
+          <Link key={post.slug} href={`/blog/${post.slug}`} className="figma-blog-preview-card">
             {post.image && <div className="figma-blog-preview-image"><Image src={post.image} alt="" width={640} height={360} /></div>}
             <div className="figma-blog-preview-meta"><span>{post.category}</span><time dateTime={post.date}>{formatPostDate(post.date)}</time></div>
             <h3>{post.title}</h3>
@@ -747,7 +747,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
             <p className="figma-eyebrow">Conteúdos para sua operação</p>
             <h2 id="blog-preview-title">Informação para tomar decisões melhores.</h2>
           </div>
-          <Link href="/blog/" className="figma-blog-preview-link">Ver todos os posts <span aria-hidden="true">↗</span></Link>
+          <Link href="/blog" className="figma-blog-preview-link">Ver todos os posts <span aria-hidden="true">↗</span></Link>
         </div>
 
         <BlogPreviewCarouselV2 />

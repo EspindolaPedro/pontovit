@@ -14,13 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = await getPublishedPost(slug);
   if (!post) return {};
 
-  const url = absoluteUrl(post.seoCanonical || `/blog/${post.slug}/`);
+  const url = absoluteUrl(post.seoCanonical || `/blog/${post.slug}`);
   const image = post.image ? absoluteUrl(post.image) : undefined;
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
     keywords: postKeywords(post.title, post.category),
-    alternates: { canonical: post.seoCanonical || `/blog/${post.slug}/` },
+    alternates: { canonical: post.seoCanonical || `/blog/${post.slug}` },
     robots: post.seoNoIndex ? { index: false, follow: true } : { index: true, follow: true },
     openGraph: {
       type: "article",

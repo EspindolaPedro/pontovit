@@ -37,7 +37,7 @@ export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePa
     dateModified: post.date,
     articleSection: post.category,
     inLanguage: "pt-BR",
-    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(post.seoCanonical || `/blog/${post.slug}/`) },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(post.seoCanonical || `/blog/${post.slug}`) },
     author: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/") },
     publisher: { "@type": "Organization", name: "PontoVit", url: absoluteUrl("/"), logo: { "@type": "ImageObject", url: absoluteUrl("/assets/product/pontovit-logo.png") } },
   };
@@ -47,7 +47,7 @@ export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePa
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <section className="pv-article-hero">
         <Container>
-          <Link href="/blog/" className="pv-back-link"><ArrowLeftIcon size={16} /> Voltar para conteúdos</Link>
+          <Link href="/blog" className="pv-back-link"><ArrowLeftIcon size={16} /> Voltar para conteúdos</Link>
           <div className="pv-article-hero-grid">
             <div>
               <p className="eyebrow">{post.category}</p>
@@ -67,13 +67,13 @@ export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePa
               {rest.map((block, index) => <Block key={index} block={block} />)}
               <div className="pv-article-callout">
                 <p>Quer entender como esse processo pode funcionar na sua empresa?</p>
-                <Link href="/contato-antigo/">Fale com um especialista <ArrowUpRightIcon size={16} /></Link>
+                <Link href="/contato-antigo">Fale com um especialista <ArrowUpRightIcon size={16} /></Link>
               </div>
             </div>
             <aside className="pv-related">
               <p className="eyebrow">Leia também</p>
               {related.map((item) => (
-                <Link key={item.slug} href={`/blog/${item.slug}/`}>
+                <Link key={item.slug} href={`/blog/${item.slug}`}>
                   <span>{item.category}</span>
                   <strong>{item.title}</strong>
                   <ArrowUpRightIcon size={15} />

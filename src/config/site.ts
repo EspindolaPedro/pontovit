@@ -16,9 +16,9 @@ export const siteConfig = {
 
 export const navigation = [
   { label: "Home", href: "/" },
-  { label: "Sobre", href: "/quem-somos/" },
-  { label: "Produto", href: "/escalas-de-trabalho/" },
-  { label: "Parceiros", href: "/parceiros/" },
-  { label: "Blog", href: "/blog/" },
-  { label: "Contato", href: "/contato-antigo/" },
+  { label: "Sobre", href: "/quem-somos" },
+  { label: "Produto", href: "/escalas-de-trabalho" },
+  { label: "Parceiros", href: "/parceiros" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contato", href: "/contato-antigo" },
 ] as const;

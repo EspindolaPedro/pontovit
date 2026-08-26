@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata = pageMetadata(
   "Parceiros",
   "Conheça os parceiros da PontoVit e as soluções que ampliam a gestão de jornadas, pessoas e operações.",
-  "/parceiros/",
+  "/parceiros",
 );
 
 export default async function PartnersRoute() {
