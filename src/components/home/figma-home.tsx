@@ -100,7 +100,7 @@ function PartnerCarousel({ logos = partnerLogos }: { logos?: readonly (readonly 
         {loopedLogos.map(([file, name], index) => {
           const source = file.startsWith("/") ? file : `/assets/parceiros-novos/${encodeURIComponent(file)}`;
           const fallback = partnerFallbacks[name] ? `/assets/parceiros-novos/${encodeURIComponent(partnerFallbacks[name])}` : null;
-          return <img key={`${file}-${index}`} src={source} alt={index < logos.length ? name : ""} aria-hidden={index >= logos.length ? true : undefined} onError={(event) => {
+          return <Image key={`${file}-${index}`} src={source} alt={index < logos.length ? name : ""} aria-hidden={index >= logos.length ? true : undefined} width={170} height={102} onError={(event) => {
             if (!fallback || event.currentTarget.dataset.fallbackApplied || source === fallback) return;
             event.currentTarget.dataset.fallbackApplied = "true";
             event.currentTarget.src = fallback;
@@ -151,9 +151,9 @@ const benefits = [
 ] as const;
 
 const resources = [
-  ["Gestão de Escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "resources-gestao-de-escalas.png", "resources-gestao-de-escalas.png"],
-  ["Controle de Ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "resources-controle-ponto.png", "resources-controle-ponto.png"],
-  ["Gestão da Força de Trabalho (WFM)", "Organize colaboradores por unidade, setor, função ou necessidade operacional.", "resources-gestao-wfm.png", "resources-gestao-wfm.png"],
+  ["Gestão de Escalas", "Planeje diferentes jornadas, turnos e folgas de forma centralizada.", "resources-gestao-de-escalas.png"],
+  ["Controle de Ponto", "Acompanhe os registros e tenha mais visibilidade sobre a jornada realizada.", "resources-controle-ponto.png"],
+  ["Gestão da Força de Trabalho (WFM)", "Organize colaboradores por unidade, setor, função ou necessidade operacional.", "resources-gestao-wfm.png"],
 ];
 
 function BenefitsCarousel() {
@@ -652,7 +652,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
       <section className="figma-hero">
         <img className="figma-rosette rosette-left" src={`${asset}rosette-left.svg`} alt="" aria-hidden="true" />
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
-        <div className="figma-orbit" aria-hidden="true"><img src={`${asset}hero-icons.svg`} alt="" /></div>
+        <div className="figma-orbit" aria-hidden="true"><img src={`${asset}hero-icons.svg`} alt="" fetchPriority="high" /></div>
         <div className="figma-hero-copy">
           <h1>Gestão de <em>escalas inteligente</em>, com registro de <em>ponto integrado</em></h1>
           <p>Com o PontoVit, você simplifica a gestão de escalas e, quando precisar, pode integrar o registro de ponto Stelanto para uma gestão ainda mais completa da jornada de trabalho.</p>
@@ -700,7 +700,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         </picture>
       </section>
 
-      <section className="figma-resources"><SectionTitle title={<>Gerêncie sua equipe<br /><strong>sem complicar a rotina.</strong></>} /><div className="figma-resource-grid">{resources.map(([title, text, image, mobileImage]) => <article key={title}><div className="resource-image"><picture><source media="(max-width: 720px)" srcSet={`${asset}${mobileImage}`} /><img src={`${asset}${image}`} alt="" /></picture></div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+      <section className="figma-resources"><SectionTitle title={<>Gerêncie sua equipe<br /><strong>sem complicar a rotina.</strong></>} /><div className="figma-resource-grid">{resources.map(([title, text, image]) => <article key={title}><div className="resource-image"><Image src={`${asset}${image}`} alt="" width={1536} height={1024} sizes="(max-width: 720px) 90vw, 350px" /></div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
       <section className="figma-scale" aria-labelledby="scale-title">
         <div className="figma-scale-art">
           <picture>
