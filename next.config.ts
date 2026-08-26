@@ -89,8 +89,9 @@ const nextConfig: NextConfig = {
       // de produto que cobre o mesmo assunto em vez de deixar 404.
       { source: "/", has: [{ type: "query", key: "escalas_trabalho" }], destination: "/escalas-de-trabalho", permanent: true },
       { source: "/escala-personalizada", destination: "/escalas-de-trabalho", permanent: true },
-      { source: "/escala-de-trabalho-5x1", destination: "/escalas-de-trabalho", permanent: true },
-      { source: "/escala-de-trabalho-5x2", destination: "/escalas-de-trabalho", permanent: true },
+      ...["2x2", "4x3", "5x1", "5x2", "6x1", "6x2", "12x36", "24x48"].map((type) => (
+        { source: `/escala-de-trabalho-${type}`, destination: "/escalas-de-trabalho", permanent: true }
+      )),
       // Categoria antiga do blog (WordPress), sem equivalente direto hoje.
       { source: "/category/:path*", destination: "/blog", permanent: true },
     ];
