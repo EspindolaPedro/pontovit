@@ -637,6 +637,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
   const cmsPartners = partnerLogosFromCms.length ? partnerLogosFromCms : partnerLogos;
   const videoRef = useRef<HTMLIFrameElement>(null);
   const [videoMuted, setVideoMuted] = useState(true);
+  const [videoStarted, setVideoStarted] = useState(false);
 
   function toggleVideoSound() {
     const command = videoMuted ? "unMute" : "mute";
@@ -662,19 +663,28 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
 
       <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit">
         <div className="figma-video-frame">
-          <button type="button" className="figma-video-sound" onClick={toggleVideoSound} aria-pressed={!videoMuted} aria-label={videoMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.2 3a4.2 4.2 0 0 0-2.2-3.7v7.4a4.2 4.2 0 0 0 2.2-3.7Zm0-8.2v2.1a8 8 0 0 1 0 12.2v2.1a10 10 0 0 0 0-16.4Z" /></svg>
-            <span>{videoMuted ? "Ativar som" : "Desativar som"}</span>
-          </button>
-          <iframe
-            ref={videoRef}
-            src="https://www.youtube.com/embed/NHp77G9FiZQ?si=n6WaBjx5YT2DDxaA&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
-            title="Conheça a PontoVit"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
+          {videoStarted ? (
+            <>
+              <button type="button" className="figma-video-sound" onClick={toggleVideoSound} aria-pressed={!videoMuted} aria-label={videoMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.2 3a4.2 4.2 0 0 0-2.2-3.7v7.4a4.2 4.2 0 0 0 2.2-3.7Zm0-8.2v2.1a8 8 0 0 1 0 12.2v2.1a10 10 0 0 0 0-16.4Z" /></svg>
+                <span>{videoMuted ? "Ativar som" : "Desativar som"}</span>
+              </button>
+              <iframe
+                ref={videoRef}
+                src="https://www.youtube.com/embed/NHp77G9FiZQ?si=n6WaBjx5YT2DDxaA&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
+                title="Conheça a PontoVit"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </>
+          ) : (
+            <button type="button" className="figma-video-poster" onClick={() => setVideoStarted(true)} aria-label="Reproduzir vídeo: Conheça a PontoVit">
+              <img src="https://i.ytimg.com/vi/NHp77G9FiZQ/hqdefault.jpg" alt="" loading="lazy" />
+              <span className="figma-video-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z" /></svg></span>
+            </button>
+          )}
         </div>
       </div>
 

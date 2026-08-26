@@ -3009,6 +3009,12 @@ body {
 .figma-video-sound:hover { background: rgba(16, 16, 16, .98); transform: translateY(-2px); }
 .figma-video-sound svg { width: 17px; height: 17px; fill: currentColor; }
 
+.figma-video-poster { position: absolute; inset: 0; display: block; width: 100%; height: 100%; padding: 0; border: 0; cursor: pointer; }
+.figma-video-poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.figma-video-play { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: rgba(16, 16, 16, .82); box-shadow: 0 16px 32px rgba(16, 16, 16, .28); transform: translate(-50%, -50%); transition: background .2s ease, transform .2s ease; }
+.figma-video-play svg { width: 30px; height: 30px; margin-left: 3px; fill: #fff; }
+.figma-video-poster:hover .figma-video-play { background: #ef8200; transform: translate(-50%, -50%) scale(1.06); }
+
 .figma-problem {
   position: relative;
   z-index: 3;
@@ -3019,6 +3025,9 @@ body {
     margin-top: -50px;
     padding: 0 20px 112px;
   }
+
+  .figma-video-play { width: 58px; height: 58px; }
+  .figma-video-play svg { width: 24px; height: 24px; }
 
   .figma-video-frame {
     border-radius: 18px;
