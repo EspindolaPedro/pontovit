@@ -77,10 +77,23 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {
-    return legacyBlogSlugs.flatMap((slug) => [
-      { source: `/${slug}.htm`, destination: `/blog/${slug}`, permanent: true },
-      { source: `/${slug}`, destination: `/blog/${slug}`, permanent: true },
-    ]);
+    return [
+      ...legacyBlogSlugs.flatMap((slug) => [
+        { source: `/${slug}.htm`, destination: `/blog/${slug}`, permanent: true },
+        { source: `/${slug}`, destination: `/blog/${slug}`, permanent: true },
+      ]),
+      // O site antigo também tinha um tipo de conteúdo à parte para tipos de
+      // escala ("escalas_trabalho"), acessado como /<slug>/ ou como
+      // /?escalas_trabalho=<slug>. Esse conteúdo não foi migrado 1:1 — o
+      // Google ainda tem essas URLs indexadas, então mandamos para a página
+      // de produto que cobre o mesmo assunto em vez de deixar 404.
+      { source: "/", has: [{ type: "query", key: "escalas_trabalho" }], destination: "/escalas-de-trabalho", permanent: true },
+      { source: "/escala-personalizada", destination: "/escalas-de-trabalho", permanent: true },
+      { source: "/escala-de-trabalho-5x1", destination: "/escalas-de-trabalho", permanent: true },
+      { source: "/escala-de-trabalho-5x2", destination: "/escalas-de-trabalho", permanent: true },
+      // Categoria antiga do blog (WordPress), sem equivalente direto hoje.
+      { source: "/category/:path*", destination: "/blog", permanent: true },
+    ];
   },
 };
 
