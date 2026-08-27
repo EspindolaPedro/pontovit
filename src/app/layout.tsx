@@ -32,7 +32,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const [headerCode, footerCode] = await Promise.all([getPublicCodeInjections(CodeInjectionLocation.HEADER), getPublicCodeInjections(CodeInjectionLocation.FOOTER)]);
   const organizationJsonLd = { "@context": "https://schema.org", "@type": "Organization", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url, logo: `${siteConfig.url}/assets/product/pontovit-logo.png`, email: runtimeSettings.site?.email || siteConfig.email, description: runtimeSettings.site?.description || siteConfig.description };
   const websiteJsonLd = { "@context": "https://schema.org", "@type": "WebSite", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url, inLanguage: "pt-BR", publisher: { "@type": "Organization", name: runtimeSettings.site?.companyName || siteConfig.name, url: siteConfig.url } };
-  return <html lang="pt-BR"><body className={`${inter.variable} ${manrope.variable} font-sans`}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} /><Script id="chatwoot-widget" strategy="afterInteractive">{`(function(d,t) {
+  return <html lang="pt-BR"><head><Script id="gtm-script" strategy="afterInteractive">{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WFFR273T');`}</Script></head><body className={`${inter.variable} ${manrope.variable} font-sans`}><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFFR273T" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} /><Script id="chatwoot-widget" strategy="afterInteractive">{`(function(d,t) {
     var BASE_URL="https://chatwoot.vitoriahumana.com.br";
     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
     g.src=BASE_URL+"/packs/js/sdk.js";

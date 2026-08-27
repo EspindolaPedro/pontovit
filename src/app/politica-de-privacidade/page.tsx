@@ -38,7 +38,7 @@ const html = `
 <li>Corrigir informações</li>
 <li>Solicitar a exclusão ou portabilidade dos seus dados</li>
 </ul>
-<p>Basta enviar um e-mail para: <strong><a href="mailto:privacidade@pontovit.com.br">privacidade@pontovit.com.br</a></strong></p>
+<p>Basta enviar um e-mail para: <strong><a href="mailto:contato@pontovit.com.br">contato@pontovit.com.br</a></strong></p>
 <h2>6. Uso de cookies</h2>
 <p>Utilizamos cookies para melhorar sua navegação e oferecer conteúdo mais relevante. Você pode desativá-los nas configurações do seu navegador.</p>
 <h2>7. Alterações nesta política</h2>

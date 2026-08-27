@@ -636,16 +636,41 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
   const cmsClients = clientLogosFromCms.length ? clientLogosFromCms : clientLogos;
   const cmsPartners = partnerLogosFromCms.length ? partnerLogosFromCms : partnerLogos;
   const videoRef = useRef<HTMLIFrameElement>(null);
+  const videoEmbedRef = useRef<HTMLDivElement>(null);
   const [videoMuted, setVideoMuted] = useState(true);
   const [videoStarted, setVideoStarted] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+
+  // Autoplay once the video scrolls near view, instead of only on click — keeps the
+  // perf win (YouTube's player JS isn't mounted on initial paint) without requiring
+  // the visitor to click before it plays.
+  useEffect(() => {
+    const el = videoEmbedRef.current;
+    if (!el || videoStarted) return;
+    const observer = new IntersectionObserver(
+      (entries) => { if (entries[0]?.isIntersecting) setVideoStarted(true); },
+      { threshold: 0.25, rootMargin: "0px 0px 200px 0px" },
+    );
+    observer.observe(el);
+    const failsafe = window.setTimeout(() => setVideoStarted(true), 2500);
+    return () => { observer.disconnect(); window.clearTimeout(failsafe); };
+  }, [videoStarted]);
+
+  // Re-send the mute/unmute command whenever the desired state changes AND once the
+  // player has actually finished loading — sending it right after the iframe mounts
+  // (before YouTube's player is listening) silently drops the command.
+  useEffect(() => {
+    if (!videoReady) return;
+    const win = videoRef.current?.contentWindow;
+    if (!win) return;
+    win.postMessage(JSON.stringify({ event: "command", func: videoMuted ? "mute" : "unMute", args: [] }), "*");
+    if (!videoMuted) {
+      win.postMessage(JSON.stringify({ event: "command", func: "setVolume", args: [100] }), "*");
+    }
+  }, [videoMuted, videoReady]);
 
   function toggleVideoSound() {
-    const command = videoMuted ? "unMute" : "mute";
-    videoRef.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func: command, args: [] }), "*");
-    if (videoMuted) {
-      videoRef.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func: "setVolume", args: [100] }), "*");
-    }
-    setVideoMuted(!videoMuted);
+    setVideoMuted((muted) => !muted);
   }
 
   return (
@@ -661,7 +686,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         </div>
       </section>
 
-      <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit">
+      <div className="figma-video-embed" aria-label="Vídeo de apresentação da PontoVit" ref={videoEmbedRef}>
         <div className="figma-video-frame">
           {videoStarted ? (
             <>
@@ -671,6 +696,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
               </button>
               <iframe
                 ref={videoRef}
+                onLoad={() => setVideoReady(true)}
                 src="https://www.youtube.com/embed/NHp77G9FiZQ?si=n6WaBjx5YT2DDxaA&autoplay=1&mute=1&playsinline=1&rel=0&vq=hd1080&controls=1&modestbranding=1&fs=1&enablejsapi=1&cc_load_policy=0&iv_load_policy=3"
                 title="Conheça a PontoVit"
                 frameBorder="0"
