@@ -837,6 +837,7 @@ body {
 .pv-feature-section { background: var(--pv-warm); }
 .pv-flow-section, .pv-story-section, .pv-contact-section, .pv-blog-section, .pv-article-section { background: var(--pv-page); }
 .pv-access-section, .pv-principles-section { background: var(--pv-white); }
+.pv-legal-section { background: var(--pv-white); }
 
 @media (max-width: 720px) {
   .pv-container,

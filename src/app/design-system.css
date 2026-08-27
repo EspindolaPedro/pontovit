@@ -1390,4 +1390,4 @@ a.pv-icon-card { display: block; text-decoration: none; }
 
 /* Legal pages (política de privacidade, exclusão de dados) — simple centered prose, no sidebar. */
 .pv-legal-hero { padding-bottom: 40px; }
-.pv-legal-body { max-width: 760px; margin: 0 auto; }
+.pv-legal-body { max-width: 760px; }
