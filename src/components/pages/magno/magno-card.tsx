@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CompanyIcon } from "@/components/shared/feature-icons";
-import { ArrowDownIcon, ArrowUpRightIcon, CheckIcon, CircleDotIcon, LinkedinIcon, MailIcon, PhoneIcon, WhatsappIcon } from "@/components/shared/icons";
+import { ArrowDownIcon, CheckIcon, ChevronRightIcon, DocumentIcon, GlobeIcon, LinkedinIcon, MailIcon, PhoneIcon, UserIcon, WhatsappIcon } from "@/components/shared/icons";
 import { getMagnoCardUrl, getMagnoWhatsAppUrl, magnoCard } from "@/config/magno";
 
 const initials = magnoCard.firstName[0] + magnoCard.lastName[0];
@@ -22,6 +22,9 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
             <Link href="/" aria-label="PontoVit, início" className="pv-magno-brand-chip">
               <img src="/assets/product/pontovit-mark.png" alt="" />
             </Link>
+            <svg className="pv-magno-cover-wave" viewBox="0 0 420 44" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 30 C 90 6, 180 44, 210 30 C 250 12, 340 44, 420 16 V44 H0 Z" fill="var(--pv-white)" />
+            </svg>
           </div>
 
           <div className="pv-magno-avatar-wrap">
@@ -37,11 +40,11 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
             <h1>{magnoCard.fullName}</h1>
             <div className="pv-magno-meta">
               <span className="pv-magno-role-pill">
-                <CircleDotIcon size={8} />
+                <UserIcon size={13} />
                 {magnoCard.role}
               </span>
-              <span className="pv-magno-company">
-                <CompanyIcon size={14} />
+              <span className="pv-magno-company-pill">
+                <CompanyIcon size={13} />
                 {magnoCard.company}
               </span>
             </div>
@@ -49,27 +52,19 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
 
             <div className="pv-magno-actions">
               <a href={getMagnoWhatsAppUrl()} target="_blank" rel="noreferrer" className="pv-magno-action">
-                <span className="pv-magno-action-icon">
-                  <WhatsappIcon size={19} />
-                </span>
+                <WhatsappIcon size={28} />
                 WhatsApp
               </a>
               <a href={`tel:+${magnoCard.whatsapp}`} className="pv-magno-action">
-                <span className="pv-magno-action-icon">
-                  <PhoneIcon size={19} />
-                </span>
+                <PhoneIcon size={28} />
                 Ligar
               </a>
               <a href={`mailto:${magnoCard.email}`} className="pv-magno-action">
-                <span className="pv-magno-action-icon">
-                  <MailIcon size={19} />
-                </span>
+                <MailIcon size={28} />
                 E-mail
               </a>
               <a href={magnoCard.linkedin} target="_blank" rel="noreferrer" className="pv-magno-action">
-                <span className="pv-magno-action-icon">
-                  <LinkedinIcon size={19} />
-                </span>
+                <LinkedinIcon size={28} />
                 LinkedIn
               </a>
             </div>
@@ -81,12 +76,18 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
 
             <div className="pv-magno-links">
               <Link href="/escalas-de-trabalho">
+                <span className="pv-magno-links-icon">
+                  <DocumentIcon size={17} />
+                </span>
                 Conheça nossos serviços
-                <ArrowUpRightIcon size={16} />
+                <ChevronRightIcon size={18} className="pv-magno-links-chevron" />
               </Link>
               <Link href="/">
+                <span className="pv-magno-links-icon">
+                  <GlobeIcon size={17} />
+                </span>
                 Site da PontoVit
-                <ArrowUpRightIcon size={16} />
+                <ChevronRightIcon size={18} className="pv-magno-links-chevron" />
               </Link>
             </div>
 
@@ -95,7 +96,10 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
               <div className="pv-magno-qr-panel">
                 <span className="pv-magno-qr-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} />
               </div>
-              <p className="pv-magno-qr-url">{cardUrlLabel}</p>
+              <p className="pv-magno-qr-url">
+                <GlobeIcon size={14} />
+                {cardUrlLabel}
+              </p>
             </div>
           </div>
         </div>
