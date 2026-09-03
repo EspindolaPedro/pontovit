@@ -1393,3 +1393,80 @@ a.pv-icon-card { display: block; text-decoration: none; }
 .pv-legal-hero .pv-container { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .pv-legal-hero h1 { margin-inline: auto; }
 .pv-legal-body { max-width: 760px; margin-inline: auto; text-align: left; }
+
+/* Cartão virtual (/magno) — cartão de visita digital + link in bio. Página standalone, sem header/footer do site. */
+.pv-magno-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  background:
+    radial-gradient(120% 90% at 15% -10%, rgba(255, 208, 67, .35), transparent 55%),
+    radial-gradient(120% 90% at 100% 110%, rgba(237, 129, 7, .32), transparent 55%),
+    var(--pv-dark);
+}
+
+.pv-magno-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 28px 32px;
+  border-radius: var(--pv-radius-lg);
+  background: var(--pv-white);
+  box-shadow: var(--pv-shadow-float);
+  text-align: center;
+}
+
+.pv-magno-brand { display: inline-flex; margin-bottom: 28px; }
+.pv-magno-brand img { display: block; width: 128px; height: auto; }
+
+.pv-magno-avatar {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(145deg, var(--pv-orange), var(--pv-yellow-strong));
+  box-shadow: 0 14px 30px rgba(237, 129, 7, .35);
+  color: var(--pv-white);
+  font-family: var(--pv-font-display);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  overflow: hidden;
+}
+.pv-magno-avatar img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+
+.pv-magno-card h1 { margin: 0; color: var(--pv-ink); font-family: var(--pv-font-display); font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+.pv-magno-role { display: inline-flex; align-items: center; gap: 4px; margin: 6px 0 0; color: var(--pv-orange-deep); font-size: 14px; font-weight: 600; }
+.pv-magno-role span:last-child { color: var(--pv-muted); font-weight: 500; }
+.pv-magno-bio { margin: 16px 0 0; color: var(--pv-ink-soft); font-size: 14.5px; line-height: 1.55; }
+
+.pv-magno-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 26px 0 0; }
+.pv-magno-action { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 4px; border-radius: 18px; background: var(--pv-gray-soft); color: var(--pv-ink); font-size: 11.5px; font-weight: 600; transition: background-color .2s ease, transform .2s ease; }
+.pv-magno-action svg { color: var(--pv-orange-deep); }
+.pv-magno-action:hover { background: var(--pv-yellow-soft); transform: translateY(-2px); }
+
+.pv-magno-save { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 22px; padding: 15px; border-radius: 999px; background: var(--pv-orange); color: var(--pv-white); font-family: var(--pv-font-display); font-size: 15px; font-weight: 700; box-shadow: 0 14px 28px rgba(234, 126, 4, .28); transition: background-color .2s ease, transform .2s ease; }
+.pv-magno-save:hover { background: var(--pv-orange-deep); transform: translateY(-2px); }
+
+.pv-magno-links { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.pv-magno-links a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-radius: 16px; border: 1px solid var(--pv-line); color: var(--pv-ink); font-size: 14px; font-weight: 600; transition: border-color .2s ease, background-color .2s ease, color .2s ease; }
+.pv-magno-links a:hover { border-color: var(--pv-orange); background: var(--pv-warm); color: var(--pv-orange-deep); }
+
+.pv-magno-qr { margin-top: 30px; padding-top: 26px; border-top: 1px dashed var(--pv-line); }
+.pv-magno-qr p { margin: 0 0 14px; color: var(--pv-muted); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+.pv-magno-qr-frame { display: inline-flex; padding: 12px; border-radius: 20px; background: var(--pv-white); border: 1px solid var(--pv-line); }
+.pv-magno-qr-frame svg { display: block; width: 150px; height: 150px; }
+.pv-magno-qr-url { margin: 12px 0 0; color: var(--pv-muted); font-size: 12.5px; text-transform: none; letter-spacing: normal; font-weight: 500; }
+
+.pv-magno-footer { margin-top: 26px; color: var(--pv-muted); font-size: 11.5px; }
+.pv-magno-footer a { color: var(--pv-orange-deep); font-weight: 600; }
+
+@media (max-width: 420px) {
+  .pv-magno-card { padding: 32px 18px 26px; }
+  .pv-magno-actions { gap: 8px; }
+}

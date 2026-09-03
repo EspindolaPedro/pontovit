@@ -39,6 +39,9 @@ export function SiteChrome({ settings, headerCode, footerCode, children }: { set
   // O painel tem navegação e layout próprios. Nunca herda o chrome público.
   if (pathname.startsWith("/admin")) return <>{children}</>;
 
+  // O cartão virtual (/magno) é uma mini-página standalone (link in bio), sem header/footer do site.
+  if (pathname.startsWith("/magno")) return <>{children}</>;
+
   const renderCode = (item: CodeItem) => (
     <span
       key={item.id}
