@@ -1497,6 +1497,14 @@ a.pv-icon-card { display: block; text-decoration: none; }
 .pv-magno-qr-frame svg { display: block; width: 148px; height: 148px; }
 .pv-magno-qr-url { margin: 14px 0 0; color: var(--pv-muted); font-size: 12.5px; font-weight: 500; }
 
+@media (max-width: 560px) {
+  /* No celular o cartão ocupa a tela inteira — sem bordas arredondadas nem gradiente
+     ao redor, como se fosse a própria página em vez de um cartão flutuando nela. */
+  .pv-magno-page { padding: 0; align-items: stretch; }
+  .pv-magno-wrap { max-width: 100%; }
+  .pv-magno-card { min-height: 100dvh; border-radius: 0; box-shadow: none; }
+}
+
 @media (max-width: 420px) {
   .pv-magno-body { padding: 16px 20px 28px; }
   .pv-magno-actions { gap: 6px; }
