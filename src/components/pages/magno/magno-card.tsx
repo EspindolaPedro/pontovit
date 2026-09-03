@@ -99,10 +99,6 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
             </div>
           </div>
         </div>
-
-        <p className="pv-magno-footer">
-          Um cartão <Link href="/">PontoVit</Link>
-        </p>
       </div>
     </main>
   );

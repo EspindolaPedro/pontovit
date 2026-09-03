@@ -1497,9 +1497,6 @@ a.pv-icon-card { display: block; text-decoration: none; }
 .pv-magno-qr-frame svg { display: block; width: 148px; height: 148px; }
 .pv-magno-qr-url { margin: 14px 0 0; color: var(--pv-muted); font-size: 12.5px; font-weight: 500; }
 
-.pv-magno-footer { margin-top: 22px; color: rgba(255, 247, 239, .6); font-size: 11.5px; text-align: center; }
-.pv-magno-footer a { color: var(--pv-yellow); font-weight: 700; }
-
 @media (max-width: 420px) {
   .pv-magno-body { padding: 16px 20px 28px; }
   .pv-magno-actions { gap: 6px; }
