@@ -22,6 +22,12 @@ RUN mkdir -p .next/standalone/public .next/standalone/.next/static \
 
 ENV NODE_ENV=production
 ENV PORT=3000
+# O container fica em mais de uma rede Docker (ex.: EasyPanel), cada uma com um IP
+# diferente. Sem isso, o server standalone do Next.js usa a variável HOSTNAME (que o
+# Docker preenche sozinho com o ID do container) para decidir em qual IP escutar — e
+# pode acabar ouvindo só numa das redes, deixando o proxy reverso sem conseguir
+# alcançá-lo ("connection refused" -> 502). 0.0.0.0 faz escutar em todas as interfaces.
+ENV HOSTNAME=0.0.0.0
 
 EXPOSE 3000
 
