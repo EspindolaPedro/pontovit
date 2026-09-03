@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter, Manrope, Ubuntu } from "next/font/google";
 import Script from "next/script";
 import { SiteChrome } from "@/components/shared/site-chrome";
 import { AdminFrame } from "@/components/admin/admin-frame";
@@ -13,6 +13,8 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
+// Usada só no cartão virtual (/magno), que segue um layout de referência com essa fonte.
+const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-ubuntu", display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getPublicSettings();
@@ -36,7 +38,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WFFR273T');`}</Script></head><body className={`${inter.variable} ${manrope.variable} font-sans`}><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFFR273T" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} /><Script id="chatwoot-widget" strategy="afterInteractive">{`(function(d,t) {
+    })(window,document,'script','dataLayer','GTM-WFFR273T');`}</Script></head><body className={`${inter.variable} ${manrope.variable} ${ubuntu.variable} font-sans`}><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFFR273T" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} /><Script id="chatwoot-widget" strategy="afterInteractive">{`(function(d,t) {
     var BASE_URL="https://chatwoot.vitoriahumana.com.br";
     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
     g.src=BASE_URL+"/packs/js/sdk.js";

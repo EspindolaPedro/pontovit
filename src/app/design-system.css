@@ -1399,6 +1399,10 @@ a.pv-icon-card { display: block; text-decoration: none; }
 @keyframes pv-magno-float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-14px, 16px); } }
 
 .pv-magno-page {
+  /* Fonte própria do cartão, seguindo o layout de referência — não afeta o resto do site. */
+  --pv-font-body: var(--font-ubuntu), Arial, sans-serif;
+  --pv-font-display: var(--font-ubuntu), Arial, sans-serif;
+  font-family: var(--pv-font-body);
   position: relative;
   min-height: 100dvh;
   overflow: hidden;
