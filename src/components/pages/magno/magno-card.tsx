@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CompanyIcon } from "@/components/shared/feature-icons";
-import { ArrowDownIcon, CheckIcon, ChevronRightIcon, DocumentIcon, GlobeIcon, LinkedinIcon, MailIcon, PhoneIcon, UserIcon, WhatsappIcon } from "@/components/shared/icons";
+import { CheckIcon, ChevronRightIcon, DocumentIcon, GlobeIcon, LinkedinIcon, MailIcon, PhoneIcon, UserIcon, WhatsappIcon } from "@/components/shared/icons";
 import { getMagnoCardUrl, getMagnoWhatsAppUrl, magnoCard } from "@/config/magno";
 
 const initials = magnoCard.firstName[0] + magnoCard.lastName[0];
@@ -68,11 +68,6 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
                 LinkedIn
               </a>
             </div>
-
-            <a href="/magno/vcard" download="magno-bais-pontovit.vcf" className="pv-magno-save">
-              <ArrowDownIcon size={17} />
-              Salvar meu contato
-            </a>
 
             <div className="pv-magno-links">
               <Link href="/escalas-de-trabalho">
