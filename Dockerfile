@@ -31,4 +31,4 @@ ENV HOSTNAME=0.0.0.0
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm db:deploy && (pnpm db:restore-media || echo 'Aviso: nao foi possivel restaurar as midias publicas') && node .next/standalone/server.js"]
+CMD ["sh", "-c", "pnpm db:deploy && (pnpm db:restore-media || echo 'Aviso: nao foi possivel restaurar as midias publicas') && (pnpm db:seed-magno-photo || echo 'Aviso: nao foi possivel semear a foto do Magno') && node .next/standalone/server.js"]

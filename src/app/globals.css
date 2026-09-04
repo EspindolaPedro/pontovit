@@ -3417,6 +3417,18 @@ body {
   padding: 13px;
 }
 
+.pv-magno-admin-layout { display: flex; gap: 48px; align-items: flex-start; margin-top: 28px; }
+.pv-magno-admin-preview-col { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.pv-magno-admin-avatar { display: flex; align-items: center; justify-content: center; width: 200px; height: 200px; overflow: hidden; border-radius: 999px; background: var(--pv-gray-soft); box-shadow: 0 10px 30px rgba(16, 16, 16, .12); touch-action: none; }
+.pv-magno-admin-avatar.is-draggable { cursor: grab; }
+.pv-magno-admin-avatar.is-draggable:active { cursor: grabbing; }
+.pv-magno-admin-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.pv-magno-admin-avatar-empty { color: var(--pv-white); background: linear-gradient(145deg, var(--pv-orange-strong), var(--pv-orange-deep)); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: var(--pv-font-display); font-size: 44px; font-weight: 700; }
+.pv-magno-admin-hint { max-width: 220px; margin: 0; color: var(--pv-muted); font-size: 11.5px; text-align: center; }
+.pv-magno-admin-form { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; max-width: 360px; }
+.pv-magno-admin-note { margin-top: 18px; color: var(--pv-muted); font-size: 12px; }
+.pv-magno-admin-note a { color: var(--pv-orange-deep); font-weight: 600; }
+
 .pv-admin-media-empty {
   margin: 18px 0 0;
   padding: 22px;

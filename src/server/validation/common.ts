@@ -105,6 +105,11 @@ export const MediaUpdateSchema = z.object({
   focalPointY: z.number().min(0).max(100).default(50),
 });
 
+export const MagnoFocalPointSchema = z.object({
+  focalPointX: z.number().min(0).max(100),
+  focalPointY: z.number().min(0).max(100),
+});
+
 export const CodeInjectionSchema = z.object({
   name: text(100, 2),
   location: z.enum(["HEADER", "FOOTER"]),

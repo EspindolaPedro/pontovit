@@ -13,6 +13,7 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:restore-media": "tsx prisma/restore-media.ts",
+    "db:seed-magno-photo": "tsx prisma/seed-magno-photo.ts",
     "db:import-blog": "tsx prisma/import-blog.ts",
     "db:import-brand": "tsx prisma/import-brand.ts"
   },

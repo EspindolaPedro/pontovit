@@ -2,8 +2,8 @@ import { siteConfig } from "@/config/site";
 
 /**
  * Cartão virtual do Magno (/magno) — cartão de visita digital + link in bio.
- * TODO: quando a foto real chegar, salve-a em public/assets/people/magno-bais.png
- * e troque `photo: null` abaixo pelo caminho "/assets/people/magno-bais.png".
+ * A foto de perfil não fica aqui: é gerenciada pelo CMS (/admin/magno) e
+ * servida via /api/magno/photo — veja src/server/modules/magno/magno.service.ts.
  */
 export const magnoCard = {
   slug: "magno",
@@ -21,7 +21,6 @@ export const magnoCard = {
   linkedin: siteConfig.socialLinks.linkedin,
   instagram: siteConfig.socialLinks.instagram,
   siteUrl: siteConfig.url,
-  photo: null as string | null,
 } as const;
 
 export function getMagnoWhatsAppUrl() {

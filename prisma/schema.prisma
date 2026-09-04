@@ -256,3 +256,14 @@ model ApiKey {
 
   @@index([revokedAt, expiresAt])
 }
+
+// Foto do cartão virtual (/magno). Os bytes ficam no Postgres (não no disco do
+// container) porque o storage de arquivos do site não é persistente entre deploys.
+model MagnoCardSettings {
+  id            String   @id @default("main")
+  photoData     Bytes?
+  photoMimeType String?
+  focalPointX   Float    @default(50)
+  focalPointY   Float    @default(50)
+  updatedAt     DateTime @updatedAt
+}

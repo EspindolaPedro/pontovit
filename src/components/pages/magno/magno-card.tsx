@@ -5,7 +5,14 @@ import { getMagnoCardUrl, getMagnoWhatsAppUrl, magnoCard } from "@/config/magno"
 
 const initials = magnoCard.firstName[0] + magnoCard.lastName[0];
 
-export function MagnoCard({ qrSvg }: { qrSvg: string }) {
+type MagnoCardProps = {
+  qrSvg: string;
+  photoUrl?: string | null;
+  focalPointX?: number;
+  focalPointY?: number;
+};
+
+export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 }: MagnoCardProps) {
   const cardUrl = getMagnoCardUrl();
   const cardUrlLabel = cardUrl.replace(/^https?:\/\//, "");
 
@@ -28,8 +35,12 @@ export function MagnoCard({ qrSvg }: { qrSvg: string }) {
           </div>
 
           <div className="pv-magno-avatar-wrap">
-            <div className="pv-magno-avatar" aria-hidden={!!magnoCard.photo}>
-              {magnoCard.photo ? <img src={magnoCard.photo} alt={magnoCard.fullName} /> : initials}
+            <div className="pv-magno-avatar" aria-hidden={!!photoUrl}>
+              {photoUrl ? (
+                <img src={photoUrl} alt={magnoCard.fullName} style={{ objectPosition: `${focalPointX}% ${focalPointY}%` }} />
+              ) : (
+                initials
+              )}
             </div>
             <span className="pv-magno-avatar-badge" aria-hidden="true">
               <CheckIcon size={11} />
