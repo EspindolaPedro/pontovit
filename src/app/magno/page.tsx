@@ -12,7 +12,9 @@ export const metadata = pageMetadata(
 
 export default async function MagnoRoute() {
   const [qrSvg, photo] = await Promise.all([
-    QRCode.toString(getMagnoCardUrl(), { type: "svg", margin: 0, color: { dark: "#1c140d", light: "#00000000" } }),
+    // Nível de correção de erro alto (H) porque o selo da PontoVit fica sobreposto
+    // no centro do QR — o código continua lendo mesmo com ~30% da área coberta.
+    QRCode.toString(getMagnoCardUrl(), { type: "svg", margin: 0, errorCorrectionLevel: "H", color: { dark: "#24313f", light: "#00000000" } }),
     getMagnoPhoto(),
   ]);
   const photoUrl = photo ? `/api/magno/photo?v=${photo.updatedAt.getTime()}` : null;

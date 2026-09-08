@@ -11,20 +11,25 @@ export const magnoCard = {
   fullName: "Magno Baís",
   firstName: "Magno",
   lastName: "Baís",
-  role: "Founder",
+  role: "Founder & CEO",
   company: siteConfig.name,
-  bio: "Founder da PontoVit. Ajudo empresas a organizarem escalas, jornadas e equipes com mais eficiência.",
+  // Mensagem de posicionamento — fala da solução da PontoVit, não da pessoa.
+  positioningStatement: "Solução em gestão de escalas de trabalho para equipes mais organizadas, produtivas e eficientes.",
+  institutionalTagline: "Tecnologia que organiza pessoas e facilita a sua gestão.",
+  footerSignature: "Pessoas bem escaladas fazem empresas mais fortes",
+  presentationUrl: "/assets/magno/apresentacao-pontovit-2026.pdf",
   email: "magno@pontovit.com.br",
   whatsapp: siteConfig.whatsapp,
   whatsappMessage: "Olá, Magno! Vim através do seu cartão digital da PontoVit.",
+  demoWhatsappMessage: "Olá! Vim através do cartão do Magno e gostaria de agendar uma demonstração da PontoVit.",
   phoneDisplay: "+55 51 99299-8338",
   linkedin: siteConfig.socialLinks.linkedin,
   instagram: siteConfig.socialLinks.instagram,
   siteUrl: siteConfig.url,
 } as const;
 
-export function getMagnoWhatsAppUrl() {
-  return `https://wa.me/${magnoCard.whatsapp}?text=${encodeURIComponent(magnoCard.whatsappMessage)}`;
+export function getMagnoWhatsAppUrl(message: string = magnoCard.whatsappMessage) {
+  return `https://wa.me/${magnoCard.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
 export function getMagnoCardUrl() {
@@ -47,7 +52,7 @@ export function buildMagnoVCard() {
     `EMAIL;TYPE=WORK:${magnoCard.email}`,
     `URL:${magnoCard.siteUrl}`,
     `URL:${getMagnoCardUrl()}`,
-    `NOTE:${escapeVCardValue(magnoCard.bio)}`,
+    `NOTE:${escapeVCardValue(magnoCard.positioningStatement)}`,
     "END:VCARD",
   ];
   return lines.join("\r\n");
