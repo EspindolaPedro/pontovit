@@ -1426,6 +1426,8 @@ a.pv-icon-card { display: block; text-decoration: none; }
   text-align: center;
 }
 
+.pv-magno-top-logo { display: block; width: 120px; height: auto; margin: 0 auto 26px; }
+
 .pv-magno-avatar-wrap { display: flex; justify-content: center; }
 .pv-magno-avatar {
   width: 116px;
@@ -1533,10 +1535,6 @@ a.pv-icon-card { display: block; text-decoration: none; }
 .pv-magno-cta-light:hover .pv-magno-cta-light-chevron { transform: translateX(2px); }
 
 .pv-magno-divider { margin: 28px 0; border: 0; border-top: 1px solid var(--pv-line); }
-
-.pv-magno-brand-block { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.pv-magno-brand-logo { display: block; width: 148px; height: auto; }
-.pv-magno-brand-tagline { max-width: 280px; margin: 0; color: var(--pv-magno-graphite-soft); font-size: 14px; line-height: 1.5; }
 
 .pv-magno-share {
   display: inline-flex;

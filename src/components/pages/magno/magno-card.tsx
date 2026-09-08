@@ -1,5 +1,5 @@
 import { CalendarIcon } from "@/components/shared/feature-icons";
-import { ChevronRightIcon, DocumentIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon, WhatsappIcon } from "@/components/shared/icons";
+import { ChevronRightIcon, DocumentIcon, GlobeIcon, MailIcon, PhoneIcon, WhatsappIcon } from "@/components/shared/icons";
 import { getMagnoCardUrl, getMagnoWhatsAppUrl, magnoCard } from "@/config/magno";
 import { MagnoShareButton } from "./magno-share-button";
 
@@ -19,6 +19,8 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
     <main className="pv-magno-page">
       <div className="pv-magno-wrap">
         <div className="pv-magno-card">
+          <img className="pv-magno-top-logo" src="/assets/product/pontovit-logo.png" alt="PontoVit" />
+
           <div className="pv-magno-avatar-wrap">
             <div className="pv-magno-avatar" aria-hidden={!!photoUrl}>
               {photoUrl ? (
@@ -38,15 +40,6 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
 
           <p className="pv-magno-positioning">{magnoCard.positioningStatement}</p>
 
-          <div className="pv-magno-qr">
-            <div className="pv-magno-qr-panel">
-              <span className="pv-magno-qr-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} />
-              <span className="pv-magno-qr-badge" aria-hidden="true">
-                <img src="/assets/product/pontovit-mark.png" alt="" />
-              </span>
-            </div>
-          </div>
-
           <a href={getMagnoWhatsAppUrl()} target="_blank" rel="noreferrer" className="pv-magno-cta-primary">
             <WhatsappIcon size={19} />
             Falar pelo WhatsApp
@@ -64,20 +57,7 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
             </a>
           </div>
 
-          <a href="/magno/vcard" download="magno-bais-pontovit.vcf" className="pv-magno-cta-light">
-            <span className="pv-magno-cta-light-icon">
-              <UserIcon size={16} />
-            </span>
-            Salvar meu contato
-            <ChevronRightIcon size={16} className="pv-magno-cta-light-chevron" />
-          </a>
-
           <hr className="pv-magno-divider" />
-
-          <div className="pv-magno-brand-block">
-            <img className="pv-magno-brand-logo" src="/assets/product/pontovit-logo.png" alt="PontoVit" />
-            <p className="pv-magno-brand-tagline">{magnoCard.institutionalTagline}</p>
-          </div>
 
           <a href="/" className="pv-magno-cta-primary">
             <GlobeIcon size={19} />
@@ -100,6 +80,15 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
           </a>
 
           <MagnoShareButton url={cardUrl} title={`${magnoCard.fullName} · ${magnoCard.role}`} />
+
+          <div className="pv-magno-qr">
+            <div className="pv-magno-qr-panel">
+              <span className="pv-magno-qr-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+              <span className="pv-magno-qr-badge" aria-hidden="true">
+                <img src="/assets/product/pontovit-mark.png" alt="" />
+              </span>
+            </div>
+          </div>
 
           <p className="pv-magno-footer-signature">{magnoCard.footerSignature}</p>
           <span className="pv-magno-footer-rule" aria-hidden="true" />

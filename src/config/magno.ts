@@ -15,7 +15,6 @@ export const magnoCard = {
   company: siteConfig.name,
   // Mensagem de posicionamento — fala da solução da PontoVit, não da pessoa.
   positioningStatement: "Solução em gestão de escalas de trabalho para equipes mais organizadas, produtivas e eficientes.",
-  institutionalTagline: "Tecnologia que organiza pessoas e facilita a sua gestão.",
   footerSignature: "Pessoas bem escaladas fazem empresas mais fortes",
   presentationUrl: "/assets/magno/apresentacao-pontovit-2026.pdf",
   email: "magno@pontovit.com.br",
