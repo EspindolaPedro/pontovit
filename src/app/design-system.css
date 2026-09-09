@@ -1562,12 +1562,14 @@ a.pv-icon-card { display: block; text-decoration: none; }
 .pv-magno-footer-rule { display: block; width: 32px; height: 3px; margin: 6px auto 0; border-radius: 999px; background: var(--pv-orange); }
 
 @media (max-width: 560px) {
-  /* No celular o cartão enquadra a tela inteira, sem rolagem: preenche exatamente
-     a altura da viewport (não só o mínimo) e só rola por dentro se algum aparelho
-     muito baixo não couber o conteúdo — a página em si nunca rola. */
-  .pv-magno-page { padding: 0; align-items: stretch; overflow: hidden; }
-  .pv-magno-wrap { max-width: 100%; height: 100dvh; animation: none; }
-  .pv-magno-card { height: 100%; justify-content: safe center; overflow-y: auto; border-radius: 0; box-shadow: none; }
+  /* No celular o cartão ocupa a tela inteira (sem cantos arredondados nem margem).
+     Só min-height, sem altura travada nem overflow customizado: em navegadores
+     in-app (WhatsApp, Instagram) o cálculo de 100dvh + rolagem interna é instável
+     e chegou a esconder a foto por trás da barra de endereço em um iPhone real.
+     Com min-height, o pior caso é a própria página rolar — nunca corta conteúdo. */
+  .pv-magno-page { padding: 0; align-items: flex-start; }
+  .pv-magno-wrap { max-width: 100%; animation: none; }
+  .pv-magno-card { min-height: 100dvh; border-radius: 0; box-shadow: none; }
 }
 
 @media (max-width: 380px) {
