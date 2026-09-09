@@ -1419,7 +1419,9 @@ a.pv-icon-card { display: block; text-decoration: none; }
 
 .pv-magno-card {
   position: relative;
-  padding: 40px 26px 34px;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 18px;
   border-radius: var(--pv-radius-lg);
   background: var(--pv-white);
   box-shadow: 0 24px 60px rgba(34, 50, 68, .12);
@@ -1428,57 +1430,57 @@ a.pv-icon-card { display: block; text-decoration: none; }
 
 .pv-magno-avatar-wrap { display: flex; justify-content: center; }
 .pv-magno-avatar {
-  width: 116px;
-  height: 116px;
+  width: 84px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background: linear-gradient(145deg, var(--pv-orange-strong), var(--pv-orange-deep));
-  box-shadow: 0 14px 30px rgba(34, 50, 68, .18);
+  box-shadow: 0 12px 24px rgba(34, 50, 68, .18);
   color: var(--pv-white);
   font-family: var(--pv-font-display);
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -.02em;
   overflow: hidden;
 }
 .pv-magno-avatar img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
 
-.pv-magno-card h1 { margin: 20px 0 0; color: var(--pv-magno-graphite); font-family: var(--pv-font-display); font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+.pv-magno-card h1 { margin: 10px 0 0; color: var(--pv-magno-graphite); font-family: var(--pv-font-display); font-size: 20px; font-weight: 800; letter-spacing: -.02em; }
 
-.pv-magno-role-line { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 0 0; font-size: 14.5px; font-weight: 700; }
+.pv-magno-role-line { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 4px 0 0; font-size: 13px; font-weight: 700; }
 .pv-magno-role { color: var(--pv-orange-deep); }
 .pv-magno-role-sep { color: var(--pv-line); }
 .pv-magno-company { color: var(--pv-magno-graphite); }
 
-.pv-magno-positioning { max-width: 300px; margin: 16px auto 0; color: var(--pv-magno-graphite-soft); font-size: 14.5px; line-height: 1.55; }
+.pv-magno-positioning { max-width: 300px; margin: 6px auto 0; color: var(--pv-magno-graphite-soft); font-size: 12.5px; line-height: 1.35; }
 
-.pv-magno-qr { margin: 26px 0 0; }
-.pv-magno-qr-panel { position: relative; display: inline-flex; padding: 14px; border-radius: 18px; background: var(--pv-white); border: 1px solid var(--pv-line); }
-.pv-magno-qr-panel::before, .pv-magno-qr-panel::after { content: ""; position: absolute; width: 16px; height: 16px; border: 2px solid var(--pv-orange); opacity: .6; }
-.pv-magno-qr-panel::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; border-radius: 6px 0 0 0; }
-.pv-magno-qr-panel::after { bottom: 6px; right: 6px; border-left: 0; border-top: 0; border-radius: 0 0 6px 0; }
+.pv-magno-qr { margin: 8px 0 0; }
+.pv-magno-qr-panel { position: relative; display: inline-flex; padding: 8px; border-radius: 14px; background: var(--pv-white); border: 1px solid var(--pv-line); }
+.pv-magno-qr-panel::before, .pv-magno-qr-panel::after { content: ""; position: absolute; width: 12px; height: 12px; border: 2px solid var(--pv-orange); opacity: .6; }
+.pv-magno-qr-panel::before { top: 5px; left: 5px; border-right: 0; border-bottom: 0; border-radius: 5px 0 0 0; }
+.pv-magno-qr-panel::after { bottom: 5px; right: 5px; border-left: 0; border-top: 0; border-radius: 0 0 5px 0; }
 .pv-magno-qr-frame { display: block; }
-.pv-magno-qr-frame svg { display: block; width: 148px; height: 148px; }
-.pv-magno-qr-badge { position: absolute; top: 50%; left: 50%; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; background: var(--pv-white); border: 1px solid var(--pv-line); box-shadow: 0 4px 10px rgba(34, 50, 68, .12); transform: translate(-50%, -50%); }
-.pv-magno-qr-badge img { display: block; width: 20px; height: 20px; object-fit: contain; }
+.pv-magno-qr-frame svg { display: block; width: 92px; height: 92px; }
+.pv-magno-qr-badge { position: absolute; top: 50%; left: 50%; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 999px; background: var(--pv-white); border: 1px solid var(--pv-line); box-shadow: 0 4px 10px rgba(34, 50, 68, .12); transform: translate(-50%, -50%); }
+.pv-magno-qr-badge img { display: block; width: 14px; height: 14px; object-fit: contain; }
 
 /* Botões — o mesmo raio moderado em todos, nada de pill 999px: fica mais executivo. */
 .pv-magno-cta-primary, .pv-magno-cta-outline, .pv-magno-cta-secondary, .pv-magno-cta-light {
   display: flex;
   align-items: center;
   width: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   font-family: var(--pv-font-display);
   transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
 }
 
 .pv-magno-cta-primary, .pv-magno-cta-outline {
   justify-content: space-between;
-  margin-top: 14px;
-  padding: 15px 18px;
-  font-size: 13.5px;
+  margin-top: 10px;
+  padding: 11px 15px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .02em;
@@ -1500,76 +1502,76 @@ a.pv-icon-card { display: block; text-decoration: none; }
 }
 .pv-magno-cta-outline:hover { background: var(--pv-warm); transform: translateY(-1px); }
 
-.pv-magno-secondary-row { display: flex; gap: 10px; margin-top: 10px; }
+.pv-magno-secondary-row { display: flex; gap: 8px; margin-top: 8px; }
 .pv-magno-cta-secondary {
   flex: 1 1 0;
   width: auto;
   justify-content: center;
-  gap: 8px;
-  padding: 13px 10px;
+  gap: 7px;
+  padding: 10px;
   border: 1px solid var(--pv-line);
   background: var(--pv-gray-soft);
   color: var(--pv-magno-graphite);
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
 }
 .pv-magno-cta-secondary svg { color: var(--pv-orange); }
 .pv-magno-cta-secondary:hover { border-color: var(--pv-orange); background: var(--pv-warm); }
 
 .pv-magno-cta-light {
-  gap: 12px;
-  margin-top: 10px;
-  padding: 13px 16px;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 10px 14px;
   border: 1px solid var(--pv-line);
   background: var(--pv-white);
   color: var(--pv-magno-graphite);
-  font-size: 14.5px;
+  font-size: 12.5px;
   font-weight: 700;
   text-align: left;
 }
-.pv-magno-cta-light-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: 0 0 auto; border-radius: 10px; background: var(--pv-yellow-soft); color: var(--pv-orange-deep); }
+.pv-magno-cta-light-icon { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; flex: 0 0 auto; border-radius: 8px; background: var(--pv-yellow-soft); color: var(--pv-orange-deep); }
 .pv-magno-cta-light-chevron { margin-left: auto; color: var(--pv-orange); flex: 0 0 auto; transition: transform .2s ease; }
 .pv-magno-cta-light:hover { border-color: var(--pv-orange); background: var(--pv-warm); }
 .pv-magno-cta-light:hover .pv-magno-cta-light-chevron { transform: translateX(2px); }
 
-.pv-magno-divider { margin: 28px 0; border: 0; border-top: 1px solid var(--pv-line); }
+.pv-magno-divider { margin: 10px 0; border: 0; border-top: 1px solid var(--pv-line); }
 
-.pv-magno-brand-block { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.pv-magno-brand-logo { display: block; width: 148px; height: auto; }
-.pv-magno-brand-tagline { max-width: 280px; margin: 0; color: var(--pv-magno-graphite-soft); font-size: 14px; line-height: 1.5; }
+.pv-magno-brand-block { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.pv-magno-brand-logo { display: block; width: 104px; height: auto; }
+.pv-magno-brand-tagline { max-width: 280px; margin: 0; color: var(--pv-magno-graphite-soft); font-size: 11px; line-height: 1.3; }
 
 .pv-magno-share {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 22px;
-  padding: 6px 4px;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 4px;
   border: 0;
   background: none;
   color: var(--pv-magno-graphite-soft);
   cursor: pointer;
   font: inherit;
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 600;
   transition: color .2s ease;
 }
 .pv-magno-share svg { color: var(--pv-orange); }
 .pv-magno-share:hover { color: var(--pv-orange-deep); }
 
-.pv-magno-footer-signature { margin: 22px 0 0; color: var(--pv-magno-graphite-soft); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.pv-magno-footer-rule { display: block; width: 40px; height: 3px; margin: 12px auto 0; border-radius: 999px; background: var(--pv-orange); }
+.pv-magno-footer-signature { margin: 6px 0 0; color: var(--pv-magno-graphite-soft); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.pv-magno-footer-rule { display: block; width: 32px; height: 3px; margin: 6px auto 0; border-radius: 999px; background: var(--pv-orange); }
 
 @media (max-width: 560px) {
-  /* No celular o cartão ocupa a tela inteira — sem bordas arredondadas nem margem
-     ao redor, como se fosse a própria página em vez de um cartão flutuando nela. */
-  .pv-magno-page { padding: 0; align-items: stretch; }
-  .pv-magno-wrap { max-width: 100%; animation: none; }
-  .pv-magno-card { min-height: 100dvh; border-radius: 0; box-shadow: none; }
+  /* No celular o cartão enquadra a tela inteira, sem rolagem: preenche exatamente
+     a altura da viewport (não só o mínimo) e só rola por dentro se algum aparelho
+     muito baixo não couber o conteúdo — a página em si nunca rola. */
+  .pv-magno-page { padding: 0; align-items: stretch; overflow: hidden; }
+  .pv-magno-wrap { max-width: 100%; height: 100dvh; animation: none; }
+  .pv-magno-card { height: 100%; justify-content: safe center; overflow-y: auto; border-radius: 0; box-shadow: none; }
 }
 
 @media (max-width: 380px) {
-  .pv-magno-card { padding: 32px 18px 28px; }
-  .pv-magno-cta-primary, .pv-magno-cta-outline { font-size: 12.5px; padding: 14px 14px; }
+  .pv-magno-card { padding: 18px 16px 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

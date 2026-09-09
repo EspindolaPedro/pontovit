@@ -38,6 +38,15 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
 
           <p className="pv-magno-positioning">{magnoCard.positioningStatement}</p>
 
+          <div className="pv-magno-qr">
+            <div className="pv-magno-qr-panel">
+              <span className="pv-magno-qr-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+              <span className="pv-magno-qr-badge" aria-hidden="true">
+                <img src="/assets/product/pontovit-mark.png" alt="" />
+              </span>
+            </div>
+          </div>
+
           <a href={getMagnoWhatsAppUrl()} target="_blank" rel="noreferrer" className="pv-magno-cta-primary">
             <WhatsappIcon size={19} />
             Falar pelo WhatsApp
@@ -83,15 +92,6 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
           </a>
 
           <MagnoShareButton url={cardUrl} title={`${magnoCard.fullName} · ${magnoCard.role}`} />
-
-          <div className="pv-magno-qr">
-            <div className="pv-magno-qr-panel">
-              <span className="pv-magno-qr-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} />
-              <span className="pv-magno-qr-badge" aria-hidden="true">
-                <img src="/assets/product/pontovit-mark.png" alt="" />
-              </span>
-            </div>
-          </div>
 
           <p className="pv-magno-footer-signature">{magnoCard.footerSignature}</p>
           <span className="pv-magno-footer-rule" aria-hidden="true" />
