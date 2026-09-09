@@ -19,8 +19,6 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
     <main className="pv-magno-page">
       <div className="pv-magno-wrap">
         <div className="pv-magno-card">
-          <img className="pv-magno-top-logo" src="/assets/product/pontovit-logo.png" alt="PontoVit" />
-
           <div className="pv-magno-avatar-wrap">
             <div className="pv-magno-avatar" aria-hidden={!!photoUrl}>
               {photoUrl ? (
@@ -58,6 +56,11 @@ export function MagnoCard({ qrSvg, photoUrl, focalPointX = 50, focalPointY = 50 
           </div>
 
           <hr className="pv-magno-divider" />
+
+          <div className="pv-magno-brand-block">
+            <img className="pv-magno-brand-logo" src="/assets/product/pontovit-logo.png" alt="PontoVit" />
+            <p className="pv-magno-brand-tagline">{magnoCard.institutionalTagline}</p>
+          </div>
 
           <a href="/" className="pv-magno-cta-primary">
             <GlobeIcon size={19} />
