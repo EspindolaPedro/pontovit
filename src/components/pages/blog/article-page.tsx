@@ -26,7 +26,14 @@ export function ArticlePage({ slug, post: dynamicPost, relatedPosts }: ArticlePa
   const post = dynamicPost ?? getPostBySlug(slug);
   if (!post) return null;
   const related = relatedPosts ?? getRelatedPosts(post.slug, 2);
-  const [lead, ...rest] = post.blocks;
+  // The editor can persist the article title as the first level-1 heading in
+  // the body. The page already renders the title in the hero, so avoid
+  // showing it a second time at the beginning of the article.
+  const articleBlocks = post.blocks.filter((block, index) => (
+    index !== 0 ||
+    !((block.type === "h2" || block.type === "h3") && block.text.trim() === post.title.trim())
+  ));
+  const [lead, ...rest] = articleBlocks;
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
