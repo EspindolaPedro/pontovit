@@ -417,7 +417,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .rosette-right { top: 397px; right: -6px; width: 108px; height: 108px; }
   .figma-orbit { top: 66px; width: 889px; height: 850px; transform: translateX(-50%) scale(.42); }
   .figma-hero-copy { top: 104px; width: calc(100% - 32px); }
-  .figma-hero-copy h1 { max-width: 390px; font-size: clamp(31px, 8.3vw, 35px); line-height: 1.08; letter-spacing: -.045em; }
+  .figma-hero-copy h1 { max-width: 390px; font-size: clamp(22px, 6.8vw, 26px); line-height: 1.18; letter-spacing: -.02em; }
   .figma-hero-copy p { max-width: 370px; margin-top: 20px; font-size: 16px; line-height: 1.28; }
   .figma-hero-copy .figma-button { margin-top: 24px; }
 

@@ -680,7 +680,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
         <div className="figma-orbit" aria-hidden="true"><img src={`${asset}hero-icons.svg`} alt="" fetchPriority="high" /></div>
         <div className="figma-hero-copy">
-          <h1>Gestão de <em>escalas inteligente</em>, com registro de <em>ponto integrado</em></h1>
+          <h1>Gestão <em>inteligente</em> de escalas de trabalho, com registro de <em>ponto integrado</em></h1>
           <p>Com o PontoVit, você simplifica a gestão de escalas e, quando precisar, pode integrar o registro de ponto Stelanto para uma gestão ainda mais completa da jornada de trabalho.</p>
           <ArrowButton>Falar no Whatsapp</ArrowButton>
         </div>
