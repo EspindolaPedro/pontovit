@@ -18,7 +18,8 @@ Nunca usar `dangerouslySetInnerHTML` com valor vindo diretamente do request ou d
 - Login: cinco falhas por janela de cinco minutos bloqueiam a combinação IP/e-mail por cinco minutos.
 - Formulário de contato: cinco envios por janela de cinco minutos por origem, com honeypot contra bots.
 - Sessão: token aleatório armazenado apenas como hash no banco e cookie HttpOnly/SameSite.
-- API do blog: escrita exige API key com hash, expiração, revogação e escopo `posts:write`.
+- API do blog: escrita exige API key com hash, expiração, revogação e escopos específicos (`posts:write`, `posts:delete` e `media:write`).
+- Upload de integração: aceita somente JPG, PNG e WebP, limita a imagem a 5 MB e o corpo multipart a 6 MB.
 - URLs: somente `http`, `https`, `mailto` e `tel` onde aplicável; `javascript:` e `data:` são rejeitados.
 - Segredos: `.env` e `.env.*` estão no `.gitignore`; somente `.env.example` é versionável.
 

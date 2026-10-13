@@ -34,6 +34,13 @@ O compose usa a porta `5434` no host para evitar conflito com outros containers 
 - `GET /api/v1/posts`: posts publicados com paginação, busca e filtro por categoria.
 - `POST /api/v1/posts`: criação via `Authorization: Bearer <API_KEY>` e escopo `posts:write`.
 
+### Integração de mídia
+
+- `POST /api/v1/media`: upload autenticado de JPG, PNG ou WebP.
+- Requer `Authorization: Bearer <API_KEY>` com o escopo `media:write`.
+- A imagem pode ter até 5 MB e deve ser enviada como `multipart/form-data`, no campo `file`.
+- A resposta contém `data.id`, usado como `coverMediaId` na criação do post.
+
 ## Produção
 
-Não versionar `.env`, senhas, tokens ou chaves. Aplicar `pnpm db:deploy` antes do novo processo da aplicação, fazer backup do PostgreSQL e manter storage de mídia persistente. Em múltiplas instâncias, trocar o rate limit local do banco por Redis compartilhado sem alterar os contratos dos services.
+Não versionar `.env`, senhas, tokens ou chaves. Aplicar `pnpm db:deploy` antes do novo processo da aplicação e fazer backup do PostgreSQL, que também armazena os bytes dos novos uploads. O diretório de mídia continua sendo usado como compatibilidade para arquivos legados. Em múltiplas instâncias, trocar o rate limit local do banco por Redis compartilhado sem alterar os contratos dos services.

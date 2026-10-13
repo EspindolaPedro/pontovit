@@ -6,15 +6,15 @@ import { BrandLogoSchema } from "../../validation/common";
 export type BrandLogoInput = ReturnType<typeof BrandLogoSchema.parse>;
 
 export function listBrandLogos(group?: LogoGroup) {
-  return prisma.brandLogo.findMany({ where: { isVisible: true, ...(group ? { group } : {}) }, orderBy: { sortOrder: "asc" }, include: { media: true } });
+  return prisma.brandLogo.findMany({ where: { isVisible: true, ...(group ? { group } : {}) }, orderBy: { sortOrder: "asc" }, include: { media: { select: { id: true, filename: true, storageKey: true, mimeType: true, byteSize: true, width: true, height: true, altText: true, focalPointX: true, focalPointY: true, createdById: true, createdAt: true, updatedAt: true } } } });
 }
 
 export function listAdminBrandLogos() {
-  return prisma.brandLogo.findMany({ orderBy: [{ group: "asc" }, { sortOrder: "asc" }], include: { media: true } });
+  return prisma.brandLogo.findMany({ orderBy: [{ group: "asc" }, { sortOrder: "asc" }], include: { media: { select: { id: true, filename: true, storageKey: true, mimeType: true, byteSize: true, width: true, height: true, altText: true, focalPointX: true, focalPointY: true, createdById: true, createdAt: true, updatedAt: true } } } });
 }
 
 export async function createBrandLogo(input: BrandLogoInput, userId: string) {
-  const media = await prisma.media.findUnique({ where: { id: input.mediaId } });
+  const media = await prisma.media.findUnique({ where: { id: input.mediaId }, select: { id: true } });
   if (!media) throw new AppError("A mídia informada não existe.", 422, "MEDIA_NOT_FOUND");
   return prisma.brandLogo.create({ data: { ...input, createdById: userId } });
 }

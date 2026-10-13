@@ -128,6 +128,6 @@ export const UserCreateSchema = z.object({
 
 export const ApiKeyCreateSchema = z.object({
   name: text(100, 2),
-  scopes: z.array(z.enum(["posts:read", "posts:write", "posts:delete"])).min(1).max(10),
+  scopes: z.array(z.enum(["posts:read", "posts:write", "posts:delete", "media:write"])).min(1).max(10),
   expiresAt: z.coerce.date().optional(),
 });

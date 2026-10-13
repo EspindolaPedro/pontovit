@@ -17,7 +17,7 @@ async function importOne(userId: string, group: "CLIENT" | "PARTNER", name: stri
   const filename = path.basename(sourcePath); const storageKey = `brand-${group.toLowerCase()}-${filename}`;
   const contents = await readFile(sourcePath); await mkdir(root, { recursive: true });
   try { await copyFile(sourcePath, path.join(root, storageKey)); } catch { /* já importado */ }
-  const media = await prisma.media.upsert({ where: { storageKey }, update: { altText: `Logo ${name}` }, create: { filename, storageKey, mimeType: mime(filename), byteSize: contents.byteLength, altText: `Logo ${name}`, createdById: userId } });
+  const media = await prisma.media.upsert({ where: { storageKey }, update: { altText: `Logo ${name}`, data: Uint8Array.from(contents) }, create: { filename, storageKey, data: Uint8Array.from(contents), mimeType: mime(filename), byteSize: contents.byteLength, altText: `Logo ${name}`, createdById: userId } });
   await prisma.brandLogo.upsert({ where: { id: `${group.toLowerCase()}-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` }, update: { mediaId: media.id, name, altText: `Logo ${name}`, sortOrder: order, isVisible: true }, create: { id: `${group.toLowerCase()}-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, group, name, altText: `Logo ${name}`, mediaId: media.id, sortOrder: order, createdById: userId } });
 }
 

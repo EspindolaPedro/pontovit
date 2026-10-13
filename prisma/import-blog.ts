@@ -28,8 +28,9 @@ async function mediaFor(image: string | null, userId: string) {
   const filename = path.basename(source);
   const storageKey = `legacy-${filename}`;
   const targetRoot = path.resolve(process.env.MEDIA_STORAGE_PATH ?? "./storage/media");
+  let contents: Buffer;
   try {
-    await readFile(source);
+    contents = await readFile(source);
   } catch {
     console.warn(`Imagem não encontrada, seguindo sem capa: ${image}`);
     return null;
@@ -38,8 +39,8 @@ async function mediaFor(image: string | null, userId: string) {
   try { await copyFile(source, path.join(targetRoot, storageKey)); } catch { /* arquivo já importado */ }
   return prisma.media.upsert({
     where: { storageKey },
-    update: { altText: filename },
-    create: { filename, storageKey, mimeType: mimeFor(filename), byteSize: (await readFile(source)).byteLength, altText: filename, createdById: userId },
+    update: { altText: filename, data: Uint8Array.from(contents) },
+    create: { filename, storageKey, data: Uint8Array.from(contents), mimeType: mimeFor(filename), byteSize: contents.byteLength, altText: filename, createdById: userId },
   });
 }
 

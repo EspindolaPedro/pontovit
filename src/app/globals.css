@@ -3493,6 +3493,22 @@ body {
 .pv-admin-settings-modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .pv-admin-settings-modal-form .pv-admin-modal-field:nth-child(2), .pv-admin-settings-modal-form .pv-admin-modal-field:nth-child(7), .pv-admin-settings-modal-form .pv-admin-modal-field:nth-child(8), .pv-admin-settings-modal-form button { grid-column: 1 / -1; }
 .pv-admin-modal-hint { grid-column: 1 / -1; margin: -6px 0 0; padding: 10px 12px; border: 1px dashed #dfe3df; border-radius: 9px; color: var(--pv-muted); font-size: 11px; line-height: 1.5; }
+.pv-admin-access-section { margin-top: 34px; }
+.pv-admin-access-section > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; }
+.pv-admin-access-section > header h2 { margin: 6px 0 0; color: var(--pv-ink); font-family: var(--pv-font-display); font-size: 24px; letter-spacing: -.035em; }
+.pv-admin-access-section > header span { display: block; margin-top: 6px; color: var(--pv-muted); font-size: 12px; }
+.pv-admin-api-key-form { display: grid; gap: 18px; }
+.pv-api-scope-list { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+.pv-api-scope-list legend { margin-bottom: 8px; color: var(--pv-ink); font-size: 11px; font-weight: 700; }
+.pv-api-scope-list label { display: flex; align-items: flex-start; gap: 11px; padding: 12px; border: 1px solid #e2e5e2; border-radius: 10px; background: #fcfdfc; cursor: pointer; }
+.pv-api-scope-list input { margin-top: 2px; accent-color: var(--pv-orange); }
+.pv-api-scope-list span, .pv-api-scope-list strong, .pv-api-scope-list small { display: block; }
+.pv-api-scope-list strong { color: var(--pv-ink); font-size: 12px; }
+.pv-api-scope-list small { margin-top: 3px; color: var(--pv-muted); font-size: 11px; font-weight: 400; line-height: 1.45; }
+.pv-api-key-result { display: grid; gap: 16px; margin-top: 22px; }
+.pv-api-key-result code { overflow-wrap: anywhere; padding: 16px; border: 1px solid #dfe3df; border-radius: 10px; background: #f7f8f6; color: var(--pv-ink); font-size: 13px; line-height: 1.6; user-select: all; }
+.pv-api-key-result .pv-admin-primary-action { justify-self: start; }
+.pv-api-key-result > small { color: #237a43; font-size: 11px; font-weight: 700; }
 .pv-admin-social-section > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .pv-admin-social-section > header h2 { margin-top: 7px; }
 
@@ -3573,6 +3589,7 @@ body {
 @media (max-width: 800px) {
   .pv-admin-settings-cards { grid-template-columns: 1fr; }
   .pv-admin-social-section > header { align-items: flex-start; flex-direction: column; }
+  .pv-admin-access-section > header { align-items: flex-start; flex-direction: column; }
 }
 
 @media (max-width: 1100px) {

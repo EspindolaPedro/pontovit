@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { copyFile, mkdir } from "node:fs/promises";
+import { copyFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -20,7 +20,7 @@ function publicSource(storageKey: string) {
 }
 
 async function main() {
-  const media = await prisma.media.findMany({ select: { storageKey: true } });
+  const media = await prisma.media.findMany({ select: { id: true, storageKey: true, data: true } });
   await mkdir(mediaRoot, { recursive: true });
 
   let restored = 0;
@@ -28,7 +28,9 @@ async function main() {
     const source = publicSource(item.storageKey);
     if (!source) continue;
     try {
+      const data = await readFile(source);
       await copyFile(source, path.join(mediaRoot, item.storageKey));
+      if (!item.data) await prisma.media.update({ where: { id: item.id }, data: { data: Uint8Array.from(data) } });
       restored += 1;
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
