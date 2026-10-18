@@ -268,3 +268,23 @@ model MagnoCardSettings {
   focalPointY   Float    @default(50)
   updatedAt     DateTime @updatedAt
 }
+
+model WorkScheduleLead {
+  id                   String   @id @default(cuid())
+  name                 String
+  email                String
+  phone                String
+  trigger              String
+  employees            Int?
+  currentScale         String?
+  operatingDays        Int?
+  openingTime          String?
+  closingTime          String?
+  simultaneousCoverage Int?
+  userAgent            String?
+  createdAt            DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([currentScale])
+}

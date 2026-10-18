@@ -56,6 +56,22 @@ export const ContactSchema = z.object({
   website: optionalText(200),
 });
 
+export const WorkScheduleLeadSchema = z.object({
+  name: text(120, 2),
+  email: EmailSchema,
+  phone: text(40, 8),
+  trigger: text(80, 2),
+  website: optionalText(200),
+  simulation: z.object({
+    employees: z.number().int().min(1).max(100000),
+    currentScale: text(30, 2),
+    operatingDays: z.number().int().min(1).max(7),
+    openingTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+    closingTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+    simultaneousCoverage: z.number().int().min(1).max(100000),
+  }).optional(),
+});
+
 export const CategorySchema = z.object({
   name: text(100, 2),
   slug: z.preprocess((value) => sanitizeSlug(value), z.string().min(2).max(120)),

@@ -5,6 +5,7 @@ import { AdminIcon, type AdminIconName } from "@/components/admin/admin-icons";
 const modules = [
   ["Conteúdo", "Posts, categorias, mídia e SEO", "/admin/posts"],
   ["Marca", "Logos, redes sociais e CTAs", "/admin/brand"],
+  ["Leads 5x2", "Contatos e dados das simulações", "/admin/leads-escala-5x2"],
   ["Site", "Dados públicos e códigos de integração", "/admin/settings"],
   ["Acesso", "Usuários, permissões e API keys", "/admin/users"],
 ];
@@ -12,6 +13,7 @@ const modules = [
 const moduleIcons: Record<string, AdminIconName> = {
   "/admin/posts": "content",
   "/admin/brand": "brand",
+  "/admin/leads-escala-5x2": "leads",
   "/admin/settings": "settings",
   "/admin/users": "access",
 };

@@ -31,3 +31,8 @@ export const ChevronRightIcon = (props: IconProps) => <Icon {...props}><path d="
 export const GlobeIcon = (props: IconProps) => <Icon {...props}><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3Z" /></Icon>;
 export const DocumentIcon = (props: IconProps) => <Icon {...props}><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" /><path d="M14 3v4h4M8.5 12.5h7M8.5 16h5" /></Icon>;
 export const UserIcon = (props: IconProps) => <Icon {...props}><circle cx="12" cy="8" r="3.5" /><path d="M5 20a7 7 0 0 1 14 0" /></Icon>;
+export const LockIcon = (props: IconProps) => <Icon {...props}><rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /><path d="M12 14v2" /></Icon>;
+export const StoreIcon = (props: IconProps) => <Icon {...props}><path d="M4 10v10h16V10" /><path d="M3 10h18l-2-6H5l-2 6Z" /><path d="M8 20v-6h8v6" /><path d="M5 10a3 3 0 0 0 6 0M11 10a3 3 0 0 0 6 0" /></Icon>;
+export const RestaurantIcon = (props: IconProps) => <Icon {...props}><path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10" /><path d="M17 3v18M17 3c2.2 1.8 3 4.2 3 7h-3" /></Icon>;
+export const FuelIcon = (props: IconProps) => <Icon {...props}><path d="M5 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16" /><path d="M3 21h15M8 7h5v4H8zM16 8h2l2 2v7a2 2 0 0 0 2 2" /><path d="m19 6 3 3" /></Icon>;
+export const BuildingIcon = (props: IconProps) => <Icon {...props}><path d="M4 21V5l8-2v18M12 8h8v13M8 7v1M8 11v1M8 15v1M16 11v1M16 15v1M3 21h18" /></Icon>;

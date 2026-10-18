@@ -12,6 +12,7 @@ const navigation = [
   ["Mídia", "/admin/media"],
   ["Marcas e parceiros", "/admin/brand"],
   ["Cartão do Magno", "/admin/magno"],
+  ["Leads escala 5x2", "/admin/leads-escala-5x2"],
   ["Configurações", "/admin/settings"],
   ["Usuários e API", "/admin/users"],
 ] as const;
@@ -27,6 +28,7 @@ function iconForAdminPath(href: string): AdminIconName {
   if (href === "/admin/media") return "media";
   if (href === "/admin/brand") return "brand";
   if (href === "/admin/magno") return "media";
+  if (href === "/admin/leads-escala-5x2") return "leads";
   if (href === "/admin/settings") return "settings";
   return "access";
 }
