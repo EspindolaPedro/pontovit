@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AdminIcon } from "@/components/admin/admin-icons";
+import { WORK_SCHEDULE_SEGMENTS } from "@/lib/work-schedule-simulation";
 
 type WorkScheduleLead = {
   id: string;
@@ -13,11 +14,30 @@ type WorkScheduleLead = {
   employees: number | null;
   currentScale: string | null;
   operatingDays: number | null;
+  segment: string | null;
+  weeklyHours: number | null;
+  targetWeeklyHours: number | null;
+  currentCapacity: number | null;
+  simulatedCapacity: number | null;
+  weeklyDifference: number | null;
+  percentVariation: number | null;
+  equivalentEmployees: number | null;
+  equivalentEmployeesRounded: number | null;
+  monthlyDifference: number | null;
   openingTime: string | null;
   closingTime: string | null;
   simultaneousCoverage: number | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+  utmTerm: string | null;
+  utmContent: string | null;
+  pageUrl: string | null;
+  referrer: string | null;
   createdAt: string;
 };
+
+const segmentLabels = Object.fromEntries(WORK_SCHEDULE_SEGMENTS.map((segment) => [segment.value, segment.label]));
 
 type LeadResult = {
   items: WorkScheduleLead[];
@@ -101,10 +121,13 @@ export default function WorkScheduleLeadsPage() {
       }
 
       const rows = [
-        ["Capturado em", "Nome", "Telefone", "E-mail", "Origem", "Colaboradores", "Escala atual", "Dias de funcionamento", "Abre às", "Fecha às", "Cobertura simultânea"],
+        ["Capturado em", "Nome", "Telefone", "E-mail", "Origem", "Segmento", "Colaboradores", "Escala atual", "Dias de funcionamento", "Jornada atual", "Jornada simulada", "Capacidade atual", "Capacidade simulada", "Diferença semanal", "Variação percentual", "Equivalência exata", "Equivalência inteira", "Diferença mensal", "UTM source", "UTM medium", "UTM campaign", "UTM term", "UTM content", "Página", "Referência"],
         ...items.map((lead) => [
           formatDate(lead.createdAt), lead.name, lead.phone, lead.email, triggerLabels[lead.trigger] || lead.trigger,
-          lead.employees, lead.currentScale, lead.operatingDays, lead.openingTime, lead.closingTime, lead.simultaneousCoverage,
+          lead.segment ? segmentLabels[lead.segment] || lead.segment : "", lead.employees, lead.currentScale, lead.operatingDays,
+          lead.weeklyHours, lead.targetWeeklyHours, lead.currentCapacity, lead.simulatedCapacity, lead.weeklyDifference,
+          lead.percentVariation, lead.equivalentEmployees, lead.equivalentEmployeesRounded, lead.monthlyDifference,
+          lead.utmSource, lead.utmMedium, lead.utmCampaign, lead.utmTerm, lead.utmContent, lead.pageUrl, lead.referrer,
         ]),
       ];
       const csv = `\uFEFF${rows.map((row) => row.map(csvValue).join(";")).join("\r\n")}`;
@@ -151,6 +174,7 @@ export default function WorkScheduleLeadsPage() {
             <option value="5x1">5x1</option>
             <option value="5x2">5x2</option>
             <option value="12x36">12x36</option>
+            <option value="mixed">Escalas mistas / outras</option>
             <option value="Outra">Outra</option>
           </select>
         </div>
@@ -170,8 +194,9 @@ export default function WorkScheduleLeadsPage() {
                 <td>
                   {lead.employees ? (
                     <div className="pv-admin-lead-simulation">
-                      <strong>{lead.employees.toLocaleString("pt-BR")} colaboradores · {lead.currentScale}</strong>
-                      <small>{lead.operatingDays} dias · {lead.openingTime} às {lead.closingTime} · cobertura de {lead.simultaneousCoverage}</small>
+                      <strong>{lead.employees.toLocaleString("pt-BR")} colaboradores · {lead.segment ? segmentLabels[lead.segment] || lead.segment : lead.currentScale}</strong>
+                      <small>{lead.operatingDays} dias · {lead.currentScale}{lead.weeklyHours ? ` · ${lead.weeklyHours}h → ${lead.targetWeeklyHours ?? 40}h` : lead.openingTime ? ` · ${lead.openingTime} às ${lead.closingTime} · cobertura de ${lead.simultaneousCoverage}` : ""}</small>
+                      {lead.currentCapacity !== null && lead.simulatedCapacity !== null ? <small>{lead.currentCapacity.toLocaleString("pt-BR")}h → {lead.simulatedCapacity.toLocaleString("pt-BR")}h · {Math.abs(lead.percentVariation ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%</small> : null}
                     </div>
                   ) : <small>Contato sem simulação</small>}
                 </td>

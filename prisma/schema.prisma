@@ -278,13 +278,31 @@ model WorkScheduleLead {
   employees            Int?
   currentScale         String?
   operatingDays        Int?
+  segment              String?
+  weeklyHours          Int?
+  targetWeeklyHours    Int?
+  currentCapacity      Float?
+  simulatedCapacity    Float?
+  weeklyDifference     Float?
+  percentVariation     Float?
+  equivalentEmployees  Float?
+  equivalentEmployeesRounded Int?
+  monthlyDifference    Float?
   openingTime          String?
   closingTime          String?
   simultaneousCoverage Int?
+  utmSource            String?
+  utmMedium            String?
+  utmCampaign          String?
+  utmTerm              String?
+  utmContent           String?
+  pageUrl              String?
+  referrer             String?
   userAgent            String?
   createdAt            DateTime @default(now())
 
   @@index([createdAt])
   @@index([email])
   @@index([currentScale])
+  @@index([segment])
 }

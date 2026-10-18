@@ -3,16 +3,10 @@
 import { createContext, useContext, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRightIcon, CloseIcon, LockIcon } from "@/components/shared/icons";
+import { getWorkScheduleSegment, type WorkScheduleSimulationInput } from "@/lib/work-schedule-simulation";
 import styles from "./landing-page.module.css";
 
-export type LeadSimulationData = {
-  employees: number;
-  currentScale: string;
-  operatingDays: number;
-  openingTime: string;
-  closingTime: string;
-  simultaneousCoverage: number;
-};
+export type LeadSimulationData = WorkScheduleSimulationInput;
 
 type CaptureRequest = { trigger: string; simulation?: LeadSimulationData };
 type LeadCaptureContextValue = { openLeadCapture: (request: CaptureRequest) => void };
@@ -73,6 +67,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
     setSubmitting(true);
     setError("");
     const form = new FormData(event.currentTarget);
+    const searchParams = new URLSearchParams(window.location.search);
 
     try {
       const response = await fetch("/api/leads/work-schedule", {
@@ -85,6 +80,15 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
           website: form.get("website"),
           trigger: request.trigger,
           simulation: request.simulation,
+          attribution: {
+            utmSource: searchParams.get("utm_source") || undefined,
+            utmMedium: searchParams.get("utm_medium") || undefined,
+            utmCampaign: searchParams.get("utm_campaign") || undefined,
+            utmTerm: searchParams.get("utm_term") || undefined,
+            utmContent: searchParams.get("utm_content") || undefined,
+            pageUrl: window.location.href,
+            referrer: document.referrer || undefined,
+          },
         }),
       });
       const data = await response.json();
@@ -107,7 +111,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
           <p className={styles.eyebrow}>Próximo passo</p>
           <h2 id={titleId}>Vamos planejar sua escala 5x2.</h2>
           <p>Preencha seus dados para salvar o interesse e conversar com a equipe da PontoVit pelo WhatsApp.</p>
-          {request.simulation ? <span>Simulação de {request.simulation.employees.toLocaleString("pt-BR")} colaboradores vinculada a este contato.</span> : null}
+          {request.simulation ? <span>Diagnóstico de {request.simulation.employees.toLocaleString("pt-BR")} colaboradores em {getWorkScheduleSegment(request.simulation).label} vinculado a este contato.</span> : null}
         </div>
         <form className={styles.leadForm} onSubmit={submitLead}>
           <label>Nome completo<input ref={nameInputRef} name="name" autoComplete="name" minLength={2} maxLength={120} required placeholder="Como podemos chamar você?" /></label>
@@ -116,7 +120,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
           <label className={styles.leadHoneypot} aria-hidden="true">Não preencha<input name="website" tabIndex={-1} autoComplete="off" /></label>
           {error ? <p className={styles.leadFormError} role="alert">{error}</p> : null}
           <button type="submit" disabled={submitting}>{submitting ? "Salvando seus dados..." : "Continuar pelo WhatsApp"}<ArrowUpRightIcon size={20} /></button>
-          <small><LockIcon size={13} /> Seus dados serão usados pela PontoVit para atender esta solicitação.</small>
+          <small><LockIcon size={13} /> Seus dados e a simulação serão usados pela PontoVit para contextualizar o atendimento desta solicitação.</small>
         </form>
       </section>
     </div>

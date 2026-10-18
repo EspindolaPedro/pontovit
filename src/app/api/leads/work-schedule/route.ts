@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getScaleLabel, getWorkScheduleSegment } from "@/lib/work-schedule-simulation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { errorResponse } from "@/server/http/errors";
 import { createWorkScheduleLead } from "@/server/modules/work-schedule-leads/work-schedule-lead.service";
@@ -21,7 +22,10 @@ export async function POST(request: Request) {
     const body = WorkScheduleLeadSchema.parse(await request.json());
     const settings = await getPublicSettings();
     const baseTarget = (settings.cta?.target || getWhatsAppUrl()).split("?")[0];
-    const redirectUrl = `${baseTarget}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+    const simulationContext = body.simulation
+      ? `\n\nMinha simulação: ${getWorkScheduleSegment(body.simulation).label}, ${body.simulation.employees} colaboradores, ${body.simulation.operatingDays} dias por semana, ${getScaleLabel(body.simulation.currentScale)}, ${body.simulation.weeklyHours}h atuais.`
+      : "";
+    const redirectUrl = `${baseTarget}?text=${encodeURIComponent(`${WHATSAPP_MESSAGE}${simulationContext}`)}`;
 
     if (body.website) return NextResponse.json({ ok: true, redirectUrl });
 

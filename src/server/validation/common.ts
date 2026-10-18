@@ -63,12 +63,20 @@ export const WorkScheduleLeadSchema = z.object({
   trigger: text(80, 2),
   website: optionalText(200),
   simulation: z.object({
+    segment: z.enum(["supermarket", "retail", "restaurant", "pharmacy", "hospitality", "fuel_station", "industry", "other"]),
     employees: z.number().int().min(1).max(100000),
-    currentScale: text(30, 2),
-    operatingDays: z.number().int().min(1).max(7),
-    openingTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
-    closingTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
-    simultaneousCoverage: z.number().int().min(1).max(100000),
+    currentScale: z.enum(["6x1", "5x2", "mixed"]),
+    operatingDays: z.union([z.literal(5), z.literal(6), z.literal(7)]),
+    weeklyHours: z.union([z.literal(44), z.literal(40), z.literal(36)]),
+  }).optional(),
+  attribution: z.object({
+    utmSource: optionalText(200),
+    utmMedium: optionalText(200),
+    utmCampaign: optionalText(200),
+    utmTerm: optionalText(200),
+    utmContent: optionalText(200),
+    pageUrl: optionalText(1000),
+    referrer: optionalText(1000),
   }).optional(),
 });
 

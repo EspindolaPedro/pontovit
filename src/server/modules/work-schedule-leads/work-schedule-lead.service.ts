@@ -1,21 +1,25 @@
 import { prisma } from "@/server/db/prisma";
+import { calculateWorkScheduleImpact, type WorkScheduleSimulationInput } from "@/lib/work-schedule-simulation";
 
 export type WorkScheduleLeadInput = {
   name: string;
   email: string;
   phone: string;
   trigger: string;
-  simulation?: {
-    employees: number;
-    currentScale: string;
-    operatingDays: number;
-    openingTime: string;
-    closingTime: string;
-    simultaneousCoverage: number;
+  simulation?: WorkScheduleSimulationInput;
+  attribution?: {
+    utmSource?: string;
+    utmMedium?: string;
+    utmCampaign?: string;
+    utmTerm?: string;
+    utmContent?: string;
+    pageUrl?: string;
+    referrer?: string;
   };
 };
 
 export function createWorkScheduleLead(input: WorkScheduleLeadInput, userAgent?: string) {
+  const result = input.simulation ? calculateWorkScheduleImpact(input.simulation) : null;
   return prisma.workScheduleLead.create({
     data: {
       name: input.name,
@@ -25,9 +29,23 @@ export function createWorkScheduleLead(input: WorkScheduleLeadInput, userAgent?:
       employees: input.simulation?.employees,
       currentScale: input.simulation?.currentScale,
       operatingDays: input.simulation?.operatingDays,
-      openingTime: input.simulation?.openingTime,
-      closingTime: input.simulation?.closingTime,
-      simultaneousCoverage: input.simulation?.simultaneousCoverage,
+      segment: input.simulation?.segment,
+      weeklyHours: input.simulation?.weeklyHours,
+      targetWeeklyHours: result?.simulatedWeeklyHours,
+      currentCapacity: result?.currentCapacity,
+      simulatedCapacity: result?.simulatedCapacity,
+      weeklyDifference: result?.differenceHours,
+      percentVariation: result?.variationPercent,
+      equivalentEmployees: result?.equivalentEmployeesExact,
+      equivalentEmployeesRounded: result?.equivalentEmployeesRounded,
+      monthlyDifference: result?.monthlyDifference,
+      utmSource: input.attribution?.utmSource,
+      utmMedium: input.attribution?.utmMedium,
+      utmCampaign: input.attribution?.utmCampaign,
+      utmTerm: input.attribution?.utmTerm,
+      utmContent: input.attribution?.utmContent,
+      pageUrl: input.attribution?.pageUrl,
+      referrer: input.attribution?.referrer,
       userAgent: userAgent?.slice(0, 500),
     },
   });
