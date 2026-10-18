@@ -107,7 +107,6 @@ export function ScheduleSimulator() {
         <div className={styles.container}>
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <p className={styles.eyebrow}>Simulador de jornada <span /> Resultado em menos de 1 minuto</p>
               <h1 id="lp-5x2-title">A escala mudou. <em>Sua empresa não pode parar.</em></h1>
               <p className={styles.heroLead}>Entenda como uma jornada semanal de 40 horas pode alterar a capacidade nominal da sua equipe e quais pontos merecem atenção no planejamento.</p>
               <p className={styles.heroStrong}>Faça uma estimativa gratuita antes de reorganizar jornadas, folgas e equipes.</p>
@@ -117,8 +116,13 @@ export function ScheduleSimulator() {
             </div>
 
             <div className={styles.simulatorCard} ref={simulatorRef} aria-live="polite">
-              <div className={styles.simulatorHeading}>
-                <span>{result ? "Etapa 2 de 2 · Seu resultado" : "Etapa 1 de 2 · Simulador gratuito"}</span>
+              <div className={styles.simulatorStageNav} aria-label={result ? "Diagnóstico em exibição" : "Dados da operação em exibição"}>
+                <span className={!result ? styles.isActiveStage : undefined}><i />Dados da operação</span>
+                <b aria-hidden="true"><i className={result ? styles.isStageComplete : undefined} /></b>
+                <span className={result ? styles.isActiveStage : undefined}><i />Diagnóstico</span>
+              </div>
+              <div className={styles.simulatorHeading} key={result ? "result-heading" : "form-heading"}>
+                {result ? <span>Resultado da simulação</span> : null}
                 <h2 id={result ? "simulation-result-title" : undefined}>{result ? "Seu diagnóstico está pronto." : "Descubra o impacto da nova jornada de trabalho na sua empresa"}</h2>
                 <p>{result && segmentData ? `${segmentData.label} · ${formatNumber(result.employees)} colaboradores · ${result.operatingDays} dias · ${getScaleLabel(result.currentScale)} · ${result.weeklyHours}h atuais` : "Informe alguns dados da sua operação e veja como uma jornada semanal de 40 horas pode afetar a disponibilidade da equipe."}</p>
               </div>
@@ -197,7 +201,7 @@ export function ScheduleSimulator() {
                     <p>{getWorkScheduleDiagnosis(result)}</p>
                   </div>
 
-                  <button className={styles.simulatorButton} type="button" onClick={handleResultCta}>Quero planejar essa mudança <ArrowUpRightIcon size={20} /></button>
+                  <button className={styles.simulatorButton} type="button" onClick={handleResultCta}>Orçamento no WhatsApp <ArrowUpRightIcon size={20} /></button>
                   <button className={styles.simulatorEditButton} type="button" onClick={() => setResult(null)}>← Editar os dados da simulação</button>
                   <p className={styles.simulatorDisclaimer}>A equivalência é matemática e não representa recomendação de contratação. A simulação não considera férias, afastamentos, intervalos, produtividade, acordos coletivos ou a distribuição real dos turnos.</p>
                 </div>

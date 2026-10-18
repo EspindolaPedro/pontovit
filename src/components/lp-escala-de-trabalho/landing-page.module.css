@@ -193,9 +193,9 @@
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(222, 222, 222, .92);
-  border-radius: 30px;
+  border-radius: 24px;
   background: #fff;
-  box-shadow: 0 34px 80px rgba(16, 16, 16, .1);
+  box-shadow: 0 28px 64px rgba(16, 16, 16, .09);
   min-width: 0;
 }
 
@@ -209,10 +209,66 @@
   content: "";
 }
 
+.simulatorStageNav {
+  display: grid;
+  grid-template-columns: auto minmax(36px, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 30px 40px 0;
+  background: #fff;
+}
+
+.simulatorStageNav span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9a9a9a;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color .25s ease;
+}
+
+.simulatorStageNav span > i {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border: 1px solid #bcbcbc;
+  border-radius: 50%;
+  background: #fff;
+  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;
+}
+
+.simulatorStageNav > b {
+  height: 1px;
+  overflow: hidden;
+  background: #dedede;
+}
+
+.simulatorStageNav > b > i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--lp-orange);
+  transition: width .4s ease;
+}
+
+.simulatorStageNav span.isActiveStage { color: var(--lp-ink); }
+.simulatorStageNav span.isActiveStage > i {
+  border-color: var(--lp-orange);
+  background: var(--lp-orange);
+  box-shadow: 0 0 0 4px rgba(237, 129, 7, .12);
+}
+.simulatorStageNav > b > i.isStageComplete { width: 100%; }
+
 .simulatorHeading {
-  padding: 38px 40px 28px;
+  padding: 24px 40px 28px;
   border-bottom: 1px solid #ececec;
-  background: linear-gradient(135deg, #fffaf4, #fff);
+  background: #fff;
+  animation: simulator-slide-in .42s cubic-bezier(.22, 1, .36, 1) both;
 }
 
 .simulatorHeading > span {
@@ -224,13 +280,15 @@
 }
 
 .simulatorHeading h2 {
-  max-width: 420px;
-  margin-top: 10px;
+  max-width: 540px;
+  margin-top: 0;
   font-size: clamp(28px, 2.1vw, 36px);
   font-weight: 750;
   letter-spacing: -.045em;
   line-height: 1.08;
 }
+
+.simulatorHeading > span + h2 { margin-top: 10px; }
 
 .simulatorHeading p { margin-top: 10px; color: var(--lp-muted); font-size: 15px; }
 
@@ -239,6 +297,7 @@
   gap: 19px;
   padding: 30px 40px 36px;
   min-width: 0;
+  animation: simulator-slide-in .46s .04s cubic-bezier(.22, 1, .36, 1) both;
 }
 
 .simulatorForm label,
@@ -328,10 +387,10 @@
 
 .privacyNote span { display: inline-flex; flex: 0 0 auto; color: var(--lp-orange); }
 
-.simulatorResult { display: grid; gap: 15px; padding: 24px 40px 32px; }
-.simulatorCapacityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.simulatorCapacityGrid article { padding: 18px; border: 1px solid #e3e3e3; border-radius: 15px; background: var(--lp-page); }
-.simulatorCapacityGrid article:last-child { border-color: var(--lp-orange); background: #fff7ee; }
+.simulatorResult { display: grid; gap: 18px; padding: 26px 40px 34px; animation: simulator-slide-in .46s .04s cubic-bezier(.22, 1, .36, 1) both; }
+.simulatorCapacityGrid { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid #dedede; border-radius: 10px; }
+.simulatorCapacityGrid article { padding: 18px; border-right: 1px solid #dedede; background: #fff; }
+.simulatorCapacityGrid article:last-child { border-right: 0; }
 .simulatorCapacityGrid span,
 .simulatorResultStats span,
 .simulatorImpact > span,
@@ -339,30 +398,42 @@
 .simulatorCapacityGrid strong { display: block; margin-top: 8px; color: var(--lp-ink); font-size: 30px; font-weight: 800; letter-spacing: -.05em; line-height: 1; }
 .simulatorCapacityGrid article:last-child strong { color: var(--lp-orange); }
 .simulatorCapacityGrid small { display: block; margin-top: 5px; color: #737373; font-size: 10px; }
-.simulatorImpact { padding: 22px; border-radius: 17px; background: #171a1f; color: #fff; }
+.simulatorImpact { padding: 22px; border-radius: 10px; background: #171a1f; color: #fff; }
 .simulatorImpact > span { color: var(--lp-orange); }
 .simulatorImpact > div { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 15px; }
 .simulatorImpact strong { font-size: 47px; font-weight: 800; letter-spacing: -.07em; line-height: .9; }
 .simulatorImpact em { color: #ff9c2b; font-size: 12px; font-style: normal; font-weight: 750; }
 .simulatorImpact p { margin-top: 16px; color: rgba(255,255,255,.68); font-size: 11px; line-height: 1.5; }
-.simulatorBars { display: grid; gap: 10px; padding: 16px 18px; border: 1px solid #e6e6e6; border-radius: 15px; }
+.simulatorBars { display: grid; gap: 10px; padding: 16px 18px; border: 1px solid #e6e6e6; border-radius: 10px; }
 .simulatorBars > div { display: grid; grid-template-columns: 86px minmax(0,1fr) 58px; align-items: center; gap: 9px; }
 .simulatorBars span { color: #676767; font-size: 9px; font-weight: 650; }
 .simulatorBars i { display: block; height: 8px; overflow: hidden; border-radius: 99px; background: #efefef; }
 .simulatorBars b { display: block; height: 100%; border-radius: inherit; background: var(--lp-orange); }
 .simulatorBars > div:first-child b { background: #30343a; }
 .simulatorBars strong { font-size: 10px; text-align: right; }
-.simulatorResultStats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.simulatorResultStats article { padding: 16px 18px; border-radius: 15px; background: var(--lp-warm); }
+.simulatorResultStats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; }
+.simulatorResultStats article { padding: 16px 18px; background: transparent; }
+.simulatorResultStats article + article { border-left: 1px solid #dedede; }
 .simulatorResultStats strong { display: block; margin-top: 8px; color: var(--lp-orange); font-size: 26px; letter-spacing: -.05em; line-height: 1; }
 .simulatorResultStats small { display: block; margin-top: 4px; color: #6b625b; font-size: 10px; }
-.simulatorDiagnosis { padding: 17px 18px; border-left: 3px solid var(--lp-orange); background: #fffaf4; }
+.simulatorDiagnosis { padding: 10px 0 10px 18px; border-left: 3px solid var(--lp-orange); background: transparent; }
 .simulatorDiagnosis > span { color: var(--lp-orange); }
 .simulatorDiagnosis p { margin-top: 8px; color: #5e5750; font-size: 11px; line-height: 1.5; }
 .simulatorResult .simulatorButton { min-height: 54px; margin-top: 1px; }
 .simulatorEditButton { justify-self: center; padding: 3px 0; border: 0; border-bottom: 1px solid #aaa; background: transparent; color: #616161; cursor: pointer; font: 650 11px var(--pv-font-display); }
 .simulatorEditButton:hover { border-color: var(--lp-orange); color: var(--lp-orange); }
 .simulatorDisclaimer { color: #898989; font-size: 8px; line-height: 1.45; text-align: center; }
+
+@keyframes simulator-slide-in {
+  from { opacity: 0; transform: translateX(22px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simulatorHeading,
+  .simulatorForm,
+  .simulatorResult { animation: none; }
+}
 
 .resultSection {
   scroll-margin-top: 90px;
@@ -915,14 +986,17 @@
   .heroBenefits { grid-template-columns: 1fr; gap: 11px; margin-top: 25px; }
   .heroBenefits li { font-size: 13px; }
   .simulatorCard { width: 100%; max-width: 100%; margin-top: 8px; border-radius: 24px; }
-  .simulatorHeading { padding: 32px 24px 23px; }
+  .simulatorStageNav { gap: 8px; padding: 25px 20px 0; }
+  .simulatorStageNav span { gap: 6px; font-size: 8px; letter-spacing: .08em; }
+  .simulatorStageNav span > i { width: 7px; height: 7px; }
+  .simulatorHeading { padding: 21px 24px 23px; }
   .simulatorHeading h2 { font-size: 29px; }
   .simulatorForm { gap: 17px; padding: 25px 24px 28px; }
   .formRow { grid-template-columns: 1fr; }
   .timeFields { gap: 7px; }
   .simulatorButton { min-height: 56px; padding-inline: 18px; font-size: 13px; }
   .privacyNote { text-align: left; }
-  .simulatorResult { gap: 12px; padding: 20px 20px 26px; }
+  .simulatorResult { gap: 15px; padding: 22px 20px 28px; }
   .simulatorCapacityGrid article { padding: 16px 14px; }
   .simulatorCapacityGrid strong { font-size: 25px; }
   .simulatorImpact { padding: 20px 18px; }
@@ -930,7 +1004,7 @@
   .simulatorImpact > div { align-items: flex-start; flex-direction: column; gap: 9px; }
   .simulatorBars { padding: 15px 14px; }
   .simulatorResultStats article { padding: 15px 14px; }
-  .simulatorDiagnosis { padding: 15px; }
+  .simulatorDiagnosis { padding: 9px 0 9px 15px; }
 
   .resultSection { padding: 82px 0 88px; }
   .resultHeading { text-align: left; }
