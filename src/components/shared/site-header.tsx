@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 type MenuItem = { label: string; href: string };
-const productItems: MenuItem[] = [{ label: "Como funciona", href: "/escalas-de-trabalho#conteudo" }, { label: "Tipos de escala", href: "/escalas-de-trabalho#tipos-de-escala" }, { label: "Vantagens", href: "/escalas-de-trabalho#recursos" }];
+const productItems: MenuItem[] = [{ label: "Simulador 5x2", href: "/lp-escala-de-trabalho" }, { label: "Como funciona", href: "/escalas-de-trabalho#conteudo" }, { label: "Tipos de escala", href: "/escalas-de-trabalho#tipos-de-escala" }, { label: "Vantagens", href: "/escalas-de-trabalho#recursos" }];
 const aboutItems: MenuItem[] = [{ label: "Nossa história", href: "/quem-somos#conteudo" }, { label: "Público-alvo e propósito", href: "/quem-somos#publico-alvo" }];
 
 function Chevron() { return <svg className="site-header-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" /></svg>; }
@@ -22,7 +22,7 @@ function Dropdown({ label, href, items, active }: { label: string; href: string;
 export function SiteHeader({ ctaLabel = "Falar no Whatsapp", ctaTarget, logoMediaId }: { ctaLabel?: string; ctaTarget?: string | null; logoMediaId?: string | null }) {
   const pathname = usePathname(); const [mobileOpen, setMobileOpen] = useState(false); const target = ctaTarget || getWhatsAppUrl();
   const leadEntry = pathname === "/lp-escala-de-trabalho" ? "header" : undefined;
-  const productActive = pathname.startsWith("/escalas-de-trabalho"); const aboutActive = pathname.startsWith("/quem-somos"); const partnersActive = pathname.startsWith("/parceiros"); const blogActive = pathname.startsWith("/blog"); const contactActive = pathname.startsWith("/contato");
+  const productActive = pathname.startsWith("/escalas-de-trabalho") || pathname.startsWith("/lp-escala-de-trabalho"); const aboutActive = pathname.startsWith("/quem-somos"); const partnersActive = pathname.startsWith("/parceiros"); const blogActive = pathname.startsWith("/blog"); const contactActive = pathname.startsWith("/contato");
   return <header className={`site-header${mobileOpen ? " is-mobile-open" : ""}`}>
     <div className="site-header-left"><Link href="/" className="site-header-brand" aria-label="PontoVit, início" onClick={() => setMobileOpen(false)}><span className="site-header-logo-window"><img src={logoMediaId ? `/api/media/${logoMediaId}` : "/assets/product/pontovit-logo.png"} alt="PontoVit" /></span></Link><nav className="site-header-nav" aria-label="Navegação principal"><Link href="/" className={`site-header-link${pathname === "/" ? " is-active" : ""}`}>Home</Link><Dropdown label="Escalas de Trabalho" href="/escalas-de-trabalho" items={productItems} active={productActive} /><Dropdown label="Quem Somos" href="/quem-somos" items={aboutItems} active={aboutActive} /><Link href="/parceiros" className={`site-header-link${partnersActive ? " is-active" : ""}`}>Parceiros</Link><Link href="/blog" className={`site-header-link${blogActive ? " is-active" : ""}`}>Blog</Link><Link href="/contato-antigo" className={`site-header-link${contactActive ? " is-active" : ""}`}>Contato</Link></nav></div>
     <Link href={target} target="_blank" rel="noreferrer" className="site-header-cta" data-lp-lead={leadEntry}>{ctaLabel}</Link>

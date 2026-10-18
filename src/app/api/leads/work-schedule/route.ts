@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getScaleLabel, getWorkScheduleSegment } from "@/lib/work-schedule-simulation";
+import { calculateWorkScheduleImpact, getScaleLabel, getWorkScheduleSegment } from "@/lib/work-schedule-simulation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { errorResponse } from "@/server/http/errors";
 import { createWorkScheduleLead } from "@/server/modules/work-schedule-leads/work-schedule-lead.service";
@@ -22,8 +22,9 @@ export async function POST(request: Request) {
     const body = WorkScheduleLeadSchema.parse(await request.json());
     const settings = await getPublicSettings();
     const baseTarget = (settings.cta?.target || getWhatsAppUrl()).split("?")[0];
-    const simulationContext = body.simulation
-      ? `\n\nMinha simulação: ${getWorkScheduleSegment(body.simulation).label}, ${body.simulation.employees} colaboradores, ${body.simulation.operatingDays} dias por semana, ${getScaleLabel(body.simulation.currentScale)}, ${body.simulation.weeklyHours}h atuais.`
+    const simulationResult = body.simulation ? calculateWorkScheduleImpact(body.simulation) : null;
+    const simulationContext = body.simulation && simulationResult
+      ? `\n\nMinha simulação: ${getWorkScheduleSegment(body.simulation).label}, ${body.simulation.employees} colaboradores, ${body.simulation.operatingDays} dias por semana, ${getScaleLabel(body.simulation.currentScale)}, ${body.simulation.weeklyHours}h atuais. Impacto estimado: ${Math.abs(simulationResult.transition.differenceHours).toLocaleString("pt-BR")}h/semana na fase de 42h e ${Math.abs(simulationResult.final.differenceHours).toLocaleString("pt-BR")}h/semana na fase de 40h.`
       : "";
     const redirectUrl = `${baseTarget}?text=${encodeURIComponent(`${WHATSAPP_MESSAGE}${simulationContext}`)}`;
 

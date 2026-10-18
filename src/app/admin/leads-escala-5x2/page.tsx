@@ -71,6 +71,37 @@ function csvValue(value: unknown) {
   return `"${String(value ?? "").replaceAll('"', '""')}"`;
 }
 
+function getLeadPhaseMetrics(lead: WorkScheduleLead, legalLimit: 42 | 40) {
+  if (!lead.employees || !lead.weeklyHours) return null;
+  const appliedHours = Math.min(lead.weeklyHours, legalLimit);
+  const currentCapacity = lead.employees * lead.weeklyHours;
+  const capacity = lead.employees * appliedHours;
+  const difference = currentCapacity - capacity;
+  const equivalentEmployees = currentCapacity / appliedHours;
+  return {
+    appliedHours,
+    capacity,
+    difference,
+    percent: currentCapacity > 0 ? ((capacity - currentCapacity) / currentCapacity) * 100 : 0,
+    equivalentEmployees,
+    equivalentEmployeesRounded: Math.ceil(equivalentEmployees),
+    monthlyDifference: difference * (52 / 12),
+  };
+}
+
+function LeadSimulationSummary({ lead }: { lead: WorkScheduleLead }) {
+  if (!lead.employees) return <small>Contato sem simulação</small>;
+  const transition = getLeadPhaseMetrics(lead, 42);
+  const final = getLeadPhaseMetrics(lead, 40);
+  return (
+    <div className="pv-admin-lead-simulation">
+      <strong>{lead.employees.toLocaleString("pt-BR")} colaboradores · {lead.segment ? segmentLabels[lead.segment] || lead.segment : lead.currentScale}</strong>
+      <small>{lead.operatingDays} dias · {lead.currentScale}{lead.weeklyHours ? ` · ${lead.weeklyHours}h → ${transition?.appliedHours ?? 42}h → ${final?.appliedHours ?? 40}h` : lead.openingTime ? ` · ${lead.openingTime} às ${lead.closingTime} · cobertura de ${lead.simultaneousCoverage}` : ""}</small>
+      {transition && final ? <small>{lead.currentCapacity?.toLocaleString("pt-BR") ?? (lead.employees * lead.weeklyHours!).toLocaleString("pt-BR")}h → {transition.capacity.toLocaleString("pt-BR")}h ({Math.abs(transition.percent).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%) → {final.capacity.toLocaleString("pt-BR")}h ({Math.abs(final.percent).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%)</small> : null}
+    </div>
+  );
+}
+
 export default function WorkScheduleLeadsPage() {
   const [result, setResult] = useState<LeadResult | null>(null);
   const [page, setPage] = useState(1);
@@ -121,12 +152,13 @@ export default function WorkScheduleLeadsPage() {
       }
 
       const rows = [
-        ["Capturado em", "Nome", "Telefone", "E-mail", "Origem", "Segmento", "Colaboradores", "Escala atual", "Dias de funcionamento", "Jornada atual", "Jornada simulada", "Capacidade atual", "Capacidade simulada", "Diferença semanal", "Variação percentual", "Equivalência exata", "Equivalência inteira", "Diferença mensal", "UTM source", "UTM medium", "UTM campaign", "UTM term", "UTM content", "Página", "Referência"],
+        ["Capturado em", "Nome", "Telefone", "E-mail", "Origem", "Segmento", "Colaboradores", "Escala atual", "Dias de funcionamento", "Jornada atual", "Capacidade atual", "Jornada fase 42h", "Capacidade fase 42h", "Diferença semanal fase 42h", "Variação fase 42h", "Jornada fase 40h", "Capacidade fase 40h", "Diferença semanal fase 40h", "Variação fase 40h", "Equivalência exata na fase 40h", "Equivalência inteira na fase 40h", "Diferença mensal na fase 40h", "UTM source", "UTM medium", "UTM campaign", "UTM term", "UTM content", "Página", "Referência"],
         ...items.map((lead) => [
           formatDate(lead.createdAt), lead.name, lead.phone, lead.email, triggerLabels[lead.trigger] || lead.trigger,
           lead.segment ? segmentLabels[lead.segment] || lead.segment : "", lead.employees, lead.currentScale, lead.operatingDays,
-          lead.weeklyHours, lead.targetWeeklyHours, lead.currentCapacity, lead.simulatedCapacity, lead.weeklyDifference,
-          lead.percentVariation, lead.equivalentEmployees, lead.equivalentEmployeesRounded, lead.monthlyDifference,
+          lead.weeklyHours, lead.currentCapacity, getLeadPhaseMetrics(lead, 42)?.appliedHours, getLeadPhaseMetrics(lead, 42)?.capacity, getLeadPhaseMetrics(lead, 42)?.difference, getLeadPhaseMetrics(lead, 42)?.percent,
+          getLeadPhaseMetrics(lead, 40)?.appliedHours, getLeadPhaseMetrics(lead, 40)?.capacity, getLeadPhaseMetrics(lead, 40)?.difference,
+          getLeadPhaseMetrics(lead, 40)?.percent, getLeadPhaseMetrics(lead, 40)?.equivalentEmployees, getLeadPhaseMetrics(lead, 40)?.equivalentEmployeesRounded, getLeadPhaseMetrics(lead, 40)?.monthlyDifference,
           lead.utmSource, lead.utmMedium, lead.utmCampaign, lead.utmTerm, lead.utmContent, lead.pageUrl, lead.referrer,
         ]),
       ];
@@ -192,13 +224,7 @@ export default function WorkScheduleLeadsPage() {
                 <td className="pv-admin-lead-contact"><strong>{lead.name}</strong><a href={`tel:${lead.phone.replace(/\D/g, "")}`}>{lead.phone}</a><a href={`mailto:${lead.email}`}>{lead.email}</a></td>
                 <td><span className="pv-admin-status is-draft">{triggerLabels[lead.trigger] || lead.trigger}</span></td>
                 <td>
-                  {lead.employees ? (
-                    <div className="pv-admin-lead-simulation">
-                      <strong>{lead.employees.toLocaleString("pt-BR")} colaboradores · {lead.segment ? segmentLabels[lead.segment] || lead.segment : lead.currentScale}</strong>
-                      <small>{lead.operatingDays} dias · {lead.currentScale}{lead.weeklyHours ? ` · ${lead.weeklyHours}h → ${lead.targetWeeklyHours ?? 40}h` : lead.openingTime ? ` · ${lead.openingTime} às ${lead.closingTime} · cobertura de ${lead.simultaneousCoverage}` : ""}</small>
-                      {lead.currentCapacity !== null && lead.simulatedCapacity !== null ? <small>{lead.currentCapacity.toLocaleString("pt-BR")}h → {lead.simulatedCapacity.toLocaleString("pt-BR")}h · {Math.abs(lead.percentVariation ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%</small> : null}
-                    </div>
-                  ) : <small>Contato sem simulação</small>}
+                  <LeadSimulationSummary lead={lead} />
                 </td>
               </tr>
             ))}

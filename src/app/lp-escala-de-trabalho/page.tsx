@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 
 export const metadata = pageMetadata(
   "Simulador da Escala 5x2",
-  "Simule o impacto da transição da escala 6x1 para a 5x2 e descubra como reorganizar jornadas, folgas, turnos e equipes com a PontoVit.",
+  "Simule o impacto das etapas de 42 e 40 horas na transição da escala 6x1 para a 5x2 e descubra como reorganizar jornadas, folgas, turnos e equipes.",
   "/lp-escala-de-trabalho",
-  ["escala 5x2", "fim da escala 6x1", "simulador escala 5x2", "jornada de 40 horas", "gestão de escalas", "PontoVit"],
+  ["escala 5x2", "fim da escala 6x1", "simulador escala 5x2", "jornada de 42 horas", "jornada de 40 horas", "gestão de escalas", "PontoVit"],
 );
 
 const fallbackLogos = [

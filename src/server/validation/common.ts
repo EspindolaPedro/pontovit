@@ -67,7 +67,7 @@ export const WorkScheduleLeadSchema = z.object({
     employees: z.number().int().min(1).max(100000),
     currentScale: z.enum(["6x1", "5x2", "mixed"]),
     operatingDays: z.union([z.literal(5), z.literal(6), z.literal(7)]),
-    weeklyHours: z.union([z.literal(44), z.literal(40), z.literal(36)]),
+    weeklyHours: z.union([z.literal(44), z.literal(42), z.literal(40), z.literal(36)]),
   }).optional(),
   attribution: z.object({
     utmSource: optionalText(200),

@@ -388,6 +388,23 @@
 .privacyNote span { display: inline-flex; flex: 0 0 auto; color: var(--lp-orange); }
 
 .simulatorResult { display: grid; gap: 18px; padding: 26px 40px 34px; animation: simulator-slide-in .46s .04s cubic-bezier(.22, 1, .36, 1) both; }
+.simulatorTimeline { display: grid; gap: 12px; }
+.simulatorTimeline > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.simulatorTimeline > div:first-child > span { color: var(--lp-orange); font-size: 9px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+.simulatorTimeline > div:first-child > p { color: #777; font-size: 10px; }
+.simulatorPhasePicker { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid #dedede; border-radius: 10px; }
+.simulatorPhasePicker button { display: grid; gap: 5px; padding: 15px 17px; border: 0; background: #fff; color: var(--lp-ink); cursor: pointer; text-align: left; transition: background .25s ease, color .25s ease; }
+.simulatorPhasePicker button + button { border-left: 1px solid #dedede; }
+.simulatorPhasePicker button:hover { background: #fff8f0; }
+.simulatorPhasePicker button:focus-visible { position: relative; z-index: 1; outline: 3px solid var(--lp-orange); outline-offset: -3px; }
+.simulatorPhasePicker small { color: #7d7d7d; font-size: 8px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.simulatorPhasePicker strong { font-size: 17px; letter-spacing: -.03em; }
+.simulatorPhasePicker em { color: var(--lp-orange); font-size: 10px; font-style: normal; font-weight: 750; }
+.simulatorPhasePicker button.isSelectedPhase { background: #171a1f; color: #fff; }
+.simulatorPhasePicker button.isSelectedPhase small { color: rgba(255,255,255,.58); }
+.simulatorPhasePicker button.isSelectedPhase em { color: #ff9c2b; }
+.simulatorMathNote { padding-left: 12px; border-left: 2px solid #dedede; color: #777; font-size: 9px; line-height: 1.5; }
+.simulatorPhaseDetail { display: grid; gap: 18px; animation: simulator-phase-in .36s cubic-bezier(.22, 1, .36, 1) both; }
 .simulatorCapacityGrid { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid #dedede; border-radius: 10px; }
 .simulatorCapacityGrid article { padding: 18px; border-right: 1px solid #dedede; background: #fff; }
 .simulatorCapacityGrid article:last-child { border-right: 0; }
@@ -429,10 +446,16 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes simulator-phase-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .simulatorHeading,
   .simulatorForm,
-  .simulatorResult { animation: none; }
+  .simulatorResult,
+  .simulatorPhaseDetail { animation: none; }
 }
 
 .resultSection {
@@ -997,6 +1020,11 @@
   .simulatorButton { min-height: 56px; padding-inline: 18px; font-size: 13px; }
   .privacyNote { text-align: left; }
   .simulatorResult { gap: 15px; padding: 22px 20px 28px; }
+  .simulatorTimeline > div:first-child { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .simulatorPhasePicker button { padding: 13px 12px; }
+  .simulatorPhasePicker strong { font-size: 15px; }
+  .simulatorPhasePicker em { font-size: 9px; }
+  .simulatorPhaseDetail { gap: 15px; }
   .simulatorCapacityGrid article { padding: 16px 14px; }
   .simulatorCapacityGrid strong { font-size: 25px; }
   .simulatorImpact { padding: 20px 18px; }

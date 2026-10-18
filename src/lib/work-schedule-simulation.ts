@@ -1,18 +1,19 @@
 export const WORK_SCHEDULE_SEGMENTS = [
-  { value: "supermarket", label: "Supermercado / Atacarejo", noun: "supermercado" },
-  { value: "retail", label: "Comércio / Varejo", noun: "operação de varejo" },
-  { value: "restaurant", label: "Restaurante / Alimentação", noun: "operação de alimentação" },
-  { value: "pharmacy", label: "Farmácia", noun: "farmácia" },
-  { value: "hospitality", label: "Hotelaria", noun: "operação de hotelaria" },
-  { value: "fuel_station", label: "Posto de combustível", noun: "posto de combustível" },
-  { value: "industry", label: "Indústria", noun: "operação industrial" },
-  { value: "other", label: "Outro", noun: "operação" },
+  { value: "supermarket", label: "Supermercado / Atacarejo", noun: "supermercado", possessive: "Seu" },
+  { value: "retail", label: "Comércio / Varejo", noun: "operação de varejo", possessive: "Sua" },
+  { value: "restaurant", label: "Restaurante / Alimentação", noun: "operação de alimentação", possessive: "Sua" },
+  { value: "pharmacy", label: "Farmácia", noun: "farmácia", possessive: "Sua" },
+  { value: "hospitality", label: "Hotelaria", noun: "operação de hotelaria", possessive: "Sua" },
+  { value: "fuel_station", label: "Posto de combustível", noun: "posto de combustível", possessive: "Seu" },
+  { value: "industry", label: "Indústria", noun: "operação industrial", possessive: "Sua" },
+  { value: "other", label: "Outro", noun: "operação", possessive: "Sua" },
 ] as const;
 
 export type WorkScheduleSegment = (typeof WORK_SCHEDULE_SEGMENTS)[number]["value"];
 export type WorkScheduleScale = "6x1" | "5x2" | "mixed";
-export type WorkScheduleWeeklyHours = 44 | 40 | 36;
+export type WorkScheduleWeeklyHours = 44 | 42 | 40 | 36;
 export type WorkScheduleOperatingDays = 5 | 6 | 7;
+export type WorkSchedulePhase = "transition" | "final";
 
 export type WorkScheduleSimulationInput = {
   segment: WorkScheduleSegment;
@@ -22,9 +23,25 @@ export type WorkScheduleSimulationInput = {
   weeklyHours: WorkScheduleWeeklyHours;
 };
 
+export type WorkSchedulePhaseImpact = {
+  phase: WorkSchedulePhase;
+  legalLimitWeeklyHours: 42 | 40;
+  simulatedWeeklyHours: 42 | 40 | 36;
+  simulatedCapacity: number;
+  differenceHours: number;
+  variationPercent: number;
+  equivalentEmployeesExact: number;
+  equivalentEmployeesRounded: number;
+  equivalentDifference: number;
+  monthlyDifference: number;
+};
+
 export type WorkScheduleSimulationResult = WorkScheduleSimulationInput & {
-  simulatedWeeklyHours: 40;
   currentCapacity: number;
+  transition: WorkSchedulePhaseImpact;
+  final: WorkSchedulePhaseImpact;
+  // Campos finais preservados para manter a integração já existente com o CMS.
+  simulatedWeeklyHours: 42 | 40 | 36;
   simulatedCapacity: number;
   differenceHours: number;
   variationPercent: number;
@@ -45,7 +62,7 @@ export type RawWorkScheduleSimulationInput = {
 const segmentValues = new Set<string>(WORK_SCHEDULE_SEGMENTS.map((segment) => segment.value));
 const scaleValues = new Set<string>(["6x1", "5x2", "mixed"]);
 const operatingDayValues = new Set<number>([5, 6, 7]);
-const weeklyHourValues = new Set<number>([44, 40, 36]);
+const weeklyHourValues = new Set<number>([44, 42, 40, 36]);
 
 export function parseWorkScheduleSimulationInput(raw: RawWorkScheduleSimulationInput): WorkScheduleSimulationInput {
   const employees = Number(raw.employees);
@@ -67,17 +84,21 @@ export function parseWorkScheduleSimulationInput(raw: RawWorkScheduleSimulationI
   };
 }
 
-export function calculateWorkScheduleImpact(input: WorkScheduleSimulationInput): WorkScheduleSimulationResult {
-  const simulatedWeeklyHours = 40 as const;
-  const currentCapacity = input.employees * input.weeklyHours;
+function calculatePhaseImpact(
+  input: WorkScheduleSimulationInput,
+  currentCapacity: number,
+  phase: WorkSchedulePhase,
+  legalLimitWeeklyHours: 42 | 40,
+): WorkSchedulePhaseImpact {
+  const simulatedWeeklyHours = Math.min(input.weeklyHours, legalLimitWeeklyHours) as 42 | 40 | 36;
   const simulatedCapacity = input.employees * simulatedWeeklyHours;
   const differenceHours = currentCapacity - simulatedCapacity;
   const equivalentEmployeesExact = currentCapacity / simulatedWeeklyHours;
 
   return {
-    ...input,
+    phase,
+    legalLimitWeeklyHours,
     simulatedWeeklyHours,
-    currentCapacity,
     simulatedCapacity,
     differenceHours,
     variationPercent: currentCapacity > 0 ? ((simulatedCapacity - currentCapacity) / currentCapacity) * 100 : 0,
@@ -85,6 +106,27 @@ export function calculateWorkScheduleImpact(input: WorkScheduleSimulationInput):
     equivalentEmployeesRounded: Math.ceil(equivalentEmployeesExact),
     equivalentDifference: equivalentEmployeesExact - input.employees,
     monthlyDifference: differenceHours * (52 / 12),
+  };
+}
+
+export function calculateWorkScheduleImpact(input: WorkScheduleSimulationInput): WorkScheduleSimulationResult {
+  const currentCapacity = input.employees * input.weeklyHours;
+  const transition = calculatePhaseImpact(input, currentCapacity, "transition", 42);
+  const final = calculatePhaseImpact(input, currentCapacity, "final", 40);
+
+  return {
+    ...input,
+    currentCapacity,
+    transition,
+    final,
+    simulatedWeeklyHours: final.simulatedWeeklyHours,
+    simulatedCapacity: final.simulatedCapacity,
+    differenceHours: final.differenceHours,
+    variationPercent: final.variationPercent,
+    equivalentEmployeesExact: final.equivalentEmployeesExact,
+    equivalentEmployeesRounded: final.equivalentEmployeesRounded,
+    equivalentDifference: final.equivalentDifference,
+    monthlyDifference: final.monthlyDifference,
   };
 }
 
