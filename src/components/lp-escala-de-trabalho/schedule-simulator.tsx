@@ -113,7 +113,7 @@ export function ScheduleSimulator() {
             <div className={styles.heroCopy}>
               <h1 id="lp-5x2-title">A escala mudou. <em>Sua empresa não pode parar.</em></h1>
               <p className={styles.heroLead}>Entenda como a transição para 42 e depois 40 horas semanais pode alterar a capacidade nominal da sua equipe e quais pontos merecem atenção no planejamento.</p>
-              <p className={styles.heroStrong}>Faça uma estimativa gratuita antes de reorganizar jornadas, folgas e equipes.</p>
+              <p className={styles.heroStrong}>Simule o impacto e veja como a PontoVit organiza jornadas, turnos e folgas em um só lugar.</p>
               <ul className={styles.heroBenefits}>
                 {heroBenefits.map((benefit) => <li key={benefit}><span><CheckIcon size={15} /></span>{benefit}</li>)}
               </ul>
@@ -178,8 +178,7 @@ export function ScheduleSimulator() {
                 <div className={styles.simulatorResult} role="region" aria-labelledby="simulation-result-title">
                   <section className={styles.simulatorTimeline} aria-labelledby="transition-timeline-title">
                     <div>
-                      <span id="transition-timeline-title">Cronograma da transição</span>
-                      <p>Compare a primeira redução com o limite definitivo.</p>
+                      <span id="transition-timeline-title">Transição da jornada</span>
                     </div>
                     <div className={styles.simulatorPhasePicker} role="tablist" aria-label="Escolha a fase da transição">
                       <button type="button" role="tab" aria-selected={selectedPhase === "transition"} className={selectedPhase === "transition" ? styles.isSelectedPhase : undefined} onClick={() => setSelectedPhase("transition")}>
@@ -189,21 +188,16 @@ export function ScheduleSimulator() {
                         <small>Dezembro de 2027</small><strong>Limite de 40h</strong><em>{result.final.differenceHours > 0 ? `${formatNumber(Math.abs(result.final.variationPercent), 2)}% de redução` : "sem redução"}</em>
                       </button>
                     </div>
-                    <p className={styles.simulatorMathNote}>O percentual depende da mudança na jornada. O tamanho da equipe altera o total de horas, não a proporção da redução.</p>
+                    <p className={styles.simulatorMathNote}>O percentual vem da jornada; o total de horas varia com o tamanho da equipe.</p>
                   </section>
 
                   <div className={styles.simulatorPhaseDetail} key={selectedPhase}>
-                    <div className={styles.simulatorCapacityGrid}>
-                      <article><span>Capacidade atual</span><strong>{formatNumber(result.currentCapacity)}h</strong><small>{result.weeklyHours}h por colaborador</small></article>
-                      <article><span>Cenário selecionado</span><strong>{formatNumber(activePhase.simulatedCapacity)}h</strong><small>{activePhase.simulatedWeeklyHours}h por colaborador</small></article>
-                    </div>
-
                     <article className={styles.simulatorImpact}>
                       <span>Impacto semanal · limite de {activePhase.legalLimitWeeklyHours}h</span>
                       <div><strong>{isReduction ? "−" : ""}{formatNumber(difference)}h</strong><em>{isReduction ? `${formatNumber(Math.abs(activePhase.variationPercent), 2)}% de redução` : "sem alteração"}</em></div>
                       <p>{isReduction
-                        ? `${segmentData.possessive} ${segmentData.noun} pode ter ${formatNumber(difference)} horas semanais a menos ao comparar ${result.weeklyHours}h com ${activePhase.simulatedWeeklyHours}h por colaborador.`
-                        : `A jornada atual já está dentro do limite de ${activePhase.legalLimitWeeklyHours}h. Por isso, esta fase não reduz a capacidade semanal nominal da equipe.`}</p>
+                        ? `${formatNumber(result.employees)} colaboradores: ${formatNumber(difference)} horas semanais a menos nesta fase.`
+                        : `A jornada atual já está dentro do limite desta fase.`}</p>
                     </article>
 
                     <div className={styles.simulatorBars} aria-label="Comparação da capacidade semanal">
@@ -217,14 +211,14 @@ export function ScheduleSimulator() {
                     </div>
 
                     <div className={styles.simulatorDiagnosis}>
-                      <span>Diagnóstico operacional</span>
+                      <span>Do cenário à escala pronta</span>
+                      <strong>A PontoVit transforma este impacto em uma escala organizada.</strong>
                       <p>{getWorkScheduleDiagnosis(result)}</p>
                     </div>
                   </div>
 
                   <button className={styles.simulatorButton} type="button" onClick={handleResultCta}>Orçamento no WhatsApp <ArrowUpRightIcon size={20} /></button>
                   <button className={styles.simulatorEditButton} type="button" onClick={() => setResult(null)}>← Editar os dados da simulação</button>
-                  <p className={styles.simulatorDisclaimer}>A equivalência é matemática e não representa recomendação de contratação. O cronograma considera a regra geral da transição e a simulação não substitui análise jurídica. Não são considerados férias, afastamentos, intervalos, produtividade, acordos coletivos ou a distribuição real dos turnos.</p>
                 </div>
               ) : null}
             </div>

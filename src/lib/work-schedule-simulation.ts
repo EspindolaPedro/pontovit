@@ -135,19 +135,15 @@ export function getWorkScheduleSegment(input: WorkScheduleSimulationInput) {
 }
 
 export function getWorkScheduleDiagnosis(input: WorkScheduleSimulationInput) {
-  const operatingMessage = input.operatingDays === 7
-    ? "Como a operação funciona todos os dias, o planejamento precisa proteger a cobertura dos finais de semana, dos turnos e do revezamento de folgas."
+  const coverage = input.operatingDays === 7
+    ? "a cobertura dos finais de semana e turnos"
     : input.operatingDays === 6
-      ? "Com seis dias de funcionamento, o ponto de atenção é distribuir as jornadas sem criar lacunas na cobertura ao longo da semana."
-      : "Com cinco dias de funcionamento, o foco está em distribuir as horas dentro dos dias operacionais e acompanhar os períodos de maior demanda.";
+      ? "a cobertura dos seis dias de operação"
+      : "as horas dentro dos cinco dias de operação";
 
-  const scaleMessage = input.currentScale === "6x1"
-    ? "Na escala 6x1, a mudança também pode exigir uma nova organização dos dias de trabalho e descanso."
-    : input.currentScale === "5x2"
-      ? "Como a distribuição em cinco dias já existe, a análise deve se concentrar no impacto das horas e na cobertura de cada período."
-      : "Como há escalas mistas, este cálculo é uma aproximação baseada na jornada predominante e deve ser detalhado por equipe, função e turno.";
-
-  return `${operatingMessage} ${scaleMessage}`;
+  if (input.currentScale === "6x1") return `Organize trabalho, descanso e ${coverage} em um só lugar.`;
+  if (input.currentScale === "5x2") return `Redistribua as horas e acompanhe ${coverage} em um só lugar.`;
+  return `Como aproximação, detalhe as escalas mistas por equipe e acompanhe ${coverage} em um só lugar.`;
 }
 
 export function getScaleLabel(scale: WorkScheduleScale) {

@@ -89,7 +89,7 @@ test("valida entradas inválidas e aceita 42 horas", () => {
 
 test("personaliza o diagnóstico por dias e escala", () => {
   assert.match(getWorkScheduleDiagnosis(baseInput), /finais de semana/);
-  assert.match(getWorkScheduleDiagnosis(baseInput), /dias de trabalho e descanso/);
+  assert.match(getWorkScheduleDiagnosis(baseInput), /trabalho, descanso/);
   assert.match(getWorkScheduleDiagnosis({ ...baseInput, operatingDays: 6, currentScale: "5x2" }), /seis dias/);
   assert.match(getWorkScheduleDiagnosis({ ...baseInput, operatingDays: 5, currentScale: "mixed" }), /aproximação/);
 });
