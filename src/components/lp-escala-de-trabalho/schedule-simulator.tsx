@@ -111,9 +111,9 @@ export function ScheduleSimulator() {
         <div className={styles.container}>
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <h1 id="lp-5x2-title">A escala mudou. <em>Sua empresa não pode parar.</em></h1>
-              <p className={styles.heroLead}>Entenda como a transição para 42 e depois 40 horas semanais pode alterar a capacidade nominal da sua equipe e quais pontos merecem atenção no planejamento.</p>
-              <p className={styles.heroStrong}>Simule o impacto e veja como a PontoVit organiza jornadas, turnos e folgas em um só lugar.</p>
+              <h1 id="lp-5x2-title">A escala 6x1 vai mudar. <em>Sua empresa está preparada para o 5x2?</em></h1>
+              <p className={styles.heroLead}>A nova jornada exige mais do que reorganizar as folgas. É preciso manter a cobertura dos turnos e o funcionamento da sua operação.</p>
+              <p className={styles.heroStrong}>Simule gratuitamente o impacto na sua equipe e descubra como a PontoVit pode ajudar sua empresa nessa transição.</p>
               <ul className={styles.heroBenefits}>
                 {heroBenefits.map((benefit) => <li key={benefit}><span><CheckIcon size={15} /></span>{benefit}</li>)}
               </ul>
