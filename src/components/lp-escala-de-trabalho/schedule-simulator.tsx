@@ -56,11 +56,6 @@ export function ScheduleSimulator() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!result) return;
-    window.requestAnimationFrame(() => document.getElementById("resultado-simulacao")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  }, [result]);
-
   function markStarted() {
     if (startedRef.current) return;
     startedRef.current = true;
@@ -121,13 +116,13 @@ export function ScheduleSimulator() {
               </ul>
             </div>
 
-            <div className={styles.simulatorCard} ref={simulatorRef}>
+            <div className={styles.simulatorCard} ref={simulatorRef} aria-live="polite">
               <div className={styles.simulatorHeading}>
-                <span>Simulador gratuito</span>
-                <h2>Descubra o impacto da nova jornada de trabalho na sua empresa</h2>
-                <p>Informe alguns dados da sua operação e veja como uma jornada semanal de 40 horas pode afetar a disponibilidade da equipe.</p>
+                <span>{result ? "Etapa 2 de 2 · Seu resultado" : "Etapa 1 de 2 · Simulador gratuito"}</span>
+                <h2 id={result ? "simulation-result-title" : undefined}>{result ? "Seu diagnóstico está pronto." : "Descubra o impacto da nova jornada de trabalho na sua empresa"}</h2>
+                <p>{result && segmentData ? `${segmentData.label} · ${formatNumber(result.employees)} colaboradores · ${result.operatingDays} dias · ${getScaleLabel(result.currentScale)} · ${result.weeklyHours}h atuais` : "Informe alguns dados da sua operação e veja como uma jornada semanal de 40 horas pode afetar a disponibilidade da equipe."}</p>
               </div>
-              <form className={styles.simulatorForm} onSubmit={handleSubmit} onChange={markStarted}>
+              {!result ? <form className={styles.simulatorForm} onSubmit={handleSubmit} onChange={markStarted}>
                 <label>
                   <span>Segmento</span>
                   <select value={segment} onChange={(event) => setSegment(event.target.value)} required>
@@ -170,87 +165,48 @@ export function ScheduleSimulator() {
                 {formError ? <p className={styles.simulatorError} role="alert">{formError}</p> : null}
                 <button className={styles.simulatorButton} type="submit">Simular impacto na minha empresa <ArrowUpRightIcon size={20} /></button>
                 <p className={styles.privacyNote}><span aria-hidden="true"><LockIcon size={13} /></span> Resultado imediato e sem cadastro. Seus dados de contato serão solicitados somente se você quiser falar com a PontoVit.</p>
-              </form>
+              </form> : segmentData ? (
+                <div className={styles.simulatorResult} role="region" aria-labelledby="simulation-result-title">
+                  <div className={styles.simulatorCapacityGrid}>
+                    <article><span>Capacidade atual</span><strong>{formatNumber(result.currentCapacity)}h</strong><small>{result.weeklyHours}h por colaborador</small></article>
+                    <article><span>Simulada em 40h</span><strong>{formatNumber(result.simulatedCapacity)}h</strong><small>com a mesma equipe</small></article>
+                  </div>
+
+                  <article className={styles.simulatorImpact}>
+                    <span>Impacto semanal estimado</span>
+                    <div><strong>{isReduction ? "−" : isIncrease ? "+" : ""}{formatNumber(difference)}h</strong><em>{formatNumber(Math.abs(result.variationPercent), 2)}% {isReduction ? "de redução" : isIncrease ? "de aumento" : "de variação"}</em></div>
+                    <p>{isReduction
+                      ? `Sua ${segmentData.noun} pode ter ${formatNumber(difference)} horas semanais a menos ao comparar ${result.weeklyHours}h com 40h por colaborador.`
+                      : isIncrease
+                        ? `A jornada simulada representa ${formatNumber(difference)} horas semanais a mais que a referência atual de ${result.weeklyHours}h.`
+                        : "A equipe já está na referência de 40 horas, então a capacidade semanal nominal permanece igual."}</p>
+                  </article>
+
+                  <div className={styles.simulatorBars} aria-label="Comparação da capacidade semanal">
+                    <div><span>Atual · {result.weeklyHours}h</span><i><b style={{ width: `${(result.currentCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(result.currentCapacity)}h</strong></div>
+                    <div><span>Simulada · 40h</span><i><b style={{ width: `${(result.simulatedCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(result.simulatedCapacity)}h</strong></div>
+                  </div>
+
+                  <div className={styles.simulatorResultStats}>
+                    <article><span>Equivalência matemática</span><strong>{formatNumber(result.equivalentEmployeesRounded)}</strong><small>colaboradores a 40h</small></article>
+                    <article><span>Diferença mensal</span><strong>{formatNumber(Math.abs(result.monthlyDifference), 1)}h</strong><small>aproximação nominal</small></article>
+                  </div>
+
+                  <div className={styles.simulatorDiagnosis}>
+                    <span>Diagnóstico operacional</span>
+                    <p>{getWorkScheduleDiagnosis(result)}</p>
+                  </div>
+
+                  <button className={styles.simulatorButton} type="button" onClick={handleResultCta}>Quero planejar essa mudança <ArrowUpRightIcon size={20} /></button>
+                  <button className={styles.simulatorEditButton} type="button" onClick={() => setResult(null)}>← Editar os dados da simulação</button>
+                  <p className={styles.simulatorDisclaimer}>A equivalência é matemática e não representa recomendação de contratação. A simulação não considera férias, afastamentos, intervalos, produtividade, acordos coletivos ou a distribuição real dos turnos.</p>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
       </section>
 
-      {result && segmentData ? (
-        <section id="resultado-simulacao" className={styles.resultSection} aria-live="polite" aria-labelledby="simulation-result-title">
-          <div className={styles.container}>
-            <div className={styles.resultHeading}>
-              <p className={styles.eyebrow}>Seu diagnóstico inicial</p>
-              <h2 id="simulation-result-title">O impacto nominal de uma jornada de 40 horas.</h2>
-              <p>{segmentData.label} · {formatNumber(result.employees)} colaboradores · {result.operatingDays} dias por semana · {getScaleLabel(result.currentScale)} · {result.weeklyHours}h atuais</p>
-            </div>
-
-            <div className={styles.capacityComparison}>
-              <article>
-                <span>Capacidade atual</span>
-                <strong>{formatNumber(result.currentCapacity)}h</strong>
-                <small>{result.employees} colaboradores × {result.weeklyHours}h por semana</small>
-              </article>
-              <span className={styles.capacityVs}>versus</span>
-              <article className={styles.capacityComparisonHighlight}>
-                <span>Capacidade simulada</span>
-                <strong>{formatNumber(result.simulatedCapacity)}h</strong>
-                <small>{result.employees} colaboradores × 40h por semana</small>
-              </article>
-            </div>
-
-            <div className={styles.impactResultGrid}>
-              <article className={styles.impactMainCard}>
-                <span>Impacto semanal estimado</span>
-                <strong>{isReduction ? "−" : isIncrease ? "+" : ""}{formatNumber(difference)}h</strong>
-                <h3>{isReduction || isIncrease ? "de capacidade contratual nominal" : "sem alteração nominal"}</h3>
-                <p>{isReduction
-                  ? `Sua ${segmentData.noun} pode ter ${formatNumber(difference)} horas semanais a menos ao comparar ${result.weeklyHours}h com 40h por colaborador.`
-                  : isIncrease
-                    ? `Neste cenário, a jornada simulada de 40h representa ${formatNumber(difference)} horas semanais a mais do que a referência atual de ${result.weeklyHours}h.`
-                    : "A equipe já está na referência de 40 horas, por isso a capacidade semanal nominal permanece igual."}</p>
-              </article>
-
-              <article className={styles.impactChartCard}>
-                <div className={styles.impactChartHeading}><span>Comparativo</span><strong>{formatNumber(Math.abs(result.variationPercent), 2)}% {isReduction ? "de redução" : isIncrease ? "de aumento" : "de variação"}</strong></div>
-                <div className={styles.impactChart} aria-label="Comparação entre a capacidade atual e a capacidade simulada">
-                  <div><span>Atual · {result.weeklyHours}h</span><i><b style={{ width: `${(result.currentCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(result.currentCapacity)}h</strong></div>
-                  <div><span>Simulada · 40h</span><i><b style={{ width: `${(result.simulatedCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(result.simulatedCapacity)}h</strong></div>
-                </div>
-                <p>Diferença mensal aproximada: <strong>{formatNumber(Math.abs(result.monthlyDifference), 1)} horas</strong>, usando 52 semanas ÷ 12 meses.</p>
-              </article>
-            </div>
-
-            <div className={styles.equivalencePanel}>
-              <div>
-                <p className={styles.eyebrow}>Equivalência matemática</p>
-                <h3>{formatNumber(result.equivalentEmployeesRounded)} colaboradores a 40h</h3>
-                <p>Essa é a quantidade inteira que alcança ou supera matematicamente as <strong>{formatNumber(result.currentCapacity)} horas semanais</strong> atuais. A equivalência exata é de {formatNumber(result.equivalentEmployeesExact, 2)} colaboradores.</p>
-              </div>
-              <aside>
-                <strong>{result.equivalentDifference > 0 ? "+" : ""}{formatNumber(result.equivalentDifference, 2)}</strong>
-                <span>colaboradores equivalentes</span>
-                <p>Este valor compara horas contratuais. Ele não representa recomendação nem obrigação de contratação.</p>
-              </aside>
-            </div>
-
-            <div className={styles.diagnosisPanel}>
-              <span>Diagnóstico operacional</span>
-              <h3>A matemática mostra o tamanho do impacto. A escala define como lidar com ele.</h3>
-              <p>{getWorkScheduleDiagnosis(result)}</p>
-            </div>
-
-            <div className={styles.resultCta}>
-              <div><span>Próximo passo</span><h3>Como reorganizar sua equipe sem comprometer a operação?</h3><p>Conheça como a PontoVit pode ajudar a organizar escalas, jornadas e folgas de maneira mais eficiente.</p></div>
-              <button type="button" onClick={handleResultCta}>Agendar demonstração da PontoVit <ArrowUpRightIcon size={20} /></button>
-            </div>
-            <div className={styles.resultActions}>
-              <button type="button" onClick={() => simulatorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}>Editar ou refazer a simulação</button>
-            </div>
-            <p className={styles.legalDisclaimer}>Esta simulação utiliza horas contratuais nominais e não considera férias, afastamentos, intervalos, produtividade, acordos coletivos ou distribuição real dos turnos. Não representa previsão de contratação nem validação de conformidade legal.</p>
-          </div>
-        </section>
-      ) : null}
     </>
   );
 }

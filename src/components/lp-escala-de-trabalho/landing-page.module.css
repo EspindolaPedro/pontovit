@@ -328,6 +328,42 @@
 
 .privacyNote span { display: inline-flex; flex: 0 0 auto; color: var(--lp-orange); }
 
+.simulatorResult { display: grid; gap: 15px; padding: 24px 40px 32px; }
+.simulatorCapacityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.simulatorCapacityGrid article { padding: 18px; border: 1px solid #e3e3e3; border-radius: 15px; background: var(--lp-page); }
+.simulatorCapacityGrid article:last-child { border-color: var(--lp-orange); background: #fff7ee; }
+.simulatorCapacityGrid span,
+.simulatorResultStats span,
+.simulatorImpact > span,
+.simulatorDiagnosis > span { display: block; color: #777; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.simulatorCapacityGrid strong { display: block; margin-top: 8px; color: var(--lp-ink); font-size: 30px; font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+.simulatorCapacityGrid article:last-child strong { color: var(--lp-orange); }
+.simulatorCapacityGrid small { display: block; margin-top: 5px; color: #737373; font-size: 10px; }
+.simulatorImpact { padding: 22px; border-radius: 17px; background: #171a1f; color: #fff; }
+.simulatorImpact > span { color: var(--lp-orange); }
+.simulatorImpact > div { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 15px; }
+.simulatorImpact strong { font-size: 47px; font-weight: 800; letter-spacing: -.07em; line-height: .9; }
+.simulatorImpact em { color: #ff9c2b; font-size: 12px; font-style: normal; font-weight: 750; }
+.simulatorImpact p { margin-top: 16px; color: rgba(255,255,255,.68); font-size: 11px; line-height: 1.5; }
+.simulatorBars { display: grid; gap: 10px; padding: 16px 18px; border: 1px solid #e6e6e6; border-radius: 15px; }
+.simulatorBars > div { display: grid; grid-template-columns: 86px minmax(0,1fr) 58px; align-items: center; gap: 9px; }
+.simulatorBars span { color: #676767; font-size: 9px; font-weight: 650; }
+.simulatorBars i { display: block; height: 8px; overflow: hidden; border-radius: 99px; background: #efefef; }
+.simulatorBars b { display: block; height: 100%; border-radius: inherit; background: var(--lp-orange); }
+.simulatorBars > div:first-child b { background: #30343a; }
+.simulatorBars strong { font-size: 10px; text-align: right; }
+.simulatorResultStats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.simulatorResultStats article { padding: 16px 18px; border-radius: 15px; background: var(--lp-warm); }
+.simulatorResultStats strong { display: block; margin-top: 8px; color: var(--lp-orange); font-size: 26px; letter-spacing: -.05em; line-height: 1; }
+.simulatorResultStats small { display: block; margin-top: 4px; color: #6b625b; font-size: 10px; }
+.simulatorDiagnosis { padding: 17px 18px; border-left: 3px solid var(--lp-orange); background: #fffaf4; }
+.simulatorDiagnosis > span { color: var(--lp-orange); }
+.simulatorDiagnosis p { margin-top: 8px; color: #5e5750; font-size: 11px; line-height: 1.5; }
+.simulatorResult .simulatorButton { min-height: 54px; margin-top: 1px; }
+.simulatorEditButton { justify-self: center; padding: 3px 0; border: 0; border-bottom: 1px solid #aaa; background: transparent; color: #616161; cursor: pointer; font: 650 11px var(--pv-font-display); }
+.simulatorEditButton:hover { border-color: var(--lp-orange); color: var(--lp-orange); }
+.simulatorDisclaimer { color: #898989; font-size: 8px; line-height: 1.45; text-align: center; }
+
 .resultSection {
   scroll-margin-top: 90px;
   padding: 120px 0 126px;
@@ -886,6 +922,15 @@
   .timeFields { gap: 7px; }
   .simulatorButton { min-height: 56px; padding-inline: 18px; font-size: 13px; }
   .privacyNote { text-align: left; }
+  .simulatorResult { gap: 12px; padding: 20px 20px 26px; }
+  .simulatorCapacityGrid article { padding: 16px 14px; }
+  .simulatorCapacityGrid strong { font-size: 25px; }
+  .simulatorImpact { padding: 20px 18px; }
+  .simulatorImpact strong { font-size: 43px; }
+  .simulatorImpact > div { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .simulatorBars { padding: 15px 14px; }
+  .simulatorResultStats article { padding: 15px 14px; }
+  .simulatorDiagnosis { padding: 15px; }
 
   .resultSection { padding: 82px 0 88px; }
   .resultHeading { text-align: left; }
@@ -1024,6 +1069,7 @@
   .simulatorHeading, .simulatorForm { padding-right: 20px; padding-left: 20px; }
   .timeFields { grid-template-columns: 1fr 1fr; }
   .timeFields > span { display: none; }
+  .simulatorBars > div { grid-template-columns: 72px minmax(0,1fr) 50px; gap: 7px; }
   .impactChart > div { grid-template-columns: minmax(0, 1fr) 58px; }
   .impactChart > div > span { grid-column: 1 / -1; }
   .operationSummary { grid-template-columns: 1fr; }
