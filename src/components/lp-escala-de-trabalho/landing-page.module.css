@@ -445,7 +445,7 @@
   left: -8%;
   height: 150px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--lp-page);
   content: "";
 }
 .problemSection::before { top: -100px; }
@@ -464,18 +464,31 @@
 .problemCopy > strong { display: block; max-width: 650px; margin-top: 30px; font-size: 17px; line-height: 1.5; }
 
 .problemVisual { position: relative; display: flex; height: 680px; align-items: flex-end; justify-content: center; }
-.problemVisual > img {
+.managerCutout {
   position: relative;
   z-index: 1;
   width: auto;
   height: min(670px, 51vw);
-  object-fit: contain;
+  flex: 0 0 auto;
+  aspect-ratio: 2 / 3;
   filter: drop-shadow(0 22px 28px rgba(91,43,0,.18));
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 76%, rgba(0,0,0,.96) 82%, rgba(0,0,0,.72) 88%, rgba(0,0,0,.36) 94%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 76%, rgba(0,0,0,.96) 82%, rgba(0,0,0,.72) 88%, rgba(0,0,0,.36) 94%, transparent 100%);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
+.managerCutout > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.tabletScreen { position: absolute; z-index: 2; top: 38.4%; left: 21.7%; display: grid; width: 18.5%; height: 18.7%; align-content: start; padding: 4.5% 5%; overflow: hidden; border-radius: 2px; background: linear-gradient(145deg, #fff 0%, #f5f7f6 100%); color: #25282b; transform: rotate(-.35deg); }
+.tabletBrand { display: flex; align-items: center; gap: 4%; color: var(--lp-orange); font-family: inherit; font-size: clamp(3px, .42vw, 6px); font-weight: 800; line-height: 1; white-space: nowrap; }
+.tabletBrand i { width: 8%; aspect-ratio: 1; border-radius: 50%; background: var(--lp-orange); box-shadow: 5px 0 0 rgba(237,129,7,.36); }
+.tabletTitle { display: flex; align-items: center; justify-content: space-between; gap: 5%; margin-top: 8%; }
+.tabletTitle strong { font-size: clamp(3px, .38vw, 5px); white-space: nowrap; }
+.tabletTitle span { padding: 2% 5%; border-radius: 99px; background: #fff0df; color: var(--lp-orange); font-size: clamp(2px, .28vw, 4px); }
+.tabletRows { display: grid; gap: 7%; margin-top: 8%; }
+.tabletRows span { position: relative; display: block; height: clamp(2px, .3vw, 4px); border-radius: 9px; background: linear-gradient(90deg, #dfe4e2 0 16%, #f0f2f1 16% 56%, #ffd6a5 56% 75%, #f0f2f1 75%); }
+.tabletRows span:nth-child(2) { background: linear-gradient(90deg, #dfe4e2 0 16%, #f0f2f1 16% 44%, #ffd6a5 44% 64%, #f0f2f1 64%); }
+.tabletRows span:nth-child(3) { background: linear-gradient(90deg, #dfe4e2 0 16%, #f0f2f1 16% 69%, #ffd6a5 69% 88%, #f0f2f1 88%); }
+.tabletRows span:nth-child(4) { background: linear-gradient(90deg, #dfe4e2 0 16%, #ffd6a5 16% 36%, #f0f2f1 36%); }
 .problemVisual::before { position: absolute; bottom: 40px; width: 480px; height: 480px; border-radius: 50%; background: rgba(255,255,255,.16); content: ""; }
 .floatingLabel { position: absolute; z-index: 2; top: 75px; right: -10px; padding: 12px 18px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.14); backdrop-filter: blur(8px); color: #fff; font-size: 12px; font-weight: 700; }
 .floatingSchedule { position: absolute; z-index: 2; right: -30px; bottom: 88px; width: 245px; padding: 20px; border-radius: 18px; background: #fff; box-shadow: 0 20px 50px rgba(80,34,0,.25); color: #171717; }
@@ -757,7 +770,7 @@
   .problemGrid { grid-template-columns: 1fr; }
   .problemCopy { padding-bottom: 0; }
   .problemVisual { height: 600px; }
-  .problemVisual > img { height: 590px; }
+  .managerCutout { height: 590px; }
   .platformHeading, .proofHeading { grid-template-columns: 1fr; }
   .platformHeading > p, .proofHeading > p { max-width: 720px; }
   .featureGrid { grid-template-columns: repeat(2, 1fr); }
@@ -842,10 +855,10 @@
   .problemQuestions p { align-items: flex-start; font-size: 14px; line-height: 1.4; }
   .problemCopy > strong { font-size: 15px; }
   .problemVisual { height: 510px; margin-top: 10px; }
-  .problemVisual > img { height: 500px; max-width: none; }
+  .managerCutout { height: 500px; max-width: none; transform: translateX(5%); }
   .problemVisual::before { bottom: 20px; width: 370px; height: 370px; }
-  .floatingLabel { top: 58px; right: 0; font-size: 10px; }
-  .floatingSchedule { right: -8px; bottom: 30px; width: 210px; }
+  .floatingLabel { top: 16px; right: auto; left: 0; padding: 10px 14px; font-size: 9px; }
+  .floatingSchedule { right: -6px; bottom: 18px; width: 196px; padding: 17px; }
 
   .platformSection { padding: 84px 0 88px; }
   .platformHeading h2 { font-size: 38px; }
@@ -857,8 +870,8 @@
   .productMiniCard { right: 12px; bottom: 22px; }
   .featureGrid { display: flex; gap: 12px; margin: 70px -20px 0; padding: 0 20px 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-top: 0; }
   .featureGrid::-webkit-scrollbar { display: none; }
-  .featureGrid article, .featureGrid article:not(:first-child), .featureGrid article:nth-child(n+3) { min-height: 270px; flex: 0 0 calc(100vw - 56px); padding: 34px 26px; border: 1px solid var(--lp-line); border-radius: 20px; scroll-snap-align: start; }
-  .featureGrid article > span, .featureGrid article:not(:first-child) > span { top: -13px; left: 24px; }
+  .featureGrid article, .featureGrid article:not(:first-child), .featureGrid article:nth-child(n+3) { min-height: 285px; flex: 0 0 calc(100vw - 56px); padding: 72px 26px 34px; border: 1px solid var(--lp-line); border-radius: 20px; scroll-snap-align: start; }
+  .featureGrid article > span, .featureGrid article:not(:first-child) > span { top: 22px; left: 24px; }
   .centerCta { justify-content: stretch; margin-top: 28px; }
   .centerCta .cta { width: 100%; justify-content: space-between; }
 
@@ -889,12 +902,13 @@
   .segmentCards { grid-template-columns: 1fr; }
   .segmentCards article { min-height: 0; padding: 23px; }
   .segmentCards h3 { margin-top: 24px; }
-  .teamVisual { min-height: 390px; margin: 10px -20px 0; overflow: hidden; }
-  .teamVisual > img { bottom: 0; left: 50%; width: 142%; max-width: none; }
-  .teamHalo { bottom: 5px; left: 50%; width: 350px; height: 350px; }
+  .teamVisual { min-height: 535px; margin: 18px -20px 0; overflow: hidden; }
+  .teamVisual > img { bottom: 0; left: 55%; width: 132%; max-width: none; }
+  .teamHalo { bottom: 5px; left: 56%; width: 355px; height: 355px; }
   .teamVisual::after { bottom: 3px; width: 70%; height: 24px; }
-  .teamBadgeCoverage { top: 30px; left: 20px; }
-  .teamBadgeTeams { right: 20px; bottom: 16px; }
+  .teamBadge { padding: 12px 14px; animation-name: none; }
+  .teamBadgeCoverage { top: 18px; left: 20px; }
+  .teamBadgeTeams { top: 78px; right: 20px; bottom: auto; }
   .teamBadgeControl { display: none; }
   .segmentsSection .cta { width: 100%; justify-content: space-between; margin-top: 28px; }
 
@@ -910,7 +924,7 @@
   .proofProduct > div { padding: 36px 25px 18px; }
   .proofProduct h3 { font-size: 31px; }
   .proofProduct .cta { width: 100%; justify-content: space-between; }
-  .proofProduct > img { width: 118%; margin: 22px -9% 30px; }
+  .proofProduct > img { width: calc(100% - 24px); margin: 22px 12px 30px; transform: none; }
 
   .faqSection { padding: 90px 0; }
   .faqGrid { gap: 45px; }
@@ -938,7 +952,7 @@
   .impactGrid { grid-template-columns: 1fr; }
   .productBadge { transform: scale(.88); transform-origin: top left; }
   .productMiniCard { transform: scale(.88); transform-origin: bottom right; }
-  .teamVisual > img { left: 50%; width: 164%; }
+  .teamVisual > img { left: 57%; width: 138%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

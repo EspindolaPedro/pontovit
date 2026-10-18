@@ -73,7 +73,14 @@ export function WorkScheduleLandingPage({ clientLogos }: { clientLogos: ClientLo
             </div>
             <div className={styles.problemVisual}>
               <span className={styles.floatingLabel}>Operação em movimento</span>
-              <Image src="/assets/lp-escala-de-trabalho/operations-manager-refined.png" alt="Gestora de operações com um tablet" width={1024} height={1536} sizes="(max-width: 720px) 86vw, 520px" />
+              <div className={styles.managerCutout}>
+                <Image src="/assets/lp-escala-de-trabalho/operations-manager-refined.png" alt="Gestora de operações com um tablet" width={1024} height={1536} sizes="(max-width: 720px) 86vw, 520px" />
+                <div className={styles.tabletScreen} aria-hidden="true">
+                  <div className={styles.tabletBrand}><i />PontoVit</div>
+                  <div className={styles.tabletTitle}><strong>Escala semanal</strong><span>Equipe</span></div>
+                  <div className={styles.tabletRows}><span /><span /><span /><span /></div>
+                </div>
+              </div>
               <div className={styles.floatingSchedule}>
                 <span>Folgas da semana</span>
                 <div><i /><i /><i className={styles.isOrange} /><i /><i className={styles.isOrange} /><i /><i /></div>
