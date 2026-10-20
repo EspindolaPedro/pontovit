@@ -134,16 +134,20 @@ export function getWorkScheduleSegment(input: WorkScheduleSimulationInput) {
   return WORK_SCHEDULE_SEGMENTS.find((segment) => segment.value === input.segment) ?? WORK_SCHEDULE_SEGMENTS.at(-1)!;
 }
 
-export function getWorkScheduleDiagnosis(input: WorkScheduleSimulationInput) {
-  const coverage = input.operatingDays === 7
-    ? "a cobertura dos finais de semana e turnos"
-    : input.operatingDays === 6
-      ? "a cobertura dos seis dias de operação"
-      : "as horas dentro dos cinco dias de operação";
+export function getWorkScheduleDiagnosis(result: WorkScheduleSimulationResult, phase: WorkSchedulePhase) {
+  const impact = result[phase];
+  const gap = Math.max(impact.equivalentEmployeesRounded - result.employees, 0);
+  const coverage = result.operatingDays === 7
+    ? "os 7 dias de operação, incluindo fins de semana"
+    : result.operatingDays === 6
+      ? "os 6 dias de funcionamento"
+      : "os 5 dias de funcionamento";
 
-  if (input.currentScale === "6x1") return `Organize trabalho, descanso e ${coverage} em um só lugar.`;
-  if (input.currentScale === "5x2") return `Redistribua as horas e acompanhe ${coverage} em um só lugar.`;
-  return `Como aproximação, detalhe as escalas mistas por equipe e acompanhe ${coverage} em um só lugar.`;
+  if (gap <= 0) {
+    return `Sua equipe atual de ${result.employees} colaboradores já comporta a jornada de ${impact.simulatedWeeklyHours}h, mas vai precisar de uma escala redesenhada para garantir os 2 dias de descanso por pessoa cobrindo ${coverage}.`;
+  }
+
+  return `Para cobrir ${coverage} com a jornada de ${impact.simulatedWeeklyHours}h, sua operação precisa do equivalente a ${impact.equivalentEmployeesRounded} colaboradores — ${gap} a mais que hoje. Isso pode vir de novas contratações ou de uma redistribuição completa dos turnos atuais.`;
 }
 
 export function getScaleLabel(scale: WorkScheduleScale) {

@@ -5,7 +5,6 @@ import { ArrowUpRightIcon, CheckIcon, LockIcon } from "@/components/shared/icons
 import {
   WORK_SCHEDULE_SEGMENTS,
   calculateWorkScheduleImpact,
-  getScaleLabel,
   getWorkScheduleDiagnosis,
   getWorkScheduleSegment,
   parseWorkScheduleSimulationInput,
@@ -14,6 +13,11 @@ import {
 } from "@/lib/work-schedule-simulation";
 import { useLeadCapture } from "./lead-capture";
 import styles from "./landing-page.module.css";
+
+// A LP é feita para quem ainda está na 6x1 e quer entender a transição para a 5x2:
+// assumimos a jornada padrão da 6x1 (44h) como ponto de partida, sem perguntar isso ao lead.
+const ASSUMED_CURRENT_SCALE = "6x1";
+const ASSUMED_WEEKLY_HOURS = "44";
 
 const heroBenefits = [
   "Simule as etapas de 42 e 40 horas.",
@@ -37,10 +41,8 @@ export function ScheduleSimulator() {
   const startedRef = useRef(false);
   const viewedRef = useRef(false);
   const [segment, setSegment] = useState("supermarket");
-  const [employees, setEmployees] = useState("30");
+  const [employees, setEmployees] = useState("1");
   const [operatingDays, setOperatingDays] = useState("7");
-  const [currentScale, setCurrentScale] = useState("6x1");
-  const [weeklyHours, setWeeklyHours] = useState("44");
   const [formError, setFormError] = useState("");
   const [result, setResult] = useState<WorkScheduleSimulationResult | null>(null);
   const [selectedPhase, setSelectedPhase] = useState<WorkSchedulePhase>("transition");
@@ -68,7 +70,13 @@ export function ScheduleSimulator() {
     event.preventDefault();
     setFormError("");
     try {
-      const input = parseWorkScheduleSimulationInput({ segment, employees, operatingDays, currentScale, weeklyHours });
+      const input = parseWorkScheduleSimulationInput({
+        segment,
+        employees,
+        operatingDays,
+        currentScale: ASSUMED_CURRENT_SCALE,
+        weeklyHours: ASSUMED_WEEKLY_HOURS,
+      });
       const nextResult = calculateWorkScheduleImpact(input);
       setSelectedPhase("transition");
       setResult(nextResult);
@@ -102,6 +110,7 @@ export function ScheduleSimulator() {
   const difference = activePhase ? Math.abs(activePhase.differenceHours) : 0;
   const isReduction = Boolean(activePhase && activePhase.differenceHours > 0);
   const largestCapacity = result && activePhase ? Math.max(result.currentCapacity, activePhase.simulatedCapacity) : 1;
+  const headcountGap = result && activePhase ? Math.max(activePhase.equivalentEmployeesRounded - result.employees, 0) : 0;
 
   return (
     <>
@@ -128,7 +137,7 @@ export function ScheduleSimulator() {
               <div className={styles.simulatorHeading} key={result ? "result-heading" : "form-heading"}>
                 {result ? <span>Resultado da simulação</span> : null}
                 <h2 id={result ? "simulation-result-title" : undefined}>{result ? "Seu diagnóstico está pronto." : "Descubra o impacto da nova jornada de trabalho na sua empresa"}</h2>
-                <p>{result && segmentData ? `${segmentData.label} · ${formatNumber(result.employees)} colaboradores · ${result.operatingDays} dias · ${getScaleLabel(result.currentScale)} · ${result.weeklyHours}h atuais` : "Informe alguns dados da sua operação e veja o impacto estimado de cada etapa da redução da jornada semanal."}</p>
+                <p>{result && segmentData ? `${segmentData.label} · ${formatNumber(result.employees)} colaboradores · ${result.operatingDays} dias de funcionamento` : "Informe os dados da sua operação e veja quantas pessoas sua equipe vai precisar na transição da 6x1 para a 5x2."}</p>
               </div>
               {!result ? <form className={styles.simulatorForm} onSubmit={handleSubmit} onChange={markStarted}>
                 <label>
@@ -137,14 +146,14 @@ export function ScheduleSimulator() {
                     {WORK_SCHEDULE_SEGMENTS.map((item) => <option value={item.value} key={item.value}>{item.label}</option>)}
                   </select>
                 </label>
-                <label>
-                  <span>Quantidade de colaboradores que trabalham em escala</span>
-                  <div className={styles.inputSuffix}>
-                    <input type="number" min="1" max="100000" inputMode="numeric" value={employees} onChange={(event) => setEmployees(event.target.value)} required />
-                    <small>colaboradores</small>
-                  </div>
-                </label>
                 <div className={styles.formRow}>
+                  <label>
+                    <span>Quantidade de colaboradores em escala</span>
+                    <div className={styles.inputSuffix}>
+                      <input type="number" min="1" max="100000" inputMode="numeric" value={employees} onChange={(event) => setEmployees(event.target.value)} required />
+                      <small>colaboradores</small>
+                    </div>
+                  </label>
                   <label>
                     <span>Dias de funcionamento semanal</span>
                     <select value={operatingDays} onChange={(event) => setOperatingDays(event.target.value)} required>
@@ -153,24 +162,7 @@ export function ScheduleSimulator() {
                       <option value="7">7 dias</option>
                     </select>
                   </label>
-                  <label>
-                    <span>Escala predominante</span>
-                    <select value={currentScale} onChange={(event) => setCurrentScale(event.target.value)} required>
-                      <option value="6x1">6x1</option>
-                      <option value="5x2">5x2</option>
-                      <option value="mixed">Escalas mistas / outras</option>
-                    </select>
-                  </label>
                 </div>
-                <label>
-                  <span>Jornada semanal predominante</span>
-                  <select value={weeklyHours} onChange={(event) => setWeeklyHours(event.target.value)}>
-                    <option value="44">44 horas</option>
-                    <option value="42">42 horas</option>
-                    <option value="40">40 horas</option>
-                    <option value="36">36 horas</option>
-                  </select>
-                </label>
                 {formError ? <p className={styles.simulatorError} role="alert">{formError}</p> : null}
                 <button className={styles.simulatorButton} type="submit">Simular impacto na minha empresa <ArrowUpRightIcon size={20} /></button>
                 <p className={styles.privacyNote}><span aria-hidden="true"><LockIcon size={13} /></span> Resultado imediato e sem cadastro. Seus dados de contato serão solicitados somente se você quiser falar com a PontoVit.</p>
@@ -193,27 +185,30 @@ export function ScheduleSimulator() {
 
                   <div className={styles.simulatorPhaseDetail} key={selectedPhase}>
                     <article className={styles.simulatorImpact}>
-                      <span>Impacto semanal · limite de {activePhase.legalLimitWeeklyHours}h</span>
-                      <div><strong>{isReduction ? "−" : ""}{formatNumber(difference)}h</strong><em>{isReduction ? `${formatNumber(Math.abs(activePhase.variationPercent), 2)}% de redução` : "sem alteração"}</em></div>
-                      <p>{isReduction
-                        ? `${formatNumber(result.employees)} colaboradores: ${formatNumber(difference)} horas semanais a menos nesta fase.`
-                        : `A jornada atual já está dentro do limite desta fase.`}</p>
+                      <span>Equipe necessária · jornada de {activePhase.simulatedWeeklyHours}h</span>
+                      <div>
+                        <strong>{formatNumber(activePhase.equivalentEmployeesRounded)}</strong>
+                        <span className={`${styles.simulatorGapBadge} ${headcountGap <= 0 ? styles.simulatorGapBadgeOk : ""}`}>
+                          {headcountGap > 0 ? `+${formatNumber(headcountGap)} vagas` : <><CheckIcon size={11} /> sem novas vagas</>}
+                        </span>
+                      </div>
+                      <p>{headcountGap > 0
+                        ? `Hoje: ${formatNumber(result.employees)} colaboradores. Contrate ${formatNumber(headcountGap)} ${headcountGap > 1 ? "pessoas" : "pessoa"} ou redistribua toda a equipe em novos turnos para manter a cobertura.`
+                        : `Hoje: ${formatNumber(result.employees)} colaboradores — já são suficientes. Redistribua os turnos para garantir os 2 dias de descanso por pessoa.`}</p>
                     </article>
 
                     <div className={styles.simulatorBars} aria-label="Comparação da capacidade semanal">
                       <div><span>Atual · {result.weeklyHours}h</span><i><b style={{ width: `${(result.currentCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(result.currentCapacity)}h</strong></div>
                       <div><span>Limite · {activePhase.legalLimitWeeklyHours}h</span><i><b style={{ width: `${(activePhase.simulatedCapacity / largestCapacity) * 100}%` }} /></i><strong>{formatNumber(activePhase.simulatedCapacity)}h</strong></div>
                     </div>
-
-                    <div className={styles.simulatorResultStats}>
-                      <article><span>Equivalência matemática</span><strong>{formatNumber(activePhase.equivalentEmployeesRounded)}</strong><small>colaboradores a {activePhase.simulatedWeeklyHours}h</small></article>
-                      <article><span>Diferença mensal</span><strong>{formatNumber(Math.abs(activePhase.monthlyDifference), 1)}h</strong><small>aproximação nominal</small></article>
-                    </div>
+                    <p className={styles.simulatorMathNote}>{isReduction
+                      ? `${formatNumber(difference)}h a menos por semana nesta fase (${formatNumber(Math.abs(activePhase.variationPercent), 2)}% de redução).`
+                      : "A jornada atual já está dentro do limite desta fase."}</p>
 
                     <div className={styles.simulatorDiagnosis}>
-                      <span>Do cenário à escala pronta</span>
-                      <strong>A PontoVit transforma este impacto em uma escala organizada.</strong>
-                      <p>{getWorkScheduleDiagnosis(result)}</p>
+                      <span>O que isso significa para você</span>
+                      <strong>A PontoVit transforma esse cálculo em uma escala 5x2 pronta para rodar.</strong>
+                      <p>{getWorkScheduleDiagnosis(result, selectedPhase)}</p>
                     </div>
                   </div>
 

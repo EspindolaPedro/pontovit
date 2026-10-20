@@ -87,9 +87,18 @@ test("valida entradas inválidas e aceita 42 horas", () => {
   assert.equal(parseWorkScheduleSimulationInput({ ...baseInput, weeklyHours: 42 }).weeklyHours, 42);
 });
 
-test("personaliza o diagnóstico por dias e escala", () => {
-  assert.match(getWorkScheduleDiagnosis(baseInput), /finais de semana/);
-  assert.match(getWorkScheduleDiagnosis(baseInput), /trabalho, descanso/);
-  assert.match(getWorkScheduleDiagnosis({ ...baseInput, operatingDays: 6, currentScale: "5x2" }), /seis dias/);
-  assert.match(getWorkScheduleDiagnosis({ ...baseInput, operatingDays: 5, currentScale: "mixed" }), /aproximação/);
+test("diagnóstico informa quantos colaboradores a mais são necessários por fase", () => {
+  const result = calculateWorkScheduleImpact(baseInput);
+  assert.match(getWorkScheduleDiagnosis(result, "transition"), /fins de semana/);
+  assert.match(getWorkScheduleDiagnosis(result, "transition"), /2 a mais que hoje/);
+  assert.match(getWorkScheduleDiagnosis(result, "final"), /3 a mais que hoje/);
+
+  const sixDays = calculateWorkScheduleImpact({ ...baseInput, operatingDays: 6 });
+  assert.match(getWorkScheduleDiagnosis(sixDays, "final"), /6 dias de funcionamento/);
+});
+
+test("diagnóstico reconhece quando a equipe atual já é suficiente", () => {
+  const result = calculateWorkScheduleImpact({ ...baseInput, employees: 21, weeklyHours: 42 });
+  assert.equal(result.transition.equivalentEmployeesRounded, 21);
+  assert.match(getWorkScheduleDiagnosis(result, "transition"), /já comporta a jornada/);
 });
