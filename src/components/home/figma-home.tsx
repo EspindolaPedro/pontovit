@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { testimonials } from "@/data/home";
 import { blogPosts, formatPostDate } from "@/data/blog";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { LeadCaptureButton } from "@/components/shared/lead-capture";
 
 const asset = "/assets/figma/";
-const CtaContext = createContext({ label: "Falar no Whatsapp", target: getWhatsAppUrl() });
 
 const legacyClientLogos = [
   ["superdo.jpeg", "Superdó"],
@@ -113,11 +112,11 @@ function PartnerCarousel({ logos = partnerLogos }: { logos?: readonly (readonly 
 
 function ArrowButton({ children = "Falar no Whatsapp", mobileChildren }: { children?: React.ReactNode; mobileChildren?: React.ReactNode }) {
   return (
-    <Link href={useContext(CtaContext).target} target="_blank" rel="noreferrer" className="figma-button">
+    <LeadCaptureButton trigger="home" className="figma-button">
       <span className="figma-button-label figma-button-label-desktop">{children}</span>
       {mobileChildren && <span className="figma-button-label figma-button-label-mobile">{mobileChildren}</span>}
       <span className="figma-button-arrow">↗</span>
-    </Link>
+    </LeadCaptureButton>
   );
 }
 
@@ -632,7 +631,7 @@ function BlogPreviewCarouselV2() {
   );
 }
 
-export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], ctaTarget }: { clientLogosFromCms?: readonly (readonly [string, string])[]; partnerLogosFromCms?: readonly (readonly [string, string])[]; ctaTarget?: string | null }) {
+export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [] }: { clientLogosFromCms?: readonly (readonly [string, string])[]; partnerLogosFromCms?: readonly (readonly [string, string])[] }) {
   const cmsClients = clientLogosFromCms.length ? clientLogosFromCms : clientLogos;
   const cmsPartners = partnerLogosFromCms.length ? partnerLogosFromCms : partnerLogos;
   const videoRef = useRef<HTMLIFrameElement>(null);
@@ -674,7 +673,7 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
   }
 
   return (
-    <CtaContext.Provider value={{ label: "Falar no Whatsapp", target: ctaTarget || getWhatsAppUrl() }}><main className="figma-home">
+    <main className="figma-home">
       <section className="figma-hero">
         <img className="figma-rosette rosette-left" src={`${asset}rosette-left.svg`} alt="" aria-hidden="true" />
         <img className="figma-rosette rosette-right" src={`${asset}rosette-right.svg`} alt="" aria-hidden="true" />
@@ -789,6 +788,6 @@ export function FigmaHome({ clientLogosFromCms = [], partnerLogosFromCms = [], c
         <BlogPreviewCarouselV2 />
       </section>
 
-    </main></CtaContext.Provider>
+    </main>
   );
 }

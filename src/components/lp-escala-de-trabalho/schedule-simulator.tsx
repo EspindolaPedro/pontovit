@@ -11,7 +11,7 @@ import {
   type WorkSchedulePhase,
   type WorkScheduleSimulationResult,
 } from "@/lib/work-schedule-simulation";
-import { useLeadCapture } from "./lead-capture";
+import { useLeadCapture } from "@/components/shared/lead-capture";
 import styles from "./landing-page.module.css";
 
 // A LP é feita para quem ainda está na 6x1 e quer entender a transição para a 5x2:

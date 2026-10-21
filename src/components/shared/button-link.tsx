@@ -1,6 +1,7 @@
 import Link, { type LinkProps } from "next/link";
 import type { AnchorHTMLAttributes } from "react";
 import { ArrowUpRightIcon } from "@/components/shared/icons";
+import { LeadCaptureButton } from "@/components/shared/lead-capture";
 import { cn } from "@/lib/utils";
 
 type ButtonLinkProps = LinkProps & AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -23,5 +24,22 @@ export function ButtonLink({ className, variant = "primary", withArrow = true, c
       {children}
       {withArrow && <ArrowUpRightIcon size={17} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />}
     </Link>
+  );
+}
+
+// Mesmo visual do ButtonLink (variant="primary"), mas abre o formulário de lead em vez
+// de navegar direto — usado nos CTAs "Falar no Whatsapp" espalhados pelas páginas.
+export function WhatsAppButtonLink({ trigger, className, children }: { trigger: string; className?: string; children: React.ReactNode }) {
+  return (
+    <LeadCaptureButton
+      trigger={trigger}
+      className={cn(
+        "pv-button-link group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-5 text-sm font-semibold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 bg-brand text-white hover:-translate-y-0.5 hover:bg-brand-deep",
+        className,
+      )}
+    >
+      {children}
+      <ArrowUpRightIcon size={17} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </LeadCaptureButton>
   );
 }

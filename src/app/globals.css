@@ -233,8 +233,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .site-header.is-mobile-open .site-header-toggle span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
   .site-header-mobile-panel { position: absolute; top: 52px; right: 0; left: 0; display: none; padding: 10px; border: 1px solid rgba(224, 224, 224, .9); border-radius: 22px; background: #fff; box-shadow: 0 20px 45px rgba(22, 29, 34, .15); }
   .site-header.is-mobile-open .site-header-mobile-panel { display: block; }
-  .site-header-mobile-panel > a, .site-header-mobile-panel summary { display: flex; min-height: 44px; align-items: center; justify-content: space-between; padding: 0 14px; border-radius: 12px; color: #555; font-size: 15px; }
-  .site-header-mobile-panel > a:hover, .site-header-mobile-panel summary:hover { background: #fff1e9; color: #f47721; }
+  .site-header-mobile-panel > a, .site-header-mobile-panel > button, .site-header-mobile-panel summary { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; padding: 0 14px; border-radius: 12px; color: #555; font-size: 15px; text-align: left; }
+  .site-header-mobile-panel > a:hover, .site-header-mobile-panel > button:hover, .site-header-mobile-panel summary:hover { background: #fff1e9; color: #f47721; }
   .site-header-mobile-panel details { border-top: 1px solid #f0f0f0; }
   .site-header-mobile-panel details:first-of-type { margin-top: 4px; }
   .site-header-mobile-panel summary { cursor: pointer; list-style: none; }

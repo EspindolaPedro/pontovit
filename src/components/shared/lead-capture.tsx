@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useId, useRef, useState } from "r
 import { createPortal } from "react-dom";
 import { ArrowUpRightIcon, CloseIcon, LockIcon } from "@/components/shared/icons";
 import { getWorkScheduleSegment, type WorkScheduleSimulationInput } from "@/lib/work-schedule-simulation";
-import styles from "./landing-page.module.css";
+import styles from "./lead-capture.module.css";
 
 export type LeadSimulationData = WorkScheduleSimulationInput;
 
@@ -19,6 +19,8 @@ export function useLeadCapture() {
   return context;
 }
 
+// Provider único, montado em SiteChrome: todo botão "Falar no Whatsapp" do site passa
+// por aqui antes de redirecionar, para sempre coletarmos nome/telefone/e-mail do lead.
 export function LeadCaptureProvider({ children }: { children: React.ReactNode }) {
   const [request, setRequest] = useState<CaptureRequest | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -28,22 +30,6 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
   const titleId = useId();
 
   useEffect(() => setMounted(true), []);
-  useEffect(() => {
-    // Captura também o CTA do header/footer globais (fora da árvore deste provider):
-    // qualquer link com data-lp-lead passa pelo formulário antes do WhatsApp, enquanto
-    // esta LP estiver montada (o listener some ao navegar para outra página).
-    function captureSiteChromeWhatsApp(event: MouseEvent) {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      const link = target.closest<HTMLAnchorElement>("a[data-lp-lead]");
-      if (!link) return;
-      event.preventDefault();
-      setError("");
-      setRequest({ trigger: link.dataset.lpLead || "header" });
-    }
-    document.addEventListener("click", captureSiteChromeWhatsApp);
-    return () => document.removeEventListener("click", captureSiteChromeWhatsApp);
-  }, []);
   useEffect(() => {
     if (!request) return;
     const previousOverflow = document.body.style.overflow;
@@ -98,7 +84,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
       if (!response.ok || !data.redirectUrl) throw new Error(data.message || "Não foi possível salvar seus dados.");
 
       const analyticsWindow = window as typeof window & { dataLayer?: Record<string, unknown>[] };
-      analyticsWindow.dataLayer?.push({ event: "lp_5x2_lead", lead_trigger: request.trigger, has_simulation: Boolean(request.simulation) });
+      analyticsWindow.dataLayer?.push({ event: "lead_form_submitted", lead_trigger: request.trigger, has_simulation: Boolean(request.simulation) });
       window.location.assign(data.redirectUrl);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Não foi possível continuar. Tente novamente.");
@@ -112,7 +98,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
         <button className={styles.leadModalClose} type="button" onClick={() => setRequest(null)} disabled={submitting} aria-label="Fechar formulário"><CloseIcon size={20} /></button>
         <div className={styles.leadModalIntro}>
           <p className={styles.eyebrow}>Próximo passo</p>
-          <h2 id={titleId}>Vamos planejar sua escala 5x2.</h2>
+          <h2 id={titleId}>{request.simulation ? "Vamos planejar sua escala 5x2." : "Vamos continuar no WhatsApp."}</h2>
           <p>Preencha seus dados para salvar o interesse e conversar com a equipe da PontoVit pelo WhatsApp.</p>
           {request.simulation ? <span>Diagnóstico de {request.simulation.employees.toLocaleString("pt-BR")} colaboradores em {getWorkScheduleSegment(request.simulation).label} vinculado a este contato.</span> : null}
         </div>
@@ -123,7 +109,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
           <label className={styles.leadHoneypot} aria-hidden="true">Não preencha<input name="website" tabIndex={-1} autoComplete="off" /></label>
           {error ? <p className={styles.leadFormError} role="alert">{error}</p> : null}
           <button type="submit" disabled={submitting}>{submitting ? "Salvando seus dados..." : "Continuar pelo WhatsApp"}<ArrowUpRightIcon size={20} /></button>
-          <small><LockIcon size={13} /> Seus dados e a simulação serão usados pela PontoVit para contextualizar o atendimento desta solicitação.</small>
+          <small><LockIcon size={13} /> Seus dados serão usados pela PontoVit para contextualizar o atendimento desta solicitação.</small>
         </form>
       </section>
     </div>
@@ -137,7 +123,9 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
   );
 }
 
-export function LeadCaptureButton({ trigger, className, children }: { trigger: string; className?: string; children: React.ReactNode }) {
+// Botão genérico "Falar no Whatsapp": mantenha o className de cada CTA existente para
+// preservar o visual (border/background/font já vêm resetados pelo preflight do Tailwind).
+export function LeadCaptureButton({ trigger, simulation, className, children, onClick }: { trigger: string; simulation?: LeadSimulationData; className?: string; children: React.ReactNode; onClick?: () => void }) {
   const { openLeadCapture } = useLeadCapture();
-  return <button className={className} type="button" onClick={() => openLeadCapture({ trigger })}>{children}</button>;
+  return <button type="button" className={`${styles.triggerReset}${className ? ` ${className}` : ""}`} onClick={() => { onClick?.(); openLeadCapture({ trigger, simulation }); }}>{children}</button>;
 }

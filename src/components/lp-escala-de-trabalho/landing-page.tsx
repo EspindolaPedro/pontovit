@@ -3,7 +3,7 @@ import { testimonials } from "@/data/home";
 import { ArrowRightIcon, ArrowUpRightIcon, BuildingIcon, CheckIcon, FuelIcon, QuoteIcon, RestaurantIcon, StoreIcon, XIcon } from "@/components/shared/icons";
 import { ApprovalIcon, CalendarIcon, ChartIcon, CompanyIcon, LayersIcon, NetworkIcon, UsersIcon } from "@/components/shared/feature-icons";
 import { ScheduleSimulator } from "./schedule-simulator";
-import { LeadCaptureButton, LeadCaptureProvider } from "./lead-capture";
+import { LeadCaptureButton } from "@/components/shared/lead-capture";
 import styles from "./landing-page.module.css";
 
 type ClientLogo = { src: string; alt: string };
@@ -52,7 +52,6 @@ export function WorkScheduleLandingPage({ clientLogos }: { clientLogos: ClientLo
   const loopedLogos = [...clientLogos, ...clientLogos];
 
   return (
-    <LeadCaptureProvider>
     <main className={styles.page}>
       <ScheduleSimulator />
 
@@ -185,6 +184,5 @@ export function WorkScheduleLandingPage({ clientLogos }: { clientLogos: ClientLo
         </div>
       </section>
     </main>
-    </LeadCaptureProvider>
   );
 }

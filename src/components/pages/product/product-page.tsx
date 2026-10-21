@@ -2,9 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/container";
 import { PageHero } from "@/components/shared/page-hero";
-import { ButtonLink } from "@/components/shared/button-link";
+import { WhatsAppButtonLink } from "@/components/shared/button-link";
 import { Reveal } from "@/components/shared/reveal";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { ArrowUpRightIcon } from "@/components/shared/icons";
 import { escalasBenefits, escalasIntro, scaleTypes } from "@/data/home";
 import { absoluteUrl } from "@/lib/seo";
@@ -34,9 +33,7 @@ const stages = [
   ["Impressão", "Gere e compartilhe a escala final com as equipes de forma simples."],
 ] as const;
 
-export function ProductPage({ ctaTarget }: { ctaTarget?: string | null }) {
-  const whatsapp = ctaTarget || getWhatsAppUrl();
-
+export function ProductPage() {
   return (
     <main className="pv-page pv-product-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
@@ -54,7 +51,7 @@ export function ProductPage({ ctaTarget }: { ctaTarget?: string | null }) {
               <h2>{escalasIntro.oPontoVit[0]}</h2>
               <p>{escalasIntro.oPontoVit[1]}</p>
               <p>{escalasIntro.oPontoVit[2]}</p>
-              <ButtonLink href={whatsapp} target="_blank" rel="noreferrer" className="mt-8">Falar no Whatsapp</ButtonLink>
+              <WhatsAppButtonLink trigger="product_intro" className="mt-8">Falar no Whatsapp</WhatsAppButtonLink>
             </div>
           </Reveal>
         </Container>
@@ -139,7 +136,7 @@ export function ProductPage({ ctaTarget }: { ctaTarget?: string | null }) {
               <p className="eyebrow">O sistema via Web</p>
               <h2>Tecnologia Software as a Service.</h2>
               <p>{escalasIntro.sistemaViaWeb}</p>
-              <ButtonLink href={whatsapp} target="_blank" rel="noreferrer" className="mt-8">Falar com um especialista</ButtonLink>
+              <WhatsAppButtonLink trigger="product_access" className="mt-8">Falar com um especialista</WhatsAppButtonLink>
             </div>
           </Reveal>
         </Container>

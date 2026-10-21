@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/container";
 import { PageHero } from "@/components/shared/page-hero";
-import { ButtonLink } from "@/components/shared/button-link";
+import { WhatsAppButtonLink } from "@/components/shared/button-link";
 import { Reveal } from "@/components/shared/reveal";
 import { ScrollTimeline } from "@/components/shared/scroll-timeline";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { CompanyIcon, UsersIcon } from "@/components/shared/feature-icons";
 import { aboutAudience, aboutPurpose, aboutTimeline } from "@/data/home";
 import { absoluteUrl } from "@/lib/seo";
@@ -18,7 +17,7 @@ const breadcrumbJsonLd = {
   ],
 };
 
-export function AboutPage({ ctaTarget }: { ctaTarget?: string | null }) {
+export function AboutPage() {
   return (
     <main className="pv-page pv-about-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
@@ -57,7 +56,7 @@ export function AboutPage({ ctaTarget }: { ctaTarget?: string | null }) {
               <h2>{aboutPurpose.title}</h2>
               <p>{aboutPurpose.text}</p>
               <p>Estamos aqui para tornar essa tarefa mais fácil e, o que é ainda mais importante, para proporcionar harmonia onde antes reinavam conflitos e muito estresse.</p>
-              <ButtonLink href={ctaTarget || getWhatsAppUrl()} target="_blank" rel="noreferrer" className="mt-8">Conhecer a PontoVit</ButtonLink>
+              <WhatsAppButtonLink trigger="about_page" className="mt-8">Conhecer a PontoVit</WhatsAppButtonLink>
             </Reveal>
           </div>
         </Container>

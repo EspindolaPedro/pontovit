@@ -47,6 +47,7 @@ type LeadResult = {
 
 const triggerLabels: Record<string, string> = {
   header: "Header",
+  footer: "Rodapé",
   simulator: "Simulador",
   simulation_result: "Resultado da simulação",
   platform: "Apresentação da plataforma",
@@ -54,6 +55,11 @@ const triggerLabels: Record<string, string> = {
   segments: "Segmentos",
   proof: "Prova social",
   final_cta: "CTA final",
+  home: "Home",
+  product_intro: "Página de escalas (intro)",
+  product_access: "Página de escalas (SaaS)",
+  about_page: "Quem somos",
+  blog_sidebar: "Blog",
 };
 
 function buildParams(page: number, query: string, scale: string, pageSize = 25) {

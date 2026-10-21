@@ -7,7 +7,11 @@ import { getPublicSettings } from "@/server/modules/settings/settings.service";
 import { assertPublicFormAllowed, registerPublicFormAttempt } from "@/server/security/rate-limit";
 import { WorkScheduleLeadSchema } from "@/server/validation/common";
 
-const WHATSAPP_MESSAGE = "Gostaria de automatizar a minha escala para a 5x2";
+// Esse endpoint hoje recebe o lead de qualquer CTA "Falar no Whatsapp" do site, não só
+// do simulador da 5x2 — por isso a mensagem padrão é genérica, e só menciona a 5x2
+// quando o pedido realmente carrega uma simulação.
+const DEFAULT_WHATSAPP_MESSAGE = "Olá! Gostaria de falar com a equipe da PontoVit.";
+const SIMULATION_WHATSAPP_MESSAGE = "Gostaria de automatizar a minha escala para a 5x2";
 
 function getClientKey(request: Request) {
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
@@ -26,7 +30,8 @@ export async function POST(request: Request) {
     const simulationContext = body.simulation && simulationResult
       ? `\n\nMinha simulação: ${getWorkScheduleSegment(body.simulation).label}, ${body.simulation.employees} colaboradores, ${body.simulation.operatingDays} dias por semana, ${getScaleLabel(body.simulation.currentScale)}, ${body.simulation.weeklyHours}h atuais. Impacto estimado: ${Math.abs(simulationResult.transition.differenceHours).toLocaleString("pt-BR")}h/semana na fase de 42h e ${Math.abs(simulationResult.final.differenceHours).toLocaleString("pt-BR")}h/semana na fase de 40h.`
       : "";
-    const redirectUrl = `${baseTarget}?text=${encodeURIComponent(`${WHATSAPP_MESSAGE}${simulationContext}`)}`;
+    const baseMessage = body.simulation ? SIMULATION_WHATSAPP_MESSAGE : DEFAULT_WHATSAPP_MESSAGE;
+    const redirectUrl = `${baseTarget}?text=${encodeURIComponent(`${baseMessage}${simulationContext}`)}`;
 
     if (body.website) return NextResponse.json({ ok: true, redirectUrl });
 
