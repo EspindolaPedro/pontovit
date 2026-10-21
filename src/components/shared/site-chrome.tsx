@@ -42,6 +42,10 @@ export function SiteChrome({ settings, headerCode, footerCode, children }: { set
   // O cartão virtual (/magno) é uma mini-página standalone (link in bio), sem header/footer do site.
   if (pathname.startsWith("/magno")) return <>{children}</>;
 
+  // A LP da escala 5x2 trava a navegação: o rodapé perde os links de menu e o CTA
+  // de WhatsApp passa pelo mesmo formulário de lead do simulador.
+  const isLockedLp = pathname === "/lp-escala-de-trabalho";
+
   const renderCode = (item: CodeItem) => (
     <span
       key={item.id}
@@ -57,7 +61,7 @@ export function SiteChrome({ settings, headerCode, footerCode, children }: { set
       {headerCode.map(renderCode)}
       <SiteHeader ctaLabel={normalizeCtaLabel(settings.cta?.headerLabel)} ctaTarget={settings.cta?.target} logoMediaId={settings.site?.logoMediaId} />
       {children}
-      <SiteFooter settings={settings} />
+      <SiteFooter settings={settings} locked={isLockedLp} />
       {footerCode.map(renderCode)}
     </>
   );

@@ -29,17 +29,20 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    function captureHeaderWhatsApp(event: MouseEvent) {
+    // Captura também o CTA do header/footer globais (fora da árvore deste provider):
+    // qualquer link com data-lp-lead passa pelo formulário antes do WhatsApp, enquanto
+    // esta LP estiver montada (o listener some ao navegar para outra página).
+    function captureSiteChromeWhatsApp(event: MouseEvent) {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const link = target.closest<HTMLAnchorElement>("header.site-header a[data-lp-lead='header']");
+      const link = target.closest<HTMLAnchorElement>("a[data-lp-lead]");
       if (!link) return;
       event.preventDefault();
       setError("");
-      setRequest({ trigger: "header" });
+      setRequest({ trigger: link.dataset.lpLead || "header" });
     }
-    document.addEventListener("click", captureHeaderWhatsApp);
-    return () => document.removeEventListener("click", captureHeaderWhatsApp);
+    document.addEventListener("click", captureSiteChromeWhatsApp);
+    return () => document.removeEventListener("click", captureSiteChromeWhatsApp);
   }, []);
   useEffect(() => {
     if (!request) return;
