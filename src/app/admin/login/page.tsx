@@ -2,11 +2,13 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AdminIcon } from "@/components/admin/admin-icons";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,7 +40,12 @@ export default function AdminLoginPage() {
         <p className="pv-admin-login-description">Entre para gerenciar conteúdo, SEO, marcas e configurações do site.</p>
         <form onSubmit={submit} className="pv-admin-form">
           <label>E-mail<input name="email" type="email" autoComplete="email" required /></label>
-          <label>Senha<input name="password" type="password" autoComplete="current-password" required /></label>
+          <label>Senha
+            <div className="pv-admin-password-field">
+              <input name="password" type={showPassword ? "text" : "password"} autoComplete="current-password" required />
+              <button type="button" className="pv-admin-password-toggle" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}><AdminIcon name={showPassword ? "eyeOff" : "eye"} /></button>
+            </div>
+          </label>
           {error ? <p className="pv-admin-error" role="alert">{error}</p> : null}
           <button type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar no CMS"}</button>
         </form>

@@ -150,6 +150,10 @@ export const UserCreateSchema = z.object({
   role: z.enum(["OWNER", "ADMIN", "EDITOR", "AUTHOR"]).default("AUTHOR"),
 });
 
+export const UserPasswordUpdateSchema = z.object({
+  password: z.string().min(12).max(128),
+});
+
 export const ApiKeyCreateSchema = z.object({
   name: text(100, 2),
   scopes: z.array(z.enum(["posts:read", "posts:write", "posts:delete", "media:write"])).min(1).max(10),

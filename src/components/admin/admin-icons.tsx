@@ -1,4 +1,4 @@
-export type AdminIconName = "overview" | "content" | "media" | "brand" | "leads" | "settings" | "access" | "plus" | "close" | "upload" | "arrow" | "trash" | "chevron";
+export type AdminIconName = "overview" | "content" | "media" | "brand" | "leads" | "settings" | "access" | "plus" | "close" | "upload" | "arrow" | "trash" | "chevron" | "eye" | "eyeOff" | "key";
 
 const iconPaths: Record<AdminIconName, React.ReactNode> = {
   overview: <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></>,
@@ -14,6 +14,9 @@ const iconPaths: Record<AdminIconName, React.ReactNode> = {
   arrow: <path d="M6 12h12M13 7l5 5-5 5" />,
   trash: <><path d="M5 7h14M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2" /><path d="M6.5 7 7.3 19a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7" /><path d="M10.3 11v6M13.7 11v6" /></>,
   chevron: <path d="m9 6 6 6-6 6" />,
+  eye: <><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></>,
+  eyeOff: <><path d="M3 3l18 18" /><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a14.7 14.7 0 0 1-3.2 4.1M6.5 6.6C4 8.3 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.4-1" /><path d="M9.5 9.8A3 3 0 0 0 12 15a3 3 0 0 0 2.2-.9" /></>,
+  key: <><circle cx="8" cy="15" r="4.5" /><path d="M11.5 11.5 20 3M16.5 6.5 19 9M13.5 9.5 16 12" /></>,
 };
 
 export function AdminIcon({ name, className }: { name: AdminIconName; className?: string }) {

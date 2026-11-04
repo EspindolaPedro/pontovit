@@ -45,6 +45,12 @@ export default function UsersPage() {
   const [createdKey, setCreatedKey] = useState("");
   const [copyMessage, setCopyMessage] = useState("");
   const [error, setError] = useState("");
+  const [showUserPassword, setShowUserPassword] = useState(false);
+  const [passwordTarget, setPasswordTarget] = useState<User | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -95,6 +101,50 @@ export default function UsersPage() {
       return;
     }
     await load();
+  }
+
+  async function deleteUser(user: User) {
+    setError("");
+    if (!window.confirm(`Excluir o usuário "${user.name}"? Essa ação não pode ser desfeita.`)) return;
+    const response = await fetch(`/api/admin/users/${user.id}`, { method: "DELETE" });
+    if (!response.ok) {
+      const result = await response.json();
+      setError(result.message || "Não foi possível excluir o usuário.");
+      return;
+    }
+    await load();
+  }
+
+  function openPasswordModal(user: User) {
+    setPasswordError("");
+    setNewPassword("");
+    setShowNewPassword(false);
+    setPasswordTarget(user);
+  }
+
+  function closePasswordModal() {
+    setPasswordTarget(null);
+    setNewPassword("");
+    setPasswordError("");
+  }
+
+  async function savePassword(event: React.FormEvent) {
+    event.preventDefault();
+    if (!passwordTarget) return;
+    setPasswordError("");
+    setPasswordSaving(true);
+    const response = await fetch(`/api/admin/users/${passwordTarget.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: newPassword }),
+    });
+    setPasswordSaving(false);
+    if (!response.ok) {
+      const result = await response.json();
+      setPasswordError(result.message || "Não foi possível alterar a senha.");
+      return;
+    }
+    closePasswordModal();
   }
 
   function toggleScope(scope: ApiScope) {
@@ -161,7 +211,7 @@ export default function UsersPage() {
 
     <section className="pv-admin-access-section">
       <header><div><p className="pv-admin-eyebrow">Equipe</p><h2>Usuários do CMS</h2></div></header>
-      <div className="pv-admin-table-wrap"><table className="pv-admin-table"><thead><tr><th>Nome</th><th>E-mail</th><th>Permissão</th><th>Status</th><th /></tr></thead><tbody>{users.map((user) => <tr key={user.id}><td><strong>{user.name}</strong></td><td>{user.email}</td><td>{user.role}</td><td><span className={`pv-admin-status ${user.isActive ? "is-published" : "is-archived"}`}>{user.isActive ? "Ativo" : "Inativo"}</span></td><td><button className="pv-admin-delete" onClick={() => void toggleUser(user)}>{user.isActive ? "Desativar" : "Ativar"}</button></td></tr>)}</tbody></table>{!users.length ? <p className="pv-admin-empty">Nenhum usuário cadastrado.</p> : null}</div>
+      <div className="pv-admin-table-wrap"><table className="pv-admin-table"><thead><tr><th>Nome</th><th>E-mail</th><th>Permissão</th><th>Status</th><th /></tr></thead><tbody>{users.map((user) => <tr key={user.id}><td><strong>{user.name}</strong></td><td>{user.email}</td><td>{user.role}</td><td><span className={`pv-admin-status ${user.isActive ? "is-published" : "is-archived"}`}>{user.isActive ? "Ativo" : "Inativo"}</span></td><td className="pv-admin-row-actions"><button className="pv-admin-link-action" onClick={() => openPasswordModal(user)}><AdminIcon name="key" />Trocar senha</button><button className="pv-admin-delete" onClick={() => void toggleUser(user)}>{user.isActive ? "Desativar" : "Ativar"}</button><button className="pv-admin-delete" onClick={() => void deleteUser(user)}><AdminIcon name="trash" />Excluir</button></td></tr>)}</tbody></table>{!users.length ? <p className="pv-admin-empty">Nenhum usuário cadastrado.</p> : null}</div>
     </section>
 
     <section className="pv-admin-access-section">
@@ -173,9 +223,27 @@ export default function UsersPage() {
       <form className="pv-admin-user-form" onSubmit={createUser}>
         <label className="pv-admin-modal-field">Nome<input value={userForm.name} onChange={(event) => setUserForm({ ...userForm, name: event.target.value })} placeholder="Nome completo" required /></label>
         <label className="pv-admin-modal-field">E-mail<input type="email" value={userForm.email} onChange={(event) => setUserForm({ ...userForm, email: event.target.value })} placeholder="email@empresa.com" required /></label>
-        <label className="pv-admin-modal-field">Senha<input type="password" value={userForm.password} onChange={(event) => setUserForm({ ...userForm, password: event.target.value })} placeholder="Mínimo de 12 caracteres" minLength={12} required /></label>
+        <label className="pv-admin-modal-field">Senha
+          <div className="pv-admin-password-field">
+            <input type={showUserPassword ? "text" : "password"} value={userForm.password} onChange={(event) => setUserForm({ ...userForm, password: event.target.value })} placeholder="Mínimo de 12 caracteres" minLength={12} required />
+            <button type="button" className="pv-admin-password-toggle" onClick={() => setShowUserPassword((value) => !value)} aria-label={showUserPassword ? "Ocultar senha" : "Mostrar senha"}><AdminIcon name={showUserPassword ? "eyeOff" : "eye"} /></button>
+          </div>
+        </label>
         <label className="pv-admin-modal-field">Permissão<select value={userForm.role} onChange={(event) => setUserForm({ ...userForm, role: event.target.value })}><option value="AUTHOR">Autor</option><option value="EDITOR">Editor</option><option value="ADMIN">Administrador</option></select></label>
         <button className="pv-admin-primary-action"><AdminIcon name="plus" />Criar usuário</button>
+      </form>
+    </AdminModal>
+
+    <AdminModal open={Boolean(passwordTarget)} title="Trocar senha" description={passwordTarget ? `Defina uma nova senha para ${passwordTarget.name}.` : undefined} onClose={closePasswordModal}>
+      <form className="pv-admin-user-form" onSubmit={savePassword}>
+        <label className="pv-admin-modal-field">Nova senha
+          <div className="pv-admin-password-field">
+            <input type={showNewPassword ? "text" : "password"} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Mínimo de 12 caracteres" minLength={12} required autoFocus />
+            <button type="button" className="pv-admin-password-toggle" onClick={() => setShowNewPassword((value) => !value)} aria-label={showNewPassword ? "Ocultar senha" : "Mostrar senha"}><AdminIcon name={showNewPassword ? "eyeOff" : "eye"} /></button>
+          </div>
+        </label>
+        {passwordError ? <p className="pv-admin-error">{passwordError}</p> : null}
+        <button className="pv-admin-primary-action" disabled={passwordSaving}><AdminIcon name="key" />{passwordSaving ? "Salvando..." : "Salvar nova senha"}</button>
       </form>
     </AdminModal>
 

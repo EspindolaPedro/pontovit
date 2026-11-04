@@ -2480,6 +2480,7 @@ body {
 .pv-admin-status.is-published { background: #e6f6eb; color: #24743f; }
 .pv-admin-status.is-draft { background: #fff2dc; color: #aa6200; }
 .pv-admin-status.is-archived { background: #eceeed; color: #737a77; }
+.pv-admin-status.is-ads { background: #e8f0fe; color: #1a56db; }
 .pv-admin-delete { border: 0; background: none; color: #b42318; cursor: pointer; font: inherit; font-size: 11px; }
 .pv-admin-empty { padding: 40px 20px; color: var(--pv-muted); font-size: 13px; text-align: center; }
 .pv-admin-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-top: 18px; color: var(--pv-muted); font-size: 12px; }
@@ -3484,6 +3485,16 @@ body {
 .pv-admin-modal-field input, .pv-admin-modal-field select { height: 43px; }
 .pv-admin-modal-field textarea { min-height: 90px; resize: vertical; }
 .pv-admin-modal-field input:focus, .pv-admin-modal-field select:focus, .pv-admin-modal-field textarea:focus { border-color: var(--pv-orange); box-shadow: 0 0 0 3px rgba(237, 129, 7, .12); }
+
+.pv-admin-password-field { position: relative; }
+.pv-admin-password-field input { padding-right: 42px; }
+.pv-admin-password-toggle { position: absolute; top: 50%; right: 6px; display: grid; width: 30px; height: 30px; transform: translateY(-50%); place-items: center; border: 0; border-radius: 7px; background: transparent; color: #8a8f8c; cursor: pointer; }
+.pv-admin-password-toggle:hover { background: #f1f2f1; color: var(--pv-ink); }
+
+.pv-admin-row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.pv-admin-row-actions button { display: inline-flex; align-items: center; gap: 5px; }
+.pv-admin-link-action { border: 0; background: none; color: var(--pv-muted); cursor: pointer; font: inherit; font-size: 11px; }
+.pv-admin-link-action:hover { color: var(--pv-orange-deep); }
 .pv-admin-settings-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
 .pv-admin-settings-cards article { min-height: 220px; padding: 22px; border: 1px solid #dfe3df; border-radius: 13px; background: #fff; box-shadow: 0 8px 24px rgba(24, 29, 33, .035); }
 .pv-admin-settings-cards h2 { margin: 10px 0 22px; color: var(--pv-ink); font-family: var(--pv-font-display); font-size: 24px; letter-spacing: -.04em; }
@@ -4425,6 +4436,8 @@ body {
 .pv-admin-lead-table th:nth-child(4) { width: 42%; }
 .pv-admin-lead-contact a { display: block; margin-top: 5px; color: #777f7b !important; }
 .pv-admin-lead-contact a:hover { color: var(--pv-orange-deep) !important; text-decoration: underline; }
+.pv-admin-lead-origin { display: grid; gap: 5px; align-content: start; }
+.pv-admin-lead-origin .pv-admin-status { justify-self: start; }
 .pv-admin-lead-simulation strong { color: var(--pv-ink); }
 .pv-admin-lead-simulation small { white-space: normal; line-height: 1.5; }
 

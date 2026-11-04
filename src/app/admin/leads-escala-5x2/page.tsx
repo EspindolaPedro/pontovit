@@ -62,6 +62,18 @@ const triggerLabels: Record<string, string> = {
   blog_sidebar: "Blog",
 };
 
+const PAID_MEDIUM_PATTERN = /cpc|ppc|paid|ads?$/i;
+const PAID_SOURCE_PATTERN = /google|meta|facebook|instagram|tiktok|linkedin|bing/i;
+
+function getLeadSource(lead: WorkScheduleLead) {
+  if (!lead.utmSource && !lead.utmMedium && !lead.utmCampaign) {
+    return { label: "Direto / orgânico", isPaid: false };
+  }
+  const isPaid = PAID_MEDIUM_PATTERN.test(lead.utmMedium || "") || (PAID_SOURCE_PATTERN.test(lead.utmSource || "") && lead.utmMedium !== "organic");
+  const parts = [lead.utmSource, lead.utmMedium, lead.utmCampaign].filter(Boolean);
+  return { label: parts.join(" · ") || "Origem desconhecida", isPaid };
+}
+
 function buildParams(page: number, query: string, scale: string, pageSize = 25) {
   const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
   if (query.trim()) params.set("q", query.trim());
@@ -228,7 +240,10 @@ export default function WorkScheduleLeadsPage() {
               <tr key={lead.id}>
                 <td><strong>{new Date(lead.createdAt).toLocaleDateString("pt-BR")}</strong><small>{new Date(lead.createdAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</small></td>
                 <td className="pv-admin-lead-contact"><strong>{lead.name}</strong><a href={`tel:${lead.phone.replace(/\D/g, "")}`}>{lead.phone}</a><a href={`mailto:${lead.email}`}>{lead.email}</a></td>
-                <td><span className="pv-admin-status is-draft">{triggerLabels[lead.trigger] || lead.trigger}</span></td>
+                <td className="pv-admin-lead-origin">
+                  <span className="pv-admin-status is-draft">{triggerLabels[lead.trigger] || lead.trigger}</span>
+                  <span className={`pv-admin-status ${getLeadSource(lead).isPaid ? "is-ads" : "is-archived"}`}>{getLeadSource(lead).label}</span>
+                </td>
                 <td>
                   <LeadSimulationSummary lead={lead} />
                 </td>

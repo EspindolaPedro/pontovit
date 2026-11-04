@@ -13,6 +13,49 @@ type LeadCaptureContextValue = { openLeadCapture: (request: CaptureRequest) => v
 
 const LeadCaptureContext = createContext<LeadCaptureContextValue | null>(null);
 
+type StoredAttribution = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  pageUrl?: string;
+  referrer?: string;
+};
+
+const ATTRIBUTION_STORAGE_KEY = "pv_lead_attribution";
+
+// Captura utm_source/medium/campaign (e a página/referrer de entrada) só na primeira
+// vez que o visitante aparece nesta aba, e guarda na sessão. Sem isso, um lead que
+// clica num anúncio, navega por outras páginas e só depois preenche o formulário
+// perderia a origem — o formulário leria a URL do momento do clique, sem UTM nenhum.
+function captureAttributionOnce(): StoredAttribution | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const existing = window.sessionStorage.getItem(ATTRIBUTION_STORAGE_KEY);
+    if (existing) return JSON.parse(existing) as StoredAttribution;
+  } catch {
+    // sessionStorage indisponível (modo privado, política de cookies etc.)
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const attribution: StoredAttribution = {
+    utmSource: params.get("utm_source") || undefined,
+    utmMedium: params.get("utm_medium") || undefined,
+    utmCampaign: params.get("utm_campaign") || undefined,
+    utmTerm: params.get("utm_term") || undefined,
+    utmContent: params.get("utm_content") || undefined,
+    pageUrl: window.location.href,
+    referrer: document.referrer || undefined,
+  };
+  try {
+    window.sessionStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(attribution));
+  } catch {
+    // ignora — pior caso, usamos a atribuição só em memória para esta sessão
+  }
+  return attribution;
+}
+
 export function useLeadCapture() {
   const context = useContext(LeadCaptureContext);
   if (!context) throw new Error("useLeadCapture must be used inside LeadCaptureProvider");
@@ -29,7 +72,7 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
   const nameInputRef = useRef<HTMLInputElement>(null);
   const titleId = useId();
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => { setMounted(true); captureAttributionOnce(); }, []);
   useEffect(() => {
     if (!request) return;
     const previousOverflow = document.body.style.overflow;
@@ -56,7 +99,10 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
     setSubmitting(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const searchParams = new URLSearchParams(window.location.search);
+    // Usa a atribuição capturada na entrada do visitante (ver captureAttributionOnce),
+    // caindo para a URL atual só se por algum motivo nada foi guardado antes.
+    const storedAttribution = captureAttributionOnce();
+    const currentParams = new URLSearchParams(window.location.search);
 
     try {
       const response = await fetch("/api/leads/work-schedule", {
@@ -70,13 +116,13 @@ export function LeadCaptureProvider({ children }: { children: React.ReactNode })
           trigger: request.trigger,
           simulation: request.simulation,
           attribution: {
-            utmSource: searchParams.get("utm_source") || undefined,
-            utmMedium: searchParams.get("utm_medium") || undefined,
-            utmCampaign: searchParams.get("utm_campaign") || undefined,
-            utmTerm: searchParams.get("utm_term") || undefined,
-            utmContent: searchParams.get("utm_content") || undefined,
-            pageUrl: window.location.href,
-            referrer: document.referrer || undefined,
+            utmSource: storedAttribution?.utmSource || currentParams.get("utm_source") || undefined,
+            utmMedium: storedAttribution?.utmMedium || currentParams.get("utm_medium") || undefined,
+            utmCampaign: storedAttribution?.utmCampaign || currentParams.get("utm_campaign") || undefined,
+            utmTerm: storedAttribution?.utmTerm || currentParams.get("utm_term") || undefined,
+            utmContent: storedAttribution?.utmContent || currentParams.get("utm_content") || undefined,
+            pageUrl: storedAttribution?.pageUrl || window.location.href,
+            referrer: storedAttribution?.referrer || document.referrer || undefined,
           },
         }),
       });
