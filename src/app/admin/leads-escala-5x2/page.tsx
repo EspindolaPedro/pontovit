@@ -243,6 +243,7 @@ export default function WorkScheduleLeadsPage() {
                 <td className="pv-admin-lead-origin">
                   <span className="pv-admin-status is-draft">{triggerLabels[lead.trigger] || lead.trigger}</span>
                   <span className={`pv-admin-status ${getLeadSource(lead).isPaid ? "is-ads" : "is-archived"}`}>{getLeadSource(lead).label}</span>
+                  {lead.utmContent ? <small>Criativo: {lead.utmContent}</small> : null}
                 </td>
                 <td>
                   <LeadSimulationSummary lead={lead} />

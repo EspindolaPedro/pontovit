@@ -3488,8 +3488,8 @@ body {
 
 .pv-admin-password-field { position: relative; }
 .pv-admin-password-field input { padding-right: 42px; }
-.pv-admin-password-toggle { position: absolute; top: 50%; right: 6px; display: grid; width: 30px; height: 30px; transform: translateY(-50%); place-items: center; border: 0; border-radius: 7px; background: transparent; color: #8a8f8c; cursor: pointer; }
-.pv-admin-password-toggle:hover { background: #f1f2f1; color: var(--pv-ink); }
+.pv-admin-password-field .pv-admin-password-toggle { position: absolute; top: 50%; right: 6px; display: grid; width: 30px; height: 30px; transform: translateY(-50%); place-items: center; border: 0; border-radius: 7px; background: transparent; color: #8a8f8c; cursor: pointer; }
+.pv-admin-password-field .pv-admin-password-toggle:hover { background: #f1f2f1; color: var(--pv-ink); }
 
 .pv-admin-row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .pv-admin-row-actions button { display: inline-flex; align-items: center; gap: 5px; }
