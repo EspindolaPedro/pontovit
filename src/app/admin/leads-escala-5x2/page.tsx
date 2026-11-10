@@ -244,6 +244,8 @@ export default function WorkScheduleLeadsPage() {
                   <span className="pv-admin-status is-draft">{triggerLabels[lead.trigger] || lead.trigger}</span>
                   <span className={`pv-admin-status ${getLeadSource(lead).isPaid ? "is-ads" : "is-archived"}`}>{getLeadSource(lead).label}</span>
                   {lead.utmContent ? <small>Criativo: {lead.utmContent}</small> : null}
+                  {lead.pageUrl ? <a className="pv-admin-lead-page-url" href={lead.pageUrl} target="_blank" rel="noopener noreferrer" title={lead.pageUrl}>{lead.pageUrl.replace(/^https?:\/\//, "")}</a> : null}
+                  {lead.referrer ? <small title={lead.referrer}>Veio de: {lead.referrer.replace(/^https?:\/\//, "").split("/")[0]}</small> : null}
                 </td>
                 <td>
                   <LeadSimulationSummary lead={lead} />

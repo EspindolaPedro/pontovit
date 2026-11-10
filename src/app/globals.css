@@ -4438,6 +4438,8 @@ body {
 .pv-admin-lead-contact a:hover { color: var(--pv-orange-deep) !important; text-decoration: underline; }
 .pv-admin-lead-origin { display: grid; gap: 5px; align-content: start; }
 .pv-admin-lead-origin .pv-admin-status { justify-self: start; }
+.pv-admin-lead-page-url { display: block; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #777f7b; font-size: 11px; }
+.pv-admin-lead-page-url:hover { color: var(--pv-orange-deep); text-decoration: underline; }
 .pv-admin-lead-simulation strong { color: var(--pv-ink); }
 .pv-admin-lead-simulation small { white-space: normal; line-height: 1.5; }
 
