@@ -51,6 +51,10 @@ export function createWorkScheduleLead(input: WorkScheduleLeadInput, userAgent?:
   });
 }
 
+export function deleteWorkScheduleLead(id: string) {
+  return prisma.workScheduleLead.delete({ where: { id } });
+}
+
 export async function listWorkScheduleLeads(params: { page: number; pageSize: number; query?: string; scale?: string }) {
   const where = {
     ...(params.query ? {

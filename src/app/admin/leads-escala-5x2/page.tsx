@@ -64,9 +64,29 @@ const triggerLabels: Record<string, string> = {
 
 const PAID_MEDIUM_PATTERN = /cpc|ppc|paid|ads?$/i;
 const PAID_SOURCE_PATTERN = /google|meta|facebook|instagram|tiktok|linkedin|bing/i;
+// O Google Ads faz auto-tagging via gclid/gad_source em vez de utm_*, então sem
+// essa checagem na pageUrl esses leads apareciam como "Direto / orgânico".
+const GOOGLE_CLICK_ID_PATTERN = /^(gclid|gbraid|wbraid|gad_source|gad_campaignid)$/i;
+
+function extractGoogleAdsSignal(pageUrl: string | null) {
+  if (!pageUrl) return null;
+  try {
+    const url = new URL(pageUrl);
+    for (const key of url.searchParams.keys()) {
+      if (GOOGLE_CLICK_ID_PATTERN.test(key)) return key;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
 
 function getLeadSource(lead: WorkScheduleLead) {
   if (!lead.utmSource && !lead.utmMedium && !lead.utmCampaign) {
+    const googleSignal = extractGoogleAdsSignal(lead.pageUrl);
+    if (googleSignal) {
+      return { label: `Google Ads (${googleSignal})`, isPaid: true };
+    }
     return { label: "Direto / orgânico", isPaid: false };
   }
   const isPaid = PAID_MEDIUM_PATTERN.test(lead.utmMedium || "") || (PAID_SOURCE_PATTERN.test(lead.utmSource || "") && lead.utmMedium !== "organic");
@@ -120,6 +140,14 @@ function LeadSimulationSummary({ lead }: { lead: WorkScheduleLead }) {
   );
 }
 
+type MetaCapiPreview = {
+  eligibleCount: number;
+  oldestCreatedAt: string | null;
+  newestCreatedAt: string | null;
+  maxEventAgeDays: number;
+  byCampaign: { utmCampaign: string | null; utmContent: string | null; count: number }[];
+};
+
 export default function WorkScheduleLeadsPage() {
   const [result, setResult] = useState<LeadResult | null>(null);
   const [page, setPage] = useState(1);
@@ -128,6 +156,14 @@ export default function WorkScheduleLeadsPage() {
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [metaPreview, setMetaPreview] = useState<MetaCapiPreview | null>(null);
+  const [metaLoadingPreview, setMetaLoadingPreview] = useState(false);
+  const [metaSending, setMetaSending] = useState(false);
+  const [metaError, setMetaError] = useState("");
+  const [metaSentSummary, setMetaSentSummary] = useState("");
+  const [testEventCode, setTestEventCode] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -194,8 +230,112 @@ export default function WorkScheduleLeadsPage() {
     }
   }
 
+  async function deleteLead(lead: WorkScheduleLead) {
+    setError("");
+    if (!window.confirm(`Excluir o lead de "${lead.name}"? Essa ação não pode ser desfeita.`)) return;
+    setDeletingId(lead.id);
+    try {
+      const response = await fetch(`/api/admin/work-schedule-leads/${lead.id}`, { method: "DELETE" });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Não foi possível excluir o lead.");
+      }
+      setResult((current) => current && {
+        ...current,
+        items: current.items.filter((item) => item.id !== lead.id),
+        summary: { ...current.summary, total: current.summary.total - 1 },
+        pagination: { ...current.pagination, total: current.pagination.total - 1 },
+      });
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Não foi possível excluir o lead.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  async function loadMetaPreview() {
+    setMetaLoadingPreview(true);
+    setMetaError("");
+    setMetaSentSummary("");
+    try {
+      const response = await fetch("/api/admin/meta-capi/backfill");
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Não foi possível consultar o backfill.");
+      setMetaPreview(data as MetaCapiPreview);
+    } catch (reason) {
+      setMetaError(reason instanceof Error ? reason.message : "Não foi possível consultar o backfill.");
+    } finally {
+      setMetaLoadingPreview(false);
+    }
+  }
+
+  async function sendMetaBackfill() {
+    if (!metaPreview || metaPreview.eligibleCount === 0) return;
+    const confirmed = window.confirm(
+      `Isso vai enviar ${metaPreview.eligibleCount} evento(s) "Lead" reais para a Meta, de forma irreversível${testEventCode ? " (em modo de teste, pois você preencheu um código de teste)" : ""}. Confirmar envio?`,
+    );
+    if (!confirmed) return;
+    setMetaSending(true);
+    setMetaError("");
+    try {
+      const response = await fetch("/api/admin/meta-capi/backfill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true, testEventCode: testEventCode.trim() || undefined }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Não foi possível enviar os eventos.");
+      setMetaSentSummary(`${data.sentCount} evento(s) enviado(s) em ${data.batches?.length ?? 0} lote(s).`);
+      setMetaPreview(null);
+    } catch (reason) {
+      setMetaError(reason instanceof Error ? reason.message : "Não foi possível enviar os eventos.");
+    } finally {
+      setMetaSending(false);
+    }
+  }
+
   return (
     <main className="pv-admin-subpage pv-admin-leads-page">
+      <section className="pv-admin-meta-capi" aria-label="Backfill de eventos Lead para a Meta">
+        <header>
+          <div>
+            <p className="pv-admin-eyebrow">Conversions API</p>
+            <h2>Reenviar leads do Facebook/Instagram para a Meta</h2>
+            <span>Só alcança leads com UTM do Meta capturados nos últimos {metaPreview?.maxEventAgeDays ?? 7} dias — a Meta rejeita eventos mais antigos.</span>
+          </div>
+          <button className="pv-admin-secondary-action" type="button" onClick={() => void loadMetaPreview()} disabled={metaLoadingPreview}>
+            {metaLoadingPreview ? "Consultando..." : "Verificar leads elegíveis"}
+          </button>
+        </header>
+
+        {metaError ? <p className="pv-admin-error">{metaError}</p> : null}
+        {metaSentSummary ? <p className="pv-admin-meta-capi-success">{metaSentSummary}</p> : null}
+
+        {metaPreview ? (
+          <div className="pv-admin-meta-capi-preview">
+            <p>
+              <strong>{metaPreview.eligibleCount}</strong> lead(s) elegível(eis)
+              {metaPreview.oldestCreatedAt ? <> · de {formatDate(metaPreview.oldestCreatedAt)} até {formatDate(metaPreview.newestCreatedAt!)}</> : null}
+            </p>
+            {metaPreview.byCampaign.length > 0 ? (
+              <ul>
+                {metaPreview.byCampaign.map((entry, index) => (
+                  <li key={index}>{entry.utmCampaign || "(sem campanha)"} · {entry.utmContent || "(sem criativo)"} — {entry.count} lead(s)</li>
+                ))}
+              </ul>
+            ) : null}
+            {metaPreview.eligibleCount > 0 ? (
+              <div className="pv-admin-meta-capi-send">
+                <label>Código de teste (opcional, do Gerenciador de Eventos)<input value={testEventCode} onChange={(event) => setTestEventCode(event.target.value)} placeholder="TEST12345" /></label>
+                <button className="pv-admin-primary-action" type="button" onClick={() => void sendMetaBackfill()} disabled={metaSending}>
+                  {metaSending ? "Enviando..." : testEventCode ? "Enviar em modo de teste" : "Enviar para a Meta (real)"}
+                </button>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+
       <header className="pv-admin-subpage-header">
         <div>
           <Link className="pv-admin-back" href="/admin">← Voltar para visão geral</Link>
@@ -234,7 +374,7 @@ export default function WorkScheduleLeadsPage() {
       {error ? <p className="pv-admin-error">{error}</p> : null}
       <div className="pv-admin-table-wrap">
         <table className="pv-admin-table pv-admin-lead-table">
-          <thead><tr><th>Capturado</th><th>Lead</th><th>Origem</th><th>Simulação</th></tr></thead>
+          <thead><tr><th>Capturado</th><th>Lead</th><th>Origem</th><th>Simulação</th><th /></tr></thead>
           <tbody>
             {result?.items.map((lead) => (
               <tr key={lead.id}>
@@ -249,6 +389,11 @@ export default function WorkScheduleLeadsPage() {
                 </td>
                 <td>
                   <LeadSimulationSummary lead={lead} />
+                </td>
+                <td className="pv-admin-row-actions">
+                  <button className="pv-admin-delete" type="button" onClick={() => void deleteLead(lead)} disabled={deletingId === lead.id}>
+                    <AdminIcon name="trash" />{deletingId === lead.id ? "Excluindo..." : "Excluir"}
+                  </button>
                 </td>
               </tr>
             ))}

@@ -4440,6 +4440,21 @@ body {
 .pv-admin-lead-origin .pv-admin-status { justify-self: start; }
 .pv-admin-lead-page-url { display: block; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #777f7b; font-size: 11px; }
 .pv-admin-lead-page-url:hover { color: var(--pv-orange-deep); text-decoration: underline; }
+
+.pv-admin-meta-capi { margin-bottom: 34px; padding: 20px 22px; border: 1px solid #e2e5e2; border-radius: 14px; background: #fcfdfc; }
+.pv-admin-meta-capi > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; }
+.pv-admin-meta-capi > header h2 { margin: 6px 0 0; color: var(--pv-ink); font-family: var(--pv-font-display); font-size: 22px; letter-spacing: -.03em; }
+.pv-admin-meta-capi > header span { display: block; margin-top: 6px; max-width: 520px; color: var(--pv-muted); font-size: 12px; line-height: 1.5; }
+.pv-admin-meta-capi > header .pv-admin-secondary-action { margin-top: 0; white-space: nowrap; }
+.pv-admin-meta-capi-success { margin: 14px 0 0; color: #237a43; font-size: 12px; font-weight: 700; }
+.pv-admin-meta-capi-preview { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e5e2; }
+.pv-admin-meta-capi-preview p { margin: 0; color: var(--pv-ink); font-size: 13px; }
+.pv-admin-meta-capi-preview ul { display: grid; gap: 4px; margin: 10px 0 0; padding: 0; list-style: none; }
+.pv-admin-meta-capi-preview li { color: var(--pv-muted); font-size: 12px; }
+.pv-admin-meta-capi-send { display: flex; align-items: flex-end; gap: 14px; margin-top: 16px; }
+.pv-admin-meta-capi-send label { display: grid; gap: 6px; color: var(--pv-ink); font-size: 11px; font-weight: 650; }
+.pv-admin-meta-capi-send input { height: 40px; padding: 0 12px; border: 1px solid #d9dcda; border-radius: 9px; outline: 0; background: #fff; color: var(--pv-ink); font: inherit; font-size: 12px; min-width: 220px; }
+.pv-admin-meta-capi-send .pv-admin-primary-action { min-height: 40px; }
 .pv-admin-lead-simulation strong { color: var(--pv-ink); }
 .pv-admin-lead-simulation small { white-space: normal; line-height: 1.5; }
 
